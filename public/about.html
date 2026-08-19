@@ -344,52 +344,73 @@
   a { transition: color 0.2s ease, opacity 0.2s ease, background-color 0.2s ease, border-color 0.2s ease; }
   .footer-social a, .pillar-dot, .support-card, .compare-table tr { transition: transform 0.2s ease, color 0.2s ease, background-color 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease; }
 
-  /* --- modernize: hero word reveal --- */
+  /* --- modernize: hero word reveal (blur + rise) --- */
   .page-hero h1 .word-reveal, .legal-hero h1 .word-reveal {
-    display: inline-block; opacity: 0; transform: translateY(18px) rotate(-1deg);
-    animation: wordRise 0.7s cubic-bezier(0.22,1,0.36,1) forwards;
+    display: inline-block; opacity: 0; filter: blur(6px); transform: translateY(18px);
+    animation: wordRise 0.8s cubic-bezier(0.22,1,0.36,1) forwards;
   }
-  @keyframes wordRise { to { opacity: 1; transform: translateY(0) rotate(0); } }
+  @keyframes wordRise { to { opacity: 1; filter: blur(0); transform: translateY(0); } }
 
-  /* --- modernize: scroll reveal --- */
+  /* --- modernize: badge pulse dot --- */
+  @keyframes badgePulse { 0%, 100% { opacity: 1; transform: scale(1); } 50% { opacity: 0.35; transform: scale(1.35); } }
+
+  /* --- modernize: scroll reveal (JS adds a per-item stagger via transition-delay) --- */
   .reveal-init { opacity: 0; transform: translateY(22px); transition: opacity 0.7s cubic-bezier(0.22,1,0.36,1), transform 0.7s cubic-bezier(0.22,1,0.36,1); }
   .reveal-in { opacity: 1; transform: translateY(0); }
 
-  /* --- modernize: hero glow blob --- */
-  .legal-hero, .page-hero { position: relative; overflow: visible; }
-  .legal-hero::before, .page-hero::before {
-    content: ''; position: absolute; top: -40px; left: 50%; transform: translateX(-50%);
-    width: 380px; height: 380px; max-width: 90vw;
-    background: radial-gradient(circle, rgba(201,162,75,0.16) 0%, rgba(79,179,169,0.08) 45%, transparent 70%);
-    filter: blur(36px); pointer-events: none; z-index: 0;
-    animation: glowPulse 8s ease-in-out infinite;
+  /* --- modernize: hero ambience - dot-grid texture + sonar rings (replaces the old glow blob) --- */
+  .legal-hero, .page-hero {
+    background-image: radial-gradient(var(--hairline-soft) 1px, transparent 1px);
+    background-size: 24px 24px; background-position: center top;
+  }
+  .legal-hero::before, .page-hero::before,
+  .legal-hero::after, .page-hero::after {
+    content: ''; position: absolute; top: 6px; left: 50%; width: 280px; height: 280px; max-width: 78vw;
+    transform: translate(-50%, -50%) scale(0.3); border-radius: 50%; pointer-events: none; z-index: 0;
+    border: 1px solid var(--gold-line); opacity: 0;
+    animation: ringPing 4.5s cubic-bezier(0.2,0.65,0.4,1) infinite;
+  }
+  .legal-hero::after, .page-hero::after { border-color: var(--teal-soft); animation-delay: 1.5s; }
+  @keyframes ringPing {
+    0% { opacity: 0.55; transform: translate(-50%, -50%) scale(0.3); }
+    80%, 100% { opacity: 0; transform: translate(-50%, -50%) scale(1); }
   }
   .legal-hero > *, .page-hero > * { position: relative; z-index: 1; }
-  @keyframes glowPulse { 0%, 100% { opacity: 0.55; transform: translateX(-50%) scale(1); } 50% { opacity: 1; transform: translateX(-50%) scale(1.08); } }
+  @media (max-width: 640px) {
+    .legal-hero::before, .legal-hero::after, .page-hero::before, .page-hero::after { display: none; }
+  }
   @media (prefers-reduced-motion: reduce) {
-    .page-hero h1 .word-reveal, .legal-hero h1 .word-reveal { animation: none; opacity: 1; transform: none; }
+    .page-hero h1 .word-reveal, .legal-hero h1 .word-reveal { animation: none; opacity: 1; filter: none; transform: none; }
     .reveal-init { opacity: 1; transform: none; transition: none; }
-    .legal-hero::before, .page-hero::before { animation: none; }
+    .legal-hero .eyebrow-badge::before, .page-hero .eyebrow-badge::before { animation: none; }
+    .legal-hero::before, .legal-hero::after, .page-hero::before, .page-hero::after { animation: none; opacity: 0.3; transform: translate(-50%, -50%) scale(1); }
   }
   @media print {
-    .page-hero h1 .word-reveal, .legal-hero h1 .word-reveal { animation: none !important; opacity: 1 !important; transform: none !important; }
+    .page-hero h1 .word-reveal, .legal-hero h1 .word-reveal { animation: none !important; opacity: 1 !important; filter: none !important; transform: none !important; }
     .reveal-init { opacity: 1 !important; transform: none !important; }
-    .legal-hero::before, .page-hero::before { display: none !important; }
+    .legal-hero::before, .legal-hero::after, .page-hero::before, .page-hero::after { display: none !important; }
   }
 </style>
 
 
 <style>
-  .legal-hero { padding: 52px 32px 20px; max-width: 860px; margin: 0 auto; }
+  .legal-hero {
+    position: relative; padding: 60px 32px 32px; max-width: 720px; margin: 0 auto;
+    text-align: center; isolation: isolate;
+  }
   .legal-hero .eyebrow-badge {
     display: inline-flex; align-items: center; gap: 8px; font-size: 12px; font-weight: 600;
     letter-spacing: 0.1em; text-transform: uppercase; color: var(--gold);
     background: var(--gold-soft); border: 1px solid var(--gold-line); border-radius: 999px;
-    padding: 6px 14px; margin-bottom: 20px;
+    padding: 6px 14px 6px 12px; margin-bottom: 24px;
   }
-  .legal-hero h1 { font-size: clamp(30px, 5vw, 44px); margin-bottom: 14px; }
-  .legal-hero .lead { color: var(--text-secondary); font-size: 16px; line-height: 1.6; max-width: 640px; }
-  .legal-meta { display: flex; gap: 24px; flex-wrap: wrap; margin-top: 20px; font-size: 13px; color: var(--text-faint); }
+  .legal-hero .eyebrow-badge::before {
+    content: ''; width: 6px; height: 6px; border-radius: 50%; background: var(--gold); flex: none;
+    animation: badgePulse 2.4s ease-in-out infinite;
+  }
+  .legal-hero h1 { font-size: clamp(32px, 5vw, 46px); margin-bottom: 16px; }
+  .legal-hero .lead { color: var(--text-secondary); font-size: 16px; line-height: 1.65; max-width: 600px; margin-left: auto; margin-right: auto; }
+  .legal-meta { display: flex; gap: 20px; flex-wrap: wrap; margin-top: 24px; font-size: 13px; color: var(--text-faint); justify-content: center; }
   .legal-layout { display: grid; grid-template-columns: 220px 1fr; gap: 48px; max-width: 980px; margin: 0 auto; padding: 0 32px 36px; }
   @media (max-width: 820px) { .legal-layout { grid-template-columns: 1fr; } .legal-toc { display: none; } }
   .legal-toc { position: sticky; top: 90px; align-self: start; }
@@ -410,9 +431,22 @@
   .legal-content li { margin-bottom: 6px; }
   .legal-content strong { color: var(--text-primary); }
   .inline-link { color: var(--gold); text-decoration: underline; }
-  .page-hero { padding: 52px 32px 18px; text-align: center; max-width: 640px; margin: 0 auto; }
-  .page-hero h1 { font-size: clamp(30px, 5vw, 44px); margin-bottom: 16px; }
-  .page-hero .lead { color: var(--text-secondary); font-size: 16px; line-height: 1.6; }
+  .page-hero {
+    position: relative; padding: 60px 32px 32px; text-align: center; max-width: 720px; margin: 0 auto;
+    isolation: isolate;
+  }
+  .page-hero .eyebrow-badge {
+    display: inline-flex; align-items: center; gap: 8px; font-size: 12px; font-weight: 600;
+    letter-spacing: 0.1em; text-transform: uppercase; color: var(--gold);
+    background: var(--gold-soft); border: 1px solid var(--gold-line); border-radius: 999px;
+    padding: 6px 14px 6px 12px; margin-bottom: 24px;
+  }
+  .page-hero .eyebrow-badge::before {
+    content: ''; width: 6px; height: 6px; border-radius: 50%; background: var(--gold); flex: none;
+    animation: badgePulse 2.4s ease-in-out infinite;
+  }
+  .page-hero h1 { font-size: clamp(32px, 5vw, 46px); margin-bottom: 16px; }
+  .page-hero .lead { color: var(--text-secondary); font-size: 16px; line-height: 1.65; max-width: 600px; margin-left: auto; margin-right: auto; }
   .support-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; max-width: 900px; margin: 0 auto 80px; padding: 0 32px; }
   @media (max-width: 780px) { .support-grid { grid-template-columns: 1fr; } }
   .support-card { background: var(--surface); border: 1px solid var(--hairline); border-radius: var(--radius-md); padding: 28px; transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease; }

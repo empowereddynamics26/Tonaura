@@ -149,8 +149,9 @@
       });
       return;
     }
-    targets.forEach(function (el) {
+    targets.forEach(function (el, i) {
       el.classList.add("reveal-init");
+      el.style.transitionDelay = (Math.min(i % 6, 5) * 0.07).toFixed(2) + "s";
     });
     var io = new IntersectionObserver(
       function (entries) {
