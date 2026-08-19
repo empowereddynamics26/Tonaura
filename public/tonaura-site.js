@@ -1,7 +1,15 @@
 (function () {
+  function setStatus(status, state, text) {
+    if (!status) return;
+    status.className = "tonaura-form-status" + (state ? " status-" + state + " is-visible" : "");
+    status.textContent = text || "";
+  }
+
   function post(url, payload, form, success) {
     var status = form.querySelector(".tonaura-form-status");
-    if (status) status.textContent = "Sending…";
+    var btn = form.querySelector('button[type="submit"]');
+    setStatus(status, "sending", "Sending…");
+    if (btn) btn.classList.add("is-loading");
     fetch(url, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -10,12 +18,15 @@
       .then(function (res) {
         return res.json().then(function (json) {
           if (!res.ok) throw new Error(json.error || "Could not send.");
-          if (status) status.textContent = success;
+          setStatus(status, "success", success);
           form.reset();
         });
       })
       .catch(function (err) {
-        if (status) status.textContent = err.message || "Could not send.";
+        setStatus(status, "error", err.message || "Could not send.");
+      })
+      .finally(function () {
+        if (btn) btn.classList.remove("is-loading");
       });
   }
 
@@ -196,6 +207,50 @@
     update();
   }
 
+  // ---------- Modernize: mobile nav menu ----------
+  // Wires the hamburger button (markup already in the page) to slide the
+  // nav-links panel open/closed, with outside-click / Escape / link-click
+  // dismissal and basic focus handling.
+  function initMobileMenu() {
+    var btn = document.querySelector(".nav-hamburger");
+    var panel = document.getElementById("nav-links-mobile");
+    if (!btn || !panel) return;
+
+    function isOpen() {
+      return document.body.classList.contains("menu-open");
+    }
+    function closeMenu() {
+      document.body.classList.remove("menu-open");
+      btn.setAttribute("aria-expanded", "false");
+    }
+    function openMenu() {
+      document.body.classList.add("menu-open");
+      btn.setAttribute("aria-expanded", "true");
+    }
+
+    btn.addEventListener("click", function () {
+      if (isOpen()) closeMenu();
+      else openMenu();
+    });
+    document.addEventListener("keydown", function (e) {
+      if (e.key === "Escape" && isOpen()) {
+        closeMenu();
+        btn.focus();
+      }
+    });
+    document.addEventListener("click", function (e) {
+      if (!isOpen()) return;
+      if (panel.contains(e.target) || btn.contains(e.target)) return;
+      closeMenu();
+    });
+    panel.querySelectorAll("a").forEach(function (a) {
+      a.addEventListener("click", closeMenu);
+    });
+    window.addEventListener("resize", function () {
+      if (window.innerWidth > 720 && isOpen()) closeMenu();
+    });
+  }
+
   enhanceWaitlist();
   enhanceContact();
   addAccountLink();
@@ -203,4 +258,5 @@
   revealHeroWords();
   scrollReveal();
   tocScrollSpy();
+  initMobileMenu();
 })();
