@@ -97,7 +97,9 @@
   .nav-cta {
     background: var(--gold); color: #1a1608; font-weight: 600; font-size: 13px;
     padding: 10px 20px; border-radius: var(--radius-pill); border: none; cursor: pointer;
+    transition: transform 0.2s ease, filter 0.2s ease, box-shadow 0.2s ease;
   }
+  .nav-cta:hover { transform: translateY(-1px); filter: brightness(1.08); box-shadow: 0 6px 16px rgba(201,162,75,0.28); }
   .nav-mobile-hide { display: flex; }
   @media (max-width: 720px) { .nav-mobile-hide { display: none; } }
 
@@ -241,20 +243,23 @@
     display: block; text-align: center; width: 100%; padding: 13px; border-radius: var(--radius-pill);
     font-weight: 600; font-size: 14px; border: 1px solid var(--hairline); color: var(--text-secondary);
     background: transparent; cursor: pointer;
+    transition: transform 0.2s ease, border-color 0.2s ease, color 0.2s ease, filter 0.2s ease, box-shadow 0.2s ease;
   }
   .price-btn.primary { background: var(--gold); color: #1a1608; border: none; }
+  .price-btn:hover { border-color: var(--gold-line); color: var(--text-primary); transform: translateY(-1px); }
+  .price-btn.primary:hover { filter: brightness(1.08); box-shadow: 0 6px 16px rgba(201,162,75,0.28); color: #1a1608; }
 
   /* ---------- Trust strip ---------- */
   .trust-strip {
     display: flex; justify-content: center; gap: 48px; flex-wrap: wrap;
-    padding: 40px 32px; border-top: 1px solid var(--hairline-soft); border-bottom: 1px solid var(--hairline-soft);
+    padding: 16px 32px; border-top: 1px solid var(--hairline-soft); border-bottom: 1px solid var(--hairline-soft);
   }
   .trust-item { display: flex; align-items: center; gap: 10px; }
   .trust-dot { width: 6px; height: 6px; border-radius: 3px; background: var(--teal); }
   .trust-item span { font-size: 14px; color: var(--text-secondary); }
 
   /* ---------- Footer ---------- */
-  footer { padding: 64px 32px 32px; border-top: 1px solid var(--hairline-soft); }
+  footer { padding: 36px 32px 28px; border-top: 1px solid var(--hairline-soft); }
   .footer-inner {
     max-width: 1120px; margin: 0 auto;
     display: grid; grid-template-columns: 1.6fr 1fr 1fr 1fr; gap: 40px;
@@ -291,6 +296,10 @@
   .footer-bottom a { color: var(--text-secondary); }
   .footer-bottom a:hover { color: var(--gold); }
   .footer-bottom .cookie-prefs { text-decoration: underline; }
+
+  /* --- link transition polish --- */
+  a { transition: color 0.2s ease, opacity 0.2s ease, background-color 0.2s ease, border-color 0.2s ease; }
+  .footer-social a, .pillar-dot, .support-card, .compare-table tr { transition: transform 0.2s ease, color 0.2s ease, background-color 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease; }
 </style>
 </head>
 <body class="home">
