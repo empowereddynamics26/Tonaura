@@ -3,8 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Support — Tonaura</title>
-<meta name="description" content="Get help with Tonaura — getting started, billing, privacy, and how to reach us.">
+<title>About — Tonaura</title>
+<meta name="description" content="Tonaura's mission — honest about tradition and evidence, private by default, and built by Empowered Dynamics FZ-LLC.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,500;0,600;0,700;1,500&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
@@ -342,6 +342,24 @@
   .pillar-dot { width: 36px; height: 36px; border-radius: 10px; background: var(--gold-soft); border: 1px solid var(--gold-line); margin: 0 auto; }
 </style>
 
+
+<style>
+  .compare-table { width: 100%; border-collapse: collapse; max-width: 1000px; margin: 0 auto 64px; }
+  .compare-table th, .compare-table td { padding: 14px 16px; text-align: left; border-bottom: 1px solid var(--hairline-soft); font-size: 13px; vertical-align: top; }
+  .compare-table th { font-family: 'Fraunces', serif; font-weight: 600; color: var(--gold); font-size: 14px; }
+  .compare-table td.you { background: var(--gold-soft); border-left: 2px solid var(--gold); border-right: 2px solid var(--gold); }
+  .compare-table th.you { background: var(--gold-soft); border-left: 2px solid var(--gold); border-right: 2px solid var(--gold); border-top: 2px solid var(--gold); }
+  .compare-table td, .compare-table th { color: var(--text-secondary); }
+  .compare-table td.you, .compare-table th.you { color: var(--text-primary); }
+  .compare-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; max-width: 900px; margin: 0 auto 32px; padding: 0 32px; }
+  @media (max-width: 780px) { .compare-grid { grid-template-columns: 1fr; } }
+  .compare-card { background: var(--surface); border: 1px solid var(--hairline); border-radius: var(--radius-md); padding: 26px; }
+  .compare-card h3 { font-size: 16px; margin-bottom: 4px; color: var(--text-primary); }
+  .compare-card .compare-sub { font-size: 12px; color: var(--text-faint); margin-bottom: 14px; }
+  .compare-card .strength { font-size: 13px; color: var(--teal); margin-bottom: 8px; }
+  .compare-card .weakness { font-size: 13px; color: var(--gold); }
+  .compare-card .strength b, .compare-card .weakness b { color: var(--text-primary); }
+</style>
 </head>
 <body>
 
@@ -363,53 +381,105 @@
 <main id="main-content">
   <div class="container">
     <section class="page-hero">
-      <span class="eyebrow-badge">We're here to help</span>
-      <h1>Get the help<br>you need.</h1>
-      <p class="lead">Find answers below, or reach out directly — we typically reply within one business day.</p>
-      <a href="contact.html" class="price-btn primary" style="display:inline-block;margin-top:24px;text-decoration:none;max-width:220px;">Contact us</a>
+      <span class="eyebrow-badge">Honest comparison</span>
+      <h1>How Tonaura compares</h1>
+      <p class="lead">We're not going to pretend we're the best at everything &mdash; that's not how you actually pick the right app. Here's where each option in this category genuinely wins, and where it doesn't.</p>
     </section>
 
-    <div class="support-grid">
-      <div class="support-card">
-        <h3>Getting started</h3>
-        <p>New to Tonaura? Learn what each tone does, how the entrainment layer works, and how to build your first mix.</p>
-        <a href="index.html#inside">See what's inside →</a>
-      </div>
-      <div class="support-card">
-        <h3>Subscriptions &amp; billing</h3>
-        <p>Managing your plan, restoring purchases on a new device, or requesting a refund.</p>
-        <a href="billing.html">Billing policy →</a>
-      </div>
-      <div class="support-card">
-        <h3>Privacy &amp; your data</h3>
-        <p>What Tonaura collects (very little), and your options if you've signed in.</p>
-        <a href="privacy.html">Privacy policy →</a>
-      </div>
-      <div class="support-card">
-        <h3>The science, honestly</h3>
-        <p>What's traditional belief versus what has research behind it — stated plainly.</p>
-        <a href="wellness-disclaimer.html">Read the disclaimer →</a>
-      </div>
-      <div class="support-card">
-        <h3>Report a problem</h3>
-        <p>Found a bug, or something not working as expected? Let us know.</p>
-        <a href="contact.html">Contact us →</a>
-      </div>
-      <div class="support-card">
-        <h3>Service status</h3>
-        <p>Tonaura's core features work fully offline. For sign-in/sync status, contact us if something seems off.</p>
-        <a href="contact.html">Contact us →</a>
-      </div>
+    <table class="compare-table">
+      <thead>
+        <tr>
+          <th>&nbsp;</th>
+          <th class="you">Tonaura</th>
+          <th>myNoise</th>
+          <th>Endel</th>
+          <th>Brain.fm</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Solfeggio tones</td>
+          <td class="you">All 9, plus a bonus deepener</td>
+          <td>Yes, single-slider only</td>
+          <td>None</td>
+          <td>None</td>
+        </tr>
+        <tr>
+          <td>Real entrainment (binaural/isochronic)</td>
+          <td class="you">Yes, layered under the tones</td>
+          <td>No</td>
+          <td>Proprietary, undisclosed method</td>
+          <td>Yes, peer-reviewed research</td>
+        </tr>
+        <tr>
+          <td>Adaptive to your body</td>
+          <td class="you">Heart-rate suggestions (Premium)</td>
+          <td>No</td>
+          <td>Yes &mdash; heart rate, weather, time</td>
+          <td>No</td>
+        </tr>
+        <tr>
+          <td>Ads</td>
+          <td class="you">None, on either tier</td>
+          <td>Donation-supported</td>
+          <td>None</td>
+          <td>None</td>
+        </tr>
+        <tr>
+          <td>Works fully offline</td>
+          <td class="you">Yes</td>
+          <td>No &mdash; browser only</td>
+          <td>Partial</td>
+          <td>Partial</td>
+        </tr>
+        <tr>
+          <td>Price</td>
+          <td class="you">Free tier + &pound;3.99/mo or &pound;39.99 once</td>
+          <td>Free / donation</td>
+          <td>Subscription only</td>
+          <td>$99.99/yr</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="container" style="max-width:900px; margin: 0 auto 24px; padding: 0 32px;">
+    <h2 style="font-family:'Fraunces',serif; font-size:22px; color:var(--text-primary); margin-bottom:8px;">A closer look at each one</h2>
+    <p style="color:var(--text-secondary); font-size:14px; line-height:1.6; margin-bottom:24px;">Same honesty principle as everywhere else on this site: what's genuinely good about the alternative, stated plainly, not buried.</p>
+  </div>
+
+  <div class="compare-grid">
+    <div class="compare-card">
+      <h3>myNoise</h3>
+      <div class="compare-sub">The long-standing free/donation web tool</div>
+      <div class="strength"><b>Where it wins:</b> Free, no account, refreshingly honest in its own way &mdash; no false claims, just sliders.</div>
+      <div class="weakness"><b>Where it doesn't:</b> Browser-only, so playback stops when your phone locks or the tab loses focus. No real personalization, no entrainment layer, and the interface hasn't meaningfully changed in over a decade.</div>
+    </div>
+    <div class="compare-card">
+      <h3>Endel</h3>
+      <div class="compare-sub">AI-adaptive soundscapes, Apple Watch App of the Year</div>
+      <div class="strength"><b>Where it wins:</b> Genuinely impressive real-time adaptation to your heart rate, the weather, and time of day. The best wearable integration in this category, full stop.</div>
+      <div class="weakness"><b>Where it doesn't:</b> No solfeggio content at all &mdash; adaptation happens to generic ambient soundscapes, not to tones with any tradition or meaning behind them. Android support lags noticeably behind iOS.</div>
+    </div>
+    <div class="compare-card">
+      <h3>Brain.fm</h3>
+      <div class="compare-sub">Science-forward functional music</div>
+      <div class="strength"><b>Where it wins:</b> Actual peer-reviewed research behind its entrainment method, and a huge, never-repeating track library. If clinical rigor is what you want, this is the most credible option here.</div>
+      <div class="weakness"><b>Where it doesn't:</b> $99.99/year, no solfeggio angle whatsoever, and the experience feels clinical rather than like a ritual &mdash; there's no warmth to it.</div>
+    </div>
+    <div class="compare-card">
+      <h3>Static solfeggio apps</h3>
+      <div class="compare-sub">The many cheap/free solfeggio players on both stores</div>
+      <div class="strength"><b>Where they win:</b> Cheap or free, chakra-framed, easy to find, plenty of downloads.</div>
+      <div class="weakness"><b>Where they don't:</b> Static tones only, no real entrainment, dated interfaces, and at least one leading example has been flagged in its own store reviews for sharing user data with third parties.</div>
     </div>
   </div>
+
+  <div class="container" style="max-width:640px; margin: 40px auto 96px; padding: 0 32px; text-align:center;">
+    <p style="color:var(--text-secondary); font-size:14px; line-height:1.7; margin-bottom:20px;">If real entrainment research matters most to you, Brain.fm is the more rigorous choice. If wearable integration is what you're after, Endel does it best. If you specifically want solfeggio tones &mdash; done honestly, with a real entrainment layer underneath, and without your data going anywhere &mdash; that's the gap Tonaura was built to fill.</p>
+    <a href="index.html#pricing" class="price-btn primary" style="display:inline-block; text-decoration:none; padding: 13px 28px;">See Tonaura's pricing</a>
+  </div>
 </main>
-
-<div class="trust-strip">
-  <div class="trust-item"><div class="trust-dot"></div><span>No ads</span></div>
-  <div class="trust-item"><div class="trust-dot"></div><span>No account required</span></div>
-  <div class="trust-item"><div class="trust-dot"></div><span>Works fully offline</span></div>
-</div>
-
 <footer>
   <div class="footer-inner">
     <div class="footer-brand-col">
@@ -526,5 +596,6 @@ document.getElementById('cookie-modal-backdrop').addEventListener('click', (e) =
 });
 </script>
 
+<script src="/tonaura-site.js"></script>
 </body>
 </html>
