@@ -89,8 +89,118 @@
     });
   }
 
+  // ---------- Modernize: hero headline word reveal ----------
+  // Splits page-hero / legal-hero <h1> text into per-word spans so each word
+  // animates in on load (CSS handles the actual animation via .word-reveal).
+  // Preserves <br> line breaks; these headings are plain text + optional <br>
+  // only (no nested links/emphasis), so an innerHTML rebuild is safe here.
+  function revealHeroWords() {
+    if (window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    var headings = document.querySelectorAll(".page-hero h1, .legal-hero h1");
+    headings.forEach(function (h1) {
+      if (h1.getAttribute("data-split")) return;
+      h1.setAttribute("data-split", "1");
+      var lines = h1.innerHTML.split(/<br\s*\/?>/i);
+      var wordIndex = 0;
+      var html = lines
+        .map(function (line) {
+          var words = line.trim().split(/\s+/).filter(Boolean);
+          return words
+            .map(function (word) {
+              var span =
+                '<span class="word-reveal" style="animation-delay:' +
+                (wordIndex * 0.06).toFixed(2) +
+                's">' +
+                word +
+                "</span>";
+              wordIndex++;
+              return span;
+            })
+            .join(" ");
+        })
+        .join("<br>");
+      h1.innerHTML = html;
+    });
+  }
+
+  // ---------- Modernize: scroll-triggered reveal ----------
+  // Fades/slides content up into place as it enters the viewport.
+  function scrollReveal() {
+    var targets = document.querySelectorAll(
+      ".legal-content section, .support-card, .contact-card, .compare-card, .about-pillars > div, .trust-item"
+    );
+    if (!targets.length) return;
+    var reduceMotion =
+      window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    if (reduceMotion || !("IntersectionObserver" in window)) {
+      targets.forEach(function (el) {
+        el.classList.add("reveal-in");
+      });
+      return;
+    }
+    targets.forEach(function (el) {
+      el.classList.add("reveal-init");
+    });
+    var io = new IntersectionObserver(
+      function (entries) {
+        entries.forEach(function (entry) {
+          if (entry.isIntersecting) {
+            entry.target.classList.add("reveal-in");
+            io.unobserve(entry.target);
+          }
+        });
+      },
+      { threshold: 0.12, rootMargin: "0px 0px -40px 0px" }
+    );
+    targets.forEach(function (el) {
+      io.observe(el);
+    });
+  }
+
+  // ---------- Modernize: "On this page" scroll-spy ----------
+  // Highlights the legal-toc link matching whichever numbered clause is
+  // currently in view.
+  function tocScrollSpy() {
+    var toc = document.querySelector(".legal-toc");
+    if (!toc) return;
+    var links = toc.querySelectorAll('a[href^="#"]');
+    if (!links.length) return;
+    var sections = [];
+    links.forEach(function (a) {
+      var id = a.getAttribute("href").slice(1);
+      var sec = document.getElementById(id);
+      if (sec) sections.push({ link: a, sec: sec });
+    });
+    if (!sections.length) return;
+
+    var ticking = false;
+    function update() {
+      ticking = false;
+      var pos = window.scrollY + 130;
+      var current = sections[0];
+      sections.forEach(function (s) {
+        if (s.sec.offsetTop <= pos) current = s;
+      });
+      links.forEach(function (a) {
+        a.classList.remove("toc-active");
+      });
+      current.link.classList.add("toc-active");
+    }
+    function onScroll() {
+      if (!ticking) {
+        window.requestAnimationFrame(update);
+        ticking = true;
+      }
+    }
+    document.addEventListener("scroll", onScroll, { passive: true });
+    update();
+  }
+
   enhanceWaitlist();
   enhanceContact();
   addAccountLink();
   retargetCtas();
+  revealHeroWords();
+  scrollReveal();
+  tocScrollSpy();
 })();
