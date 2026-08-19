@@ -268,9 +268,15 @@
     width: 30px; height: 30px; border-radius: 8px; border: 1px solid var(--hairline);
     display: flex; align-items: center; justify-content: center;
     color: var(--text-faint);
-    transition: color 0.2s, border-color 0.2s;
+    transition: color 0.2s, border-color 0.2s, background 0.2s, transform 0.2s;
   }
-  .footer-social a:hover { color: var(--gold); border-color: var(--gold-line); }
+  .footer-social a:hover { transform: translateY(-1px); }
+  .footer-social a[aria-label="LinkedIn"]:hover { background: #0A66C2; border-color: #0A66C2; color: #fff; }
+  .footer-social a[aria-label="X"]:hover { background: #000000; border-color: #3a3a3a; color: #fff; }
+  .footer-social a[aria-label="Instagram"]:hover { background: linear-gradient(45deg,#f09433,#e6683c,#dc2743,#cc2366,#bc1888); border-color: transparent; color: #fff; }
+  .footer-social a[aria-label="YouTube"]:hover { background: #FF0000; border-color: #FF0000; color: #fff; }
+  .footer-social a[aria-label="TikTok"]:hover { background: #000000; border-color: #3a3a3a; color: #fff; }
+  .footer-social a[aria-label="Pinterest"]:hover { background: #E60023; border-color: #E60023; color: #fff; }
   .footer-col h4 {
     font-family: 'Inter', sans-serif; font-size: 12px; font-weight: 600; color: var(--text-primary);
     text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 16px;
