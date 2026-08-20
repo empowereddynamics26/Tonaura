@@ -200,7 +200,7 @@
   .section-head h2 { font-size: clamp(28px, 4vw, 38px); line-height: 1.15; margin-bottom: 16px; }
   .section-head p { color: var(--text-secondary); font-size: 16px; line-height: 1.6; }
 
-        /* ---------- Product showcase ---------- */
+          /* ---------- Product showcase ---------- */
   .showcase {
     display: grid;
     grid-template-columns: repeat(5, minmax(0, 1fr));
@@ -228,16 +228,17 @@
     width: 100%;
     max-width: 200px;
     margin: 0 auto 16px;
-    border-radius: 22px;
-    padding: 7px;
+    border-radius: 24px;
+    padding: 8px;
     background: linear-gradient(160deg, #1a1a24 0%, #0a0a10 55%, #14141c 100%);
     border: 1px solid rgba(237,231,217,0.12);
     box-shadow: 0 20px 48px -18px rgba(0,0,0,0.7), inset 0 1px 0 rgba(255,255,255,0.04);
+    box-sizing: border-box;
   }
   .phone-frame::before {
     content: "";
     position: absolute;
-    top: 11px; left: 50%;
+    top: 12px; left: 50%;
     transform: translateX(-50%);
     width: 42px; height: 4px;
     border-radius: 999px;
@@ -249,20 +250,23 @@
     position: relative;
     width: 100%;
     aspect-ratio: 9 / 16;
-    border-radius: 16px;
+    border-radius: 17px;
     overflow: hidden;
-    background: #12121A;
+    background: #0B0C10;
+    isolation: isolate;
   }
   .phone-screen > img {
     display: block;
     width: 100%;
     height: 100%;
     object-fit: cover;
-    object-position: center top;
+    object-position: center center;
   }
   .ambient-slides {
     position: absolute;
     inset: 0;
+    width: 100%;
+    height: 100%;
   }
   .ambient-slides img {
     position: absolute;
@@ -270,15 +274,18 @@
     width: 100%;
     height: 100%;
     object-fit: cover;
+    object-position: center center;
     opacity: 0;
-    transition: opacity 0.9s ease;
+    z-index: 0;
+    transition: opacity 0.8s ease;
+    pointer-events: none;
   }
-  .ambient-slides img.is-active { opacity: 1; }
+  .ambient-slides img.is-active {
+    opacity: 1;
+    z-index: 1;
+  }
   .phone-card h3 { font-size: 14px; margin-bottom: 5px; line-height: 1.25; }
   .phone-card p { font-size: 12px; color: var(--text-faint); line-height: 1.45; max-width: 190px; margin: 0 auto; }
-  @media (prefers-reduced-motion: reduce) {
-    .ambient-slides img { transition: none; }
-  }
 
 /* ---------- Honest section ---------- */
   .honest-bg { background: var(--bg-elevated); border-top: 1px solid var(--hairline-soft); border-bottom: 1px solid var(--hairline-soft); }
@@ -750,20 +757,30 @@ document.getElementById('cookie-modal-backdrop').addEventListener('click', (e) =
 
 
 
+
+
 <script>
 (function () {
-  var phone = document.querySelector("[data-ambient-phone]");
-  if (!phone) return;
-  var slides = Array.prototype.slice.call(phone.querySelectorAll(".ambient-slides img"));
-  if (slides.length < 2) return;
-  var reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-  var i = 0;
-  function tick() {
-    slides[i].classList.remove("is-active");
-    i = (i + 1) % slides.length;
-    slides[i].classList.add("is-active");
+  function startAmbientCycle() {
+    var phone = document.querySelector("[data-ambient-phone]");
+    if (!phone) return;
+    var slides = Array.prototype.slice.call(phone.querySelectorAll(".ambient-slides img"));
+    if (slides.length < 2) return;
+    var i = 0;
+    slides.forEach(function (img, n) {
+      img.classList.toggle("is-active", n === 0);
+    });
+    window.setInterval(function () {
+      slides[i].classList.remove("is-active");
+      i = (i + 1) % slides.length;
+      slides[i].classList.add("is-active");
+    }, 3000);
   }
-  if (!reduce) setInterval(tick, 3000);
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", startAmbientCycle);
+  } else {
+    startAmbientCycle();
+  }
 })();
 </script>
 
