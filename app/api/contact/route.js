@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { createAdminClient } from "@/lib/supabase/admin";
-import { notifySupportInbox, sendContactAckEmail } from "@/lib/mail";
+import { mailConfigured, notifySupportInbox, sendContactAckEmail } from "@/lib/mail";
 
 const EMAIL = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
@@ -23,14 +23,23 @@ export async function POST(request) {
       message,
     });
     if (error) return NextResponse.json({ error: "Could not send that message." }, { status: 500 });
-    await Promise.allSettled([
+
+    const mailResults = await Promise.allSettled([
       sendContactAckEmail({ to: email, name }),
       notifySupportInbox({
         subject: `Contact: ${topic || "general"} — ${name}`,
         text: `From: ${name} <${email}>\nTopic: ${topic}\n\n${message}`,
       }),
     ]);
-    return NextResponse.json({ ok: true });
+    const mailed = mailResults.every(
+      (r) => r.status === "fulfilled" && r.value && r.value.ok
+    );
+
+    return NextResponse.json({
+      ok: true,
+      mailed,
+      mailConfigured: mailConfigured(),
+    });
   } catch {
     return NextResponse.json({ error: "Could not send that message." }, { status: 500 });
   }
