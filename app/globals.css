@@ -117,3 +117,159 @@ nav.top a.brand {
   font-size: 22px;
   text-decoration: none;
 }
+
+/* Checkout success / cancel */
+.checkout-scene {
+  position: relative;
+  min-height: 100vh;
+  overflow: hidden;
+  background:
+    radial-gradient(1200px 600px at 50% -10%, rgba(201, 162, 75, 0.18), transparent 55%),
+    radial-gradient(900px 500px at 85% 30%, rgba(79, 179, 169, 0.12), transparent 50%),
+    linear-gradient(180deg, #0a0a12 0%, var(--navy) 45%, #10101a 100%);
+}
+.checkout-scene-quiet {
+  background:
+    radial-gradient(900px 480px at 40% -5%, rgba(201, 162, 75, 0.08), transparent 55%),
+    linear-gradient(180deg, #0a0a12 0%, var(--navy) 100%);
+}
+.checkout-shell {
+  position: relative;
+  z-index: 1;
+}
+.checkout-glow {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(40px);
+  pointer-events: none;
+}
+.checkout-glow-a {
+  width: 280px;
+  height: 280px;
+  top: 8%;
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(201, 162, 75, 0.22);
+  animation: checkoutPulse 5.5s ease-in-out infinite;
+}
+.checkout-glow-b {
+  width: 220px;
+  height: 220px;
+  bottom: 12%;
+  right: -40px;
+  background: rgba(79, 179, 169, 0.14);
+  animation: checkoutPulse 7s ease-in-out infinite reverse;
+}
+.checkout-ring {
+  position: absolute;
+  top: 18%;
+  left: 50%;
+  width: 320px;
+  height: 320px;
+  margin-left: -160px;
+  border-radius: 50%;
+  border: 1px solid rgba(201, 162, 75, 0.18);
+  border-top-color: rgba(79, 179, 169, 0.55);
+  border-right-color: rgba(201, 162, 75, 0.45);
+  pointer-events: none;
+  animation: checkoutSpin 18s linear infinite;
+}
+.checkout-hero {
+  padding-top: 28px;
+  margin-bottom: 28px;
+}
+.checkout-title {
+  font-size: clamp(40px, 8vw, 52px);
+  margin: 10px 0 14px;
+}
+.checkout-lead {
+  font-size: 16px;
+  line-height: 1.6;
+  max-width: 36ch;
+  color: var(--muted);
+}
+.checkout-steps {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 14px;
+}
+.checkout-steps li {
+  display: grid;
+  grid-template-columns: 36px 1fr;
+  gap: 14px;
+  align-items: start;
+  padding: 14px 0;
+  border-top: 1px solid rgba(237, 231, 217, 0.08);
+}
+.checkout-steps li:last-child {
+  border-bottom: 1px solid rgba(237, 231, 217, 0.08);
+}
+.checkout-steps strong {
+  display: block;
+  color: var(--cream);
+  font-size: 15px;
+  margin-bottom: 4px;
+}
+.checkout-steps p {
+  margin: 0;
+  font-size: 14px;
+}
+.checkout-step-num {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-family: Fraunces, serif;
+  font-style: italic;
+  font-size: 16px;
+  color: var(--navy);
+  background: var(--gold);
+}
+.checkout-actions {
+  margin-top: 8px;
+}
+.checkout-actions .btn {
+  text-decoration: none;
+}
+.checkout-actions .btn:hover {
+  text-decoration: none;
+  filter: brightness(1.05);
+}
+.checkout-note {
+  margin-top: 28px;
+  font-size: 13px;
+  color: rgba(180, 176, 196, 0.85);
+  line-height: 1.5;
+}
+.checkout-reveal {
+  opacity: 0;
+  transform: translateY(14px);
+  animation: checkoutRise 0.7s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+@keyframes checkoutRise {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+@keyframes checkoutPulse {
+  0%, 100% { opacity: 0.55; transform: translateX(-50%) scale(1); }
+  50% { opacity: 0.9; transform: translateX(-50%) scale(1.08); }
+}
+@keyframes checkoutSpin {
+  to { transform: rotate(360deg); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .checkout-reveal,
+  .checkout-glow-a,
+  .checkout-glow-b,
+  .checkout-ring {
+    animation: none !important;
+    opacity: 1;
+    transform: none;
+  }
+}
