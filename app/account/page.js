@@ -155,9 +155,9 @@ export default function AccountPage() {
         {error ? <p className="error">{error}</p> : null}
       </div>
       {profile?.role === "admin" ? (
-        <p>
-          <a href="/admin">Admin</a>
-        </p>
+        <a className="btn secondary" href="/admin" style={{ marginTop: 12 }}>
+          Open admin panel
+        </a>
       ) : null}
       <button className="secondary" type="button" onClick={signOut}>
         Sign out

@@ -3,7 +3,7 @@ import { requireAdmin } from "@/lib/auth";
 import { createAdminClient } from "@/lib/supabase/admin";
 
 export async function POST(request) {
-  const { ok } = await requireAdmin();
+  const { ok } = await requireAdmin(request);
   if (!ok) return NextResponse.json({ error: "Forbidden" }, { status: 403 });
   const { id, status } = await request.json();
   if (!id || !["new", "read", "replied", "archived"].includes(status)) {

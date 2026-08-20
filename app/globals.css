@@ -110,12 +110,195 @@ nav.top {
   align-items: center;
   margin-bottom: 32px;
 }
+nav.top .top-links {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+nav.top a.admin-nav {
+  color: var(--teal);
+  font-weight: 600;
+  font-size: 14px;
+}
 nav.top a.brand {
   color: var(--cream);
   font-family: Fraunces, serif;
   font-style: italic;
   font-size: 22px;
   text-decoration: none;
+}
+
+/* Admin */
+.admin-scene {
+  min-height: 100vh;
+  background:
+    radial-gradient(900px 420px at 10% -10%, rgba(79, 179, 169, 0.1), transparent 55%),
+    radial-gradient(700px 360px at 90% 0%, rgba(201, 162, 75, 0.1), transparent 50%),
+    var(--navy);
+}
+.admin-shell {
+  max-width: 960px;
+}
+.admin-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+.admin-header h1 { margin: 0; }
+.admin-refresh {
+  width: auto !important;
+  margin: 0 !important;
+  padding: 10px 16px !important;
+}
+.admin-sub {
+  margin-top: 8px;
+  margin-bottom: 24px;
+}
+.admin-stats {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+  margin-bottom: 16px;
+}
+@media (min-width: 720px) {
+  .admin-stats { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+}
+.admin-stat {
+  background: rgba(27, 27, 38, 0.9);
+  border: 1px solid rgba(237, 231, 217, 0.08);
+  border-radius: 14px;
+  padding: 14px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.admin-stat-label {
+  color: var(--gold);
+  font-size: 11px;
+  letter-spacing: 1.4px;
+  text-transform: uppercase;
+  font-weight: 600;
+}
+.admin-stat-value {
+  font-family: Fraunces, serif;
+  font-style: italic;
+  font-size: 28px;
+  color: var(--cream);
+}
+.admin-stat-hint { color: var(--muted); font-size: 12px; }
+.admin-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 18px;
+}
+.admin-chip {
+  display: inline-flex;
+  align-items: center;
+  padding: 6px 10px;
+  border-radius: 999px;
+  background: rgba(201, 162, 75, 0.12);
+  color: var(--gold);
+  font-size: 12px;
+  font-weight: 600;
+}
+.admin-tabs {
+  display: flex;
+  gap: 6px;
+  overflow-x: auto;
+  padding-bottom: 4px;
+  margin-bottom: 18px;
+  -webkit-overflow-scrolling: touch;
+}
+.admin-tab {
+  width: auto !important;
+  margin: 0 !important;
+  padding: 10px 14px !important;
+  border-radius: 999px !important;
+  background: transparent !important;
+  color: var(--muted) !important;
+  border: 1px solid rgba(237, 231, 217, 0.12) !important;
+  white-space: nowrap;
+  display: inline-flex !important;
+  gap: 8px;
+  align-items: center;
+}
+.admin-tab.is-active {
+  background: rgba(201, 162, 75, 0.16) !important;
+  color: var(--cream) !important;
+  border-color: rgba(201, 162, 75, 0.35) !important;
+}
+.admin-badge {
+  min-width: 18px;
+  height: 18px;
+  border-radius: 9px;
+  background: var(--gold);
+  color: var(--navy);
+  font-size: 11px;
+  font-weight: 700;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 5px;
+}
+.admin-panel h2 {
+  font-family: Fraunces, serif;
+  font-style: italic;
+  font-weight: 500;
+  font-size: 24px;
+  margin: 0 0 8px;
+}
+.admin-panel h3 {
+  font-size: 15px;
+  color: var(--cream);
+  margin: 20px 0 8px;
+}
+.admin-table-wrap {
+  overflow-x: auto;
+  border: 1px solid rgba(237, 231, 217, 0.08);
+  border-radius: 12px;
+}
+.admin-table-wrap table { margin: 0; }
+.admin-table-wrap th {
+  background: rgba(27, 27, 38, 0.95);
+  position: sticky;
+  top: 0;
+}
+.admin-message-list {
+  display: grid;
+  gap: 12px;
+}
+.admin-message {
+  background: rgba(27, 27, 38, 0.9);
+  border: 1px solid rgba(237, 231, 217, 0.08);
+  border-radius: 14px;
+  padding: 14px 16px;
+}
+.admin-message header {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-bottom: 10px;
+}
+.admin-message-meta {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 6px;
+}
+.admin-message p {
+  margin: 0 0 12px;
+  color: var(--cream);
+  white-space: pre-wrap;
+}
+.admin-message label {
+  margin: 0;
+}
+.admin-message select {
+  margin-top: 6px;
+  max-width: 200px;
 }
 
 /* Checkout success / cancel */
