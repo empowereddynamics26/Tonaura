@@ -56,7 +56,9 @@ export function AuthForm({ mode }) {
       }
       const { error: err } = await supabase.auth.signInWithPassword({ email, password });
       if (err) throw err;
-      window.location.href = "/account";
+      const params = new URLSearchParams(window.location.search);
+      const next = params.get("next");
+      window.location.href = next && next.startsWith("/") ? next : "/account";
     } catch (err) {
       setError(err.message || "Could not continue.");
     } finally {
@@ -65,66 +67,68 @@ export function AuthForm({ mode }) {
   }
 
   return (
-    <div className="shell">
+    <>
       <SiteNav />
-      <p className="kicker">Tonaura</p>
-      <h1>{title}</h1>
-      <p>{subtitle}</p>
-      <form className="card" onSubmit={onSubmit}>
-        <label htmlFor="email">Email</label>
-        <input id="email" type="email" autoComplete="email" required value={email} onChange={(e) => setEmail(e.target.value)} />
-        {!forgot && (
-          <>
-            <label htmlFor="password">Password</label>
-            <input
-              id="password"
-              type="password"
-              autoComplete={signup ? "new-password" : "current-password"}
-              required
-              minLength={6}
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-            />
-          </>
+      <div className="shell">
+        <p className="kicker">Tonaura</p>
+        <h1>{title}</h1>
+        <p>{subtitle}</p>
+        <form className="card" onSubmit={onSubmit}>
+          <label htmlFor="email">Email</label>
+          <input id="email" type="email" autoComplete="email" required value={email} onChange={(e) => setEmail(e.target.value)} />
+          {!forgot && (
+            <>
+              <label htmlFor="password">Password</label>
+              <input
+                id="password"
+                type="password"
+                autoComplete={signup ? "new-password" : "current-password"}
+                required
+                minLength={6}
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+              />
+            </>
+          )}
+          {error ? <p className="error">{error}</p> : null}
+          {notice ? <p className="ok">{notice}</p> : null}
+          <button type="submit" disabled={loading}>
+            {loading ? "Please wait…" : forgot ? "Send reset link" : signup ? "Create account" : "Sign in"}
+          </button>
+        </form>
+        {!forgot ? (
+          <button
+            className="secondary"
+            type="button"
+            onClick={async () => {
+              setError("");
+              const supabase = createClient();
+              const { error: err } = await supabase.auth.signInWithOAuth({
+                provider: "google",
+                options: { redirectTo: `${window.location.origin}/auth/callback?next=/account` },
+              });
+              if (err) setError(err.message);
+            }}
+          >
+            Continue with Google
+          </button>
+        ) : null}
+        {forgot ? (
+          <p>
+            <a href="/login">Back to sign in</a>
+          </p>
+        ) : signup ? (
+          <p>
+            Already have an account? <a href="/login">Sign in</a>
+          </p>
+        ) : (
+          <p>
+            New here? <a href="/signup">Create an account</a>
+            <br />
+            <a href="/forgot-password">Forgot password?</a>
+          </p>
         )}
-        {error ? <p className="error">{error}</p> : null}
-        {notice ? <p className="ok">{notice}</p> : null}
-        <button type="submit" disabled={loading}>
-          {loading ? "Please wait…" : forgot ? "Send reset link" : signup ? "Create account" : "Sign in"}
-        </button>
-      </form>
-      {!forgot ? (
-        <button
-          className="secondary"
-          type="button"
-          onClick={async () => {
-            setError("");
-            const supabase = createClient();
-            const { error: err } = await supabase.auth.signInWithOAuth({
-              provider: "google",
-              options: { redirectTo: `${window.location.origin}/auth/callback?next=/account` },
-            });
-            if (err) setError(err.message);
-          }}
-        >
-          Continue with Google
-        </button>
-      ) : null}
-      {forgot ? (
-        <p>
-          <a href="/login">Back to sign in</a>
-        </p>
-      ) : signup ? (
-        <p>
-          Already have an account? <a href="/login">Sign in</a>
-        </p>
-      ) : (
-        <p>
-          New here? <a href="/signup">Create an account</a>
-          <br />
-          <a href="/forgot-password">Forgot password?</a>
-        </p>
-      )}
-    </div>
+      </div>
+    </>
   );
 }

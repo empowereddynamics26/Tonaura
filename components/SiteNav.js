@@ -5,6 +5,7 @@ import { createClient } from "@/lib/supabase/client";
 
 export function SiteNav({ extra }) {
   const [isAdmin, setIsAdmin] = useState(false);
+  const [menuOpen, setMenuOpen] = useState(false);
 
   useEffect(() => {
     let alive = true;
@@ -29,17 +30,36 @@ export function SiteNav({ extra }) {
   }, []);
 
   return (
-    <nav className="top">
-      <a className="brand" href="/">
-        Tonaura
-      </a>
-      <div className="top-links">
-        {isAdmin ? (
-          <a className="admin-nav" href="/admin">
-            Admin
+    <nav className={`site-nav ${menuOpen ? "is-open" : ""}`}>
+      <div className="site-nav-inner">
+        <a className="site-brand" href="/">
+          <img src="/images/brand/lockup.png" width="168" height="54" alt="Tonaura" />
+        </a>
+        <button
+          type="button"
+          className="site-burger"
+          aria-label="Menu"
+          aria-expanded={menuOpen}
+          onClick={() => setMenuOpen((v) => !v)}
+        >
+          <span />
+          <span />
+        </button>
+        <div className="site-nav-links">
+          <a href="/#inside">Inside</a>
+          <a href="/#how">How it works</a>
+          <a href="/#pricing">Pricing</a>
+          <a href="/about.html">About</a>
+          {isAdmin ? (
+            <a className="admin-nav" href="/admin">
+              Admin
+            </a>
+          ) : null}
+          {extra || <a href="/account">Account</a>}
+          <a className="site-nav-cta" href="/#early">
+            Early access
           </a>
-        ) : null}
-        {extra || <a href="/account">Account</a>}
+        </div>
       </div>
     </nav>
   );

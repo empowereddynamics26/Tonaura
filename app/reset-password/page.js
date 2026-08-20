@@ -26,26 +26,28 @@ export default function ResetPasswordPage() {
   }
 
   return (
-    <div className="shell">
+    <>
       <SiteNav />
-      <p className="kicker">Account</p>
-      <h1>Choose a new password</h1>
-      <form className="card" onSubmit={onSubmit}>
-        <label htmlFor="password">New password</label>
-        <input
-          id="password"
-          type="password"
-          autoComplete="new-password"
-          required
-          minLength={6}
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-        />
-        {error ? <p className="error">{error}</p> : null}
-        <button type="submit" disabled={loading}>
-          {loading ? "Saving…" : "Save password"}
-        </button>
-      </form>
-    </div>
+      <div className="shell">
+        <p className="kicker">Account</p>
+        <h1>Choose a new password</h1>
+        <form className="card" onSubmit={onSubmit}>
+          <label htmlFor="password">New password</label>
+          <input
+            id="password"
+            type="password"
+            autoComplete="new-password"
+            required
+            minLength={6}
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+          />
+          {error ? <p className="error">{error}</p> : null}
+          <button type="submit" disabled={loading}>
+            {loading ? "Saving…" : "Save password"}
+          </button>
+        </form>
+      </div>
+    </>
   );
 }

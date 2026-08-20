@@ -15,7 +15,7 @@
     });
   }
 
-  // Ambient cycle on 5th phone
+  // Ambient cycle in theater stage
   function startAmbientCycle() {
     var phone = document.querySelector("[data-ambient-phone]");
     if (!phone) return;

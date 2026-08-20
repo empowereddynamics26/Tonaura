@@ -12,9 +12,9 @@ export default function CheckoutSuccessPage() {
       <div className="checkout-glow checkout-glow-b" aria-hidden="true" />
       <div className="checkout-ring" aria-hidden="true" />
 
-      <div className="shell checkout-shell">
-        <SiteNav extra={<a href="/account">Account</a>} />
+      <SiteNav extra={<a href="/account">Account</a>} />
 
+      <div className="shell checkout-shell">
         <div className="checkout-hero">
           <p className="kicker checkout-reveal" style={{ animationDelay: "0.05s" }}>
             Premium

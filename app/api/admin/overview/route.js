@@ -18,52 +18,50 @@ export async function GET(request) {
     { count: contactNew },
     { data: messages },
     { count: profileCount },
+    { count: premiumActive },
     { data: entitlements },
     { data: recentBilling },
+    { count: signupWeek },
+    { count: signupMonth },
+    { data: allActivePlans },
   ] = await Promise.all([
     admin.from("waitlist").select("*", { count: "exact", head: true }),
     admin.from("waitlist").select("*", { count: "exact", head: true }).gte("created_at", since7),
-    admin.from("waitlist").select("id,email,source,created_at").order("created_at", { ascending: false }).limit(40),
+    admin.from("waitlist").select("id,email,source,created_at").order("created_at", { ascending: false }).limit(100),
     admin.from("contact_messages").select("*", { count: "exact", head: true }),
     admin.from("contact_messages").select("*", { count: "exact", head: true }).eq("status", "new"),
     admin
       .from("contact_messages")
       .select("id,name,email,topic,message,status,created_at")
       .order("created_at", { ascending: false })
-      .limit(40),
+      .limit(100),
     admin.from("profiles").select("*", { count: "exact", head: true }),
+    admin.from("entitlement_cache").select("*", { count: "exact", head: true }).eq("is_active", true),
     admin
       .from("entitlement_cache")
       .select("user_id,is_active,plan_key,expires_at,source,environment,updated_at")
       .eq("is_active", true)
       .order("updated_at", { ascending: false })
-      .limit(40),
+      .limit(100),
     admin
       .from("billing_events")
       .select("event_id,event_type,user_id,processed_at")
       .order("processed_at", { ascending: false })
-      .limit(25),
+      .limit(50),
+    admin.from("profiles").select("*", { count: "exact", head: true }).gte("created_at", since7),
+    admin.from("profiles").select("*", { count: "exact", head: true }).gte("created_at", since30),
+    admin.from("entitlement_cache").select("plan_key").eq("is_active", true),
   ]);
 
-  const premium = entitlements || [];
-  const planBreakdown = premium.reduce((acc, row) => {
+  const planBreakdown = (allActivePlans || []).reduce((acc, row) => {
     const key = row.plan_key || "unknown";
     acc[key] = (acc[key] || 0) + 1;
     return acc;
   }, {});
 
-  const { count: signupWeek } = await admin
-    .from("profiles")
-    .select("*", { count: "exact", head: true })
-    .gte("created_at", since7);
-  const { count: signupMonth } = await admin
-    .from("profiles")
-    .select("*", { count: "exact", head: true })
-    .gte("created_at", since30);
-
   return NextResponse.json({
     generatedAt: new Date().toISOString(),
-    viewer: { email: user.email, id: user.id },
+    viewer: { email: user?.email || null, id: user?.id || null },
     stats: {
       accounts: profileCount || 0,
       accountsWeek: signupWeek || 0,
@@ -72,12 +70,12 @@ export async function GET(request) {
       waitlistWeek: waitlistWeek || 0,
       contact: contactCount || 0,
       contactNew: contactNew || 0,
-      premiumActive: premium.length,
+      premiumActive: premiumActive || 0,
       planBreakdown,
     },
     waitlist: waitlist || [],
     messages: messages || [],
-    premium,
+    premium: entitlements || [],
     recentBilling: recentBilling || [],
   });
 }

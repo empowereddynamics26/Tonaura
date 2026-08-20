@@ -88,27 +88,31 @@ export default function AccountPage() {
 
   if (user === undefined) {
     return (
-      <div className="shell">
+      <>
         <SiteNav />
-        <p>Loading…</p>
-      </div>
+        <div className="shell">
+          <p>Loading…</p>
+        </div>
+      </>
     );
   }
 
   if (!user) {
     return (
-      <div className="shell">
+      <>
         <SiteNav extra={<a href="/login">Sign in</a>} />
-        <p className="kicker">Account</p>
-        <h1>Sign in to subscribe</h1>
-        <p>Premium is sold here, then unlocked in the app when you sign in with this same email.</p>
-        <a className="btn" href="/login">
-          Sign in
-        </a>
-        <a className="btn secondary" href="/signup">
-          Create account
-        </a>
-      </div>
+        <div className="shell">
+          <p className="kicker">Account</p>
+          <h1>Sign in to subscribe</h1>
+          <p>Premium is sold here, then unlocked in the app when you sign in with this same email.</p>
+          <a className="btn" href="/login">
+            Sign in
+          </a>
+          <a className="btn secondary" href="/signup">
+            Create account
+          </a>
+        </div>
+      </>
     );
   }
 
@@ -117,58 +121,60 @@ export default function AccountPage() {
   const premium = active && !expired;
 
   return (
-    <div className="shell">
+    <>
       <SiteNav extra={<a href="/">Home</a>} />
-      <p className="kicker">{premium ? "Premium" : "Free plan"}</p>
-      <h1>{user.email}</h1>
-      <p>
-        This is the account the Tonaura app uses. After you subscribe, open the app, sign in with this email, and tap
-        Refresh Premium.
-      </p>
-      <div className="card">
-        {premium ? (
-          <>
-            <p className="ok">
-              Premium is on{entitlement.plan_key ? ` · ${entitlement.plan_key}` : ""}
-              {entitlement.expires_at ? ` · renews/ends ${new Date(entitlement.expires_at).toLocaleDateString()}` : ""}
-            </p>
-            <button className="secondary" type="button" onClick={portal} disabled={loading === "portal"}>
-              Manage billing
-            </button>
-          </>
-        ) : (
-          <>
-            <p>Choose a plan. You will pay on Stripe, then the app unlocks for this account.</p>
-            {PLANS.map((p) => (
-              <div className="plan" key={p.key}>
-                <div>
-                  <strong>{p.label}</strong>
-                  <div className="muted">{p.price}</div>
+      <div className="shell">
+        <p className="kicker">{premium ? "Premium" : "Free plan"}</p>
+        <h1>{user.email}</h1>
+        <p>
+          This is the account the Tonaura app uses. After you subscribe, open the app, sign in with this email, and tap
+          Refresh Premium.
+        </p>
+        <div className="card">
+          {premium ? (
+            <>
+              <p className="ok">
+                Premium is on{entitlement.plan_key ? ` · ${entitlement.plan_key}` : ""}
+                {entitlement.expires_at ? ` · renews/ends ${new Date(entitlement.expires_at).toLocaleDateString()}` : ""}
+              </p>
+              <button className="secondary" type="button" onClick={portal} disabled={loading === "portal"}>
+                Manage billing
+              </button>
+            </>
+          ) : (
+            <>
+              <p>Choose a plan. You will pay on Stripe, then the app unlocks for this account.</p>
+              {PLANS.map((p) => (
+                <div className="plan" key={p.key}>
+                  <div>
+                    <strong>{p.label}</strong>
+                    <div className="muted">{p.price}</div>
+                  </div>
+                  <button type="button" onClick={() => checkout(p.key)} disabled={!!loading}>
+                    {loading === p.key ? "Opening…" : "Subscribe"}
+                  </button>
                 </div>
-                <button type="button" onClick={() => checkout(p.key)} disabled={!!loading}>
-                  {loading === p.key ? "Opening…" : "Subscribe"}
-                </button>
-              </div>
-            ))}
-          </>
-        )}
-        {error ? <p className="error">{error}</p> : null}
+              ))}
+            </>
+          )}
+          {error ? <p className="error">{error}</p> : null}
+        </div>
+        {profile?.role === "admin" ? (
+          <a className="btn secondary" href="/admin" style={{ marginTop: 12 }}>
+            Open admin panel
+          </a>
+        ) : null}
+        <button className="secondary" type="button" onClick={signOut}>
+          Sign out
+        </button>
+        <button className="ghost" type="button" onClick={deleteAccount} disabled={loading === "delete"}>
+          Delete account
+        </button>
+        <p className="muted">
+          UK customers: digital content supplied immediately may affect the 14-day cooling-off right. See the{" "}
+          <a href="/billing.html">Billing Policy</a>.
+        </p>
       </div>
-      {profile?.role === "admin" ? (
-        <a className="btn secondary" href="/admin" style={{ marginTop: 12 }}>
-          Open admin panel
-        </a>
-      ) : null}
-      <button className="secondary" type="button" onClick={signOut}>
-        Sign out
-      </button>
-      <button className="ghost" type="button" onClick={deleteAccount} disabled={loading === "delete"}>
-        Delete account
-      </button>
-      <p className="muted">
-        UK customers: digital content supplied immediately may affect the 14-day cooling-off right. See the{" "}
-        <a href="/billing.html">Billing Policy</a>.
-      </p>
-    </div>
+    </>
   );
 }
