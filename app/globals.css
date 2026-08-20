@@ -148,7 +148,7 @@ nav.top a.brand {
   height: 280px;
   top: 8%;
   left: 50%;
-  transform: translateX(-50%);
+  margin-left: -140px;
   background: rgba(201, 162, 75, 0.22);
   animation: checkoutPulse 5.5s ease-in-out infinite;
 }
@@ -257,8 +257,8 @@ nav.top a.brand {
   }
 }
 @keyframes checkoutPulse {
-  0%, 100% { opacity: 0.55; transform: translateX(-50%) scale(1); }
-  50% { opacity: 0.9; transform: translateX(-50%) scale(1.08); }
+  0%, 100% { opacity: 0.55; transform: scale(1); }
+  50% { opacity: 0.9; transform: scale(1.08); }
 }
 @keyframes checkoutSpin {
   to { transform: rotate(360deg); }
