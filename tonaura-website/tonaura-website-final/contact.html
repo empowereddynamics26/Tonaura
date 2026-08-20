@@ -7,7 +7,7 @@
 <meta name="description" content="Get in touch with the Tonaura team.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,500;0,600;0,700;1,500&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
   :root {
     --bg: #12121a;
@@ -37,7 +37,7 @@
     margin: 0;
     background: var(--bg);
     color: var(--text-primary);
-    font-family: 'Inter', -apple-system, sans-serif;
+    font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
     -webkit-font-smoothing: antialiased;
     overflow-x: hidden;
   }
@@ -50,7 +50,7 @@
     background: radial-gradient(ellipse 900px 480px at 50% 0px, rgba(79,179,169,0.09), transparent 70%), var(--bg);
   }
 
-  h1, h2, h3 { font-family: 'Fraunces', serif; font-weight: 600; margin: 0; letter-spacing: -0.01em; }
+  h1, h2, h3 { font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 600; margin: 0; letter-spacing: -0.01em; }
   p { margin: 0; }
   a { color: inherit; text-decoration: none; }
 
@@ -91,7 +91,7 @@
     padding: 8px 28px; max-width: 1120px; margin: 0 auto;
   }
   .brand { display: flex; align-items: center; }
-  .brand img { width: 220px; height: auto; display: block; }
+  .brand img { width: 220px; height: auto; display: block; filter: saturate(1.22) contrast(1.06) brightness(1.04); }
   .nav-links { display: flex; align-items: center; gap: 24px; }
   .nav-links a { font-size: 14px; color: var(--text-secondary); transition: color 0.2s; position: relative; }
   .nav-links a:hover { color: var(--text-primary); }
@@ -160,14 +160,14 @@
     max-width: 780px;
     margin: 0 auto 20px;
   }
-  .hero h1 em { font-style: italic; font-weight: 500; color: var(--gold); }
+  .hero h1 em { font-style: normal; font-weight: 600; color: var(--gold); }
   .hero-sub {
     font-size: 17px; color: var(--text-secondary); max-width: 480px;
     margin: 0 auto 40px; line-height: 1.6;
   }
 
   .mandala-wrap { display: flex; justify-content: center; margin: 8px 0 48px; position: relative; z-index: 1; }
-  .mandala { animation: breathe 4s ease-in-out infinite; transform-origin: center; display: block; width: 280px; height: 280px; filter: drop-shadow(0 20px 50px rgba(201,162,75,0.18)); }
+  .mandala { animation: breathe 4s ease-in-out infinite; transform-origin: center; display: block; width: 280px; height: 280px; filter: saturate(1.28) contrast(1.08) brightness(1.05) drop-shadow(0 20px 50px rgba(201,162,75,0.28)); }
   @keyframes breathe { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.035); } }
   @media (prefers-reduced-motion: reduce) { .mandala { animation: none; } }
 
@@ -180,7 +180,7 @@
   .email-form input {
     flex: 1; background: var(--surface); border: 1px solid var(--hairline);
     border-radius: var(--radius-pill); padding: 13px 18px; color: var(--text-primary);
-    font-family: 'Inter', sans-serif; font-size: 14px;
+    font-family: 'Plus Jakarta Sans', sans-serif; font-size: 14px;
   }
   .email-form input::placeholder { color: var(--text-faint); }
   .email-form button {
@@ -228,7 +228,7 @@
     text-align: center; padding: 8px; border-radius: 999px; margin-bottom: 6px;
   }
   .phone-streak { text-align: center; margin-top: auto; margin-bottom: auto; }
-  .phone-streak .num { font-family: 'Fraunces', serif; font-size: 40px; color: var(--gold); font-weight: 600; }
+  .phone-streak .num { font-family: 'Plus Jakarta Sans', sans-serif; font-size: 40px; color: var(--gold); font-weight: 600; }
   .phone-streak .label { font-size: 10px; color: var(--text-secondary); margin-top: -6px; }
   .phone-card h3 { font-size: 16px; margin-bottom: 6px; }
   .phone-card p { font-size: 13px; color: var(--text-faint); line-height: 1.5; }
@@ -266,8 +266,8 @@
   }
   .price-card.premium { border-color: var(--gold); background: linear-gradient(180deg, var(--gold-soft), transparent 40%), var(--surface); }
   .price-card h3 { font-size: 20px; margin-bottom: 6px; }
-  .price-amount { font-family: 'Fraunces', serif; font-size: 32px; color: var(--gold); margin: 8px 0 4px; }
-  .price-amount span { font-size: 15px; color: var(--text-faint); font-family: 'Inter', sans-serif; }
+  .price-amount { font-family: 'Plus Jakarta Sans', sans-serif; font-size: 32px; color: var(--gold); margin: 8px 0 4px; }
+  .price-amount span { font-size: 15px; color: var(--text-faint); font-family: 'Plus Jakarta Sans', sans-serif; }
   .price-sub { font-size: 13px; color: var(--text-faint); margin-bottom: 24px; }
   .price-list { list-style: none; padding: 0; margin: 0 0 28px; }
   .price-list li {
@@ -326,7 +326,7 @@
   .footer-social a[aria-label="TikTok"]:hover { background: #000000; border-color: #3a3a3a; color: #fff; }
   .footer-social a[aria-label="Pinterest"]:hover { background: #E60023; border-color: #E60023; color: #fff; }
   .footer-col h4 {
-    font-family: 'Inter', sans-serif; font-size: 12px; font-weight: 600; color: var(--text-primary);
+    font-family: 'Plus Jakarta Sans', sans-serif; font-size: 12px; font-weight: 600; color: var(--text-primary);
     text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 16px;
   }
   .footer-col a { display: block; font-size: 13px; color: var(--text-secondary); margin-bottom: 12px; }
@@ -425,7 +425,7 @@
   .legal-toc li:has(a.toc-active)::before { background: var(--gold); }
   .legal-content section { padding: 0; margin-bottom: 18px; scroll-margin-top: 90px; }
   .legal-content h2 { font-size: 19px; margin-bottom: 12px; display: flex; gap: 10px; align-items: center; }
-  .legal-num { display: inline-flex; align-items: center; justify-content: center; min-width: 26px; height: 26px; padding: 0 6px; background: var(--gold-soft); border: 1px solid var(--gold-line); border-radius: 8px; color: var(--gold); font-family: 'Inter', sans-serif; font-weight: 600; font-size: 13px; transition: transform 0.2s ease, background 0.2s ease; }
+  .legal-num { display: inline-flex; align-items: center; justify-content: center; min-width: 26px; height: 26px; padding: 0 6px; background: var(--gold-soft); border: 1px solid var(--gold-line); border-radius: 8px; color: var(--gold); font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 600; font-size: 13px; transition: transform 0.2s ease, background 0.2s ease; }
   .legal-content p { color: var(--text-secondary); font-size: 14px; line-height: 1.7; margin-bottom: 12px; }
   .legal-content ul { color: var(--text-secondary); font-size: 14px; line-height: 1.7; margin: 0 0 12px; padding-left: 20px; }
   .legal-content li { margin-bottom: 6px; }
@@ -471,7 +471,7 @@
   .tonaura-form-status.status-error { color: #d98f8f; }
   .form-field input, .form-field textarea, .form-field select {
     width: 100%; background: var(--bg); border: 1px solid var(--hairline); border-radius: var(--radius-sm);
-    padding: 11px 14px; color: var(--text-primary); font-family: 'Inter', sans-serif; font-size: 14px;
+    padding: 11px 14px; color: var(--text-primary); font-family: 'Plus Jakarta Sans', sans-serif; font-size: 14px;
     transition: border-color 0.2s ease, box-shadow 0.2s ease;
   }
   .form-field input:hover, .form-field textarea:hover, .form-field select:hover { border-color: var(--gold-line); }
