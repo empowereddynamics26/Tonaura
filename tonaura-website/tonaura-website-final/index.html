@@ -249,18 +249,22 @@
   .phone-screen {
     position: relative;
     width: 100%;
-    aspect-ratio: 9 / 16;
+    aspect-ratio: 9 / 19.5;
     border-radius: 17px;
     overflow: hidden;
     background: #0B0C10;
     isolation: isolate;
   }
   .phone-screen > img {
+    position: absolute;
+    inset: 0;
     display: block;
     width: 100%;
     height: 100%;
     object-fit: cover;
     object-position: center center;
+    transform: scale(1.04);
+    transform-origin: center center;
   }
   .ambient-slides {
     position: absolute;
@@ -275,6 +279,7 @@
     height: 100%;
     object-fit: cover;
     object-position: center center;
+    transform: scale(1.02);
     opacity: 0;
     z-index: 0;
     transition: opacity 0.8s ease;
@@ -495,7 +500,7 @@
     <article class="phone-card">
       <div class="phone-frame">
         <div class="phone-screen">
-          <img src="images/app/mixer.webp" width="720" height="1280" alt="Tonaura mixer" loading="lazy" />
+          <img src="images/app/mixer.webp?v=4" width="720" height="1280" alt="Tonaura mixer" loading="lazy" />
         </div>
       </div>
       <h3>The mixer</h3>
@@ -505,7 +510,7 @@
     <article class="phone-card">
       <div class="phone-frame">
         <div class="phone-screen">
-          <img src="images/app/orb.webp" width="720" height="1280" alt="Tonaura orb mode" loading="lazy" />
+          <img src="images/app/orb.webp?v=4" width="720" height="1280" alt="Tonaura orb mode" loading="lazy" />
         </div>
       </div>
       <h3>Orb mode</h3>
@@ -515,7 +520,7 @@
     <article class="phone-card">
       <div class="phone-frame">
         <div class="phone-screen">
-          <img src="images/app/practice.webp" width="720" height="1280" alt="Tonaura practice streak" loading="lazy" />
+          <img src="images/app/practice.webp?v=4" width="720" height="1280" alt="Tonaura practice streak" loading="lazy" />
         </div>
       </div>
       <h3>Practice</h3>
@@ -525,7 +530,7 @@
     <article class="phone-card">
       <div class="phone-frame">
         <div class="phone-screen">
-          <img src="images/app/presets.webp" width="720" height="1280" alt="Tonaura presets" loading="lazy" />
+          <img src="images/app/presets.webp?v=4" width="720" height="1280" alt="Tonaura presets" loading="lazy" />
         </div>
       </div>
       <h3>Presets</h3>
@@ -536,11 +541,11 @@
       <div class="phone-frame">
         <div class="phone-screen" data-ambient-phone>
           <div class="ambient-slides">
-            <img src="images/app/ambients/winter.webp" alt="Winter ambient" class="is-active" />
-            <img src="images/app/ambients/autumn.webp" alt="Autumn ambient" />
-            <img src="images/app/ambients/summer.webp" alt="Summer ambient" />
-            <img src="images/app/ambients/rain.webp" alt="Rain ambient" />
-            <img src="images/app/ambients/nightsky.webp" alt="Night sky ambient" />
+            <img src="images/app/ambients/winter.webp?v=4" alt="Winter ambient" class="is-active" />
+            <img src="images/app/ambients/autumn.webp?v=4" alt="Autumn ambient" />
+            <img src="images/app/ambients/summer.webp?v=4" alt="Summer ambient" />
+            <img src="images/app/ambients/rain.webp?v=4" alt="Rain ambient" />
+            <img src="images/app/ambients/nightsky.webp?v=4" alt="Night sky ambient" />
           </div>
         </div>
       </div>
