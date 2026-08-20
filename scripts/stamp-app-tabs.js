@@ -56,27 +56,37 @@ async function barPng(active) {
   return sharp(Buffer.from(tabBarSvg(active))).png().toBuffer();
 }
 
+/** Crop empty margins then force exact phone fill. */
+async function fillFrame(inputPath) {
+  const meta = await sharp(inputPath).metadata();
+  const cropTop = Math.round(meta.height * 0.035);
+  const cropBot = Math.round(meta.height * 0.03);
+  const cropSide = Math.round(meta.width * 0.01);
+  return sharp(inputPath)
+    .extract({
+      left: cropSide,
+      top: cropTop,
+      width: meta.width - cropSide * 2,
+      height: meta.height - cropTop - cropBot,
+    })
+    .resize(W, H - TAB_H, { fit: "cover", position: "centre" })
+    .extend({
+      top: 0,
+      bottom: TAB_H,
+      left: 0,
+      right: 0,
+      background: { r: 11, g: 12, b: 16, alpha: 1 },
+    })
+    .toBuffer();
+}
+
 async function stampScreen(srcName, outName, activeTab) {
   const src = path.join(ASSETS, srcName);
+  const filled = await fillFrame(src);
   const bar = await barPng(activeTab);
-  const body = await sharp(src)
-    .resize(W, H, { fit: "cover", position: "centre" })
-    .composite([
-      {
-        input: {
-          create: {
-            width: W,
-            height: TAB_H + 6,
-            channels: 4,
-            background: { r: 11, g: 12, b: 16, alpha: 1 },
-          },
-        },
-        top: H - TAB_H - 6,
-        left: 0,
-      },
-      { input: bar, top: H - TAB_H, left: 0 },
-    ])
-    .webp({ quality: 85 })
+  const body = await sharp(filled)
+    .composite([{ input: bar, top: H - TAB_H, left: 0 }])
+    .webp({ quality: 86 })
     .toBuffer();
   fs.mkdirSync(OUT, { recursive: true });
   fs.mkdirSync(MIRROR, { recursive: true });
@@ -92,16 +102,16 @@ async function stampAmbient(name, activeTab = 0) {
 <svg width="${W}" height="${H}" xmlns="http://www.w3.org/2000/svg">
   <defs>
     <linearGradient id="g" x1="0" y1="0" x2="0" y2="1">
-      <stop offset="0%" stop-color="#08080E" stop-opacity="0.12"/>
-      <stop offset="50%" stop-color="#08080E" stop-opacity="0.08"/>
-      <stop offset="100%" stop-color="#08080E" stop-opacity="0.82"/>
+      <stop offset="0%" stop-color="#08080E" stop-opacity="0.08"/>
+      <stop offset="45%" stop-color="#08080E" stop-opacity="0.05"/>
+      <stop offset="100%" stop-color="#08080E" stop-opacity="0.78"/>
     </linearGradient>
   </defs>
   <rect width="${W}" height="${H}" fill="url(#g)"/>
-  <circle cx="${W / 2}" cy="${Math.round(H * 0.36)}" r="52" fill="none" stroke="#C9A24B" stroke-width="2.2" opacity="0.75"/>
-  <circle cx="${W / 2}" cy="${Math.round(H * 0.36)}" r="92" fill="none" stroke="#4FB3A9" stroke-width="1.6" opacity="0.4"/>
-  <circle cx="${W / 2}" cy="${Math.round(H * 0.36)}" r="132" fill="none" stroke="#C9A24B" stroke-width="1.2" opacity="0.25"/>
-  <circle cx="${W / 2}" cy="${Math.round(H * 0.36)}" r="7" fill="#C9A24B"/>
+  <circle cx="${W / 2}" cy="${Math.round(H * 0.34)}" r="52" fill="none" stroke="#C9A24B" stroke-width="2.2" opacity="0.75"/>
+  <circle cx="${W / 2}" cy="${Math.round(H * 0.34)}" r="92" fill="none" stroke="#4FB3A9" stroke-width="1.6" opacity="0.4"/>
+  <circle cx="${W / 2}" cy="${Math.round(H * 0.34)}" r="132" fill="none" stroke="#C9A24B" stroke-width="1.2" opacity="0.25"/>
+  <circle cx="${W / 2}" cy="${Math.round(H * 0.34)}" r="7" fill="#C9A24B"/>
   <text x="${W / 2}" y="${H - TAB_H - 118}" text-anchor="middle" font-family="Georgia, serif" font-size="36" fill="#EDE7D9">${label}</text>
   <rect x="${Math.round(W * 0.16)}" y="${H - TAB_H - 96}" width="${Math.round(W * 0.68)}" height="58" rx="29" fill="#C9A24B"/>
   <text x="${W / 2}" y="${H - TAB_H - 58}" text-anchor="middle" font-family="Inter, system-ui, sans-serif" font-size="22" font-weight="700" letter-spacing="3" fill="#1A1608">PLAY</text>
@@ -117,7 +127,7 @@ async function stampAmbient(name, activeTab = 0) {
       { input: await sharp(ui).png().toBuffer(), top: 0, left: 0 },
       { input: bar, top: H - TAB_H, left: 0 },
     ])
-    .webp({ quality: 84 })
+    .webp({ quality: 85 })
     .toBuffer();
   fs.writeFileSync(path.join(outAmb, `${name}.webp`), body);
   fs.writeFileSync(path.join(mirrorAmb, `${name}.webp`), body);
