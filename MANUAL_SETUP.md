@@ -108,16 +108,48 @@ In `tonaura-app/.env`:
 - Add `EXPO_PUBLIC_WEB_URL=https://tonaura.io` (use `http://localhost:3000` while testing checkout locally).
 - Never put the service role key or Stripe secret in the app.
 
-## 7. Email DNS
+## 7. Email (Fastmail)
 
-Point these at a mailbox you actually read (Google Workspace, Fastmail, etc.), and add SPF/DKIM/DMARC for the domain:
+Point these at mailboxes you read, with SPF/DKIM/DMARC on the domain:
 
 - `support@tonaura.io`
+- `info@tonaura.io` (welcome / waitlist)
 - `privacy@tonaura.io`
 - `billing@tonaura.io`
 - `legal@tonaura.io`
 
-Supabase custom SMTP can use the same domain so auth emails don’t look like spam.
+### 7A. Supabase auth emails (confirm signup + password reset)
+
+Project Settings → Authentication → SMTP → enable custom SMTP with Fastmail:
+
+- Host `smtp.fastmail.com`, port `465`, SSL
+- User: your Fastmail address (often `support@tonaura.io`)
+- Pass: Fastmail **App Password**
+- Sender: `Tonaura <support@tonaura.io>`
+
+Then open Authentication → Email Templates and brand Confirm signup + Reset password.
+
+### 7B. Website transactional emails (Vercel)
+
+Add the same Fastmail SMTP values as Vercel env vars (see `.env.example`):
+
+`SMTP_HOST`, `SMTP_PORT`, `SMTP_SECURE`, `SMTP_USER`, `SMTP_PASS`,
+`MAIL_FROM_SUPPORT`, `MAIL_FROM_INFO`, `MAIL_FROM_BILLING`, `MAIL_SUPPORT_INBOX`
+
+These send:
+
+- Welcome after website signup
+- Payment confirmed after Stripe checkout
+- Subscription confirmed / ended
+- Contact auto-reply + notify support inbox
+- Waitlist thank-you
+
+Stripe still sends its own payment receipt separately.
+
+### 7C. Fastmail App Password
+
+Fastmail → Settings → Password & Security → App Passwords → create one for “Tonaura SMTP”.
+Use that as `SMTP_PASS` (and in Supabase SMTP). Never commit it.
 
 ## 8. Stores (when you ship the app)
 

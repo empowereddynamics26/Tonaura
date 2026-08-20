@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { createAdminClient } from "@/lib/supabase/admin";
+import { sendWaitlistAckEmail } from "@/lib/mail";
 
 const EMAIL = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
@@ -13,6 +14,7 @@ export async function POST(request) {
     const { error } = await admin.from("waitlist").insert({ email, source: body.source || "website" });
     if (error && error.code === "23505") return NextResponse.json({ ok: true, already: true });
     if (error) return NextResponse.json({ error: "Could not save that email." }, { status: 500 });
+    await Promise.allSettled([sendWaitlistAckEmail({ to: email })]);
     return NextResponse.json({ ok: true });
   } catch {
     return NextResponse.json({ error: "Could not save that email." }, { status: 500 });

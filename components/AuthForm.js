@@ -42,6 +42,11 @@ export function AuthForm({ mode }) {
           options: { emailRedirectTo: `${origin}/auth/callback?next=/account` },
         });
         if (err) throw err;
+        fetch("/api/email/welcome", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ email }),
+        }).catch(() => {});
         if (!data.session) {
           setNotice("Check your email to confirm this account, then sign in.");
           return;

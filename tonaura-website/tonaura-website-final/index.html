@@ -200,39 +200,101 @@
   .section-head h2 { font-size: clamp(28px, 4vw, 38px); line-height: 1.15; margin-bottom: 16px; }
   .section-head p { color: var(--text-secondary); font-size: 16px; line-height: 1.6; }
 
-  /* ---------- Product showcase ---------- */
-  .showcase { display: grid; grid-template-columns: repeat(3, 1fr); gap: 28px; max-width: 980px; margin: 0 auto; }
-  @media (max-width: 860px) { .showcase { grid-template-columns: 1fr; max-width: 340px; } }
-  .phone-card { text-align: center; }
-  .phone {
-    background: var(--bg); border: 6px solid #0a0a10; border-radius: 26px;
-    width: 100%; max-width: 240px; margin: 0 auto 22px; padding: 16px 14px;
-    aspect-ratio: 9 / 17.5;
-    display: flex; flex-direction: column;
-    box-shadow: 0 24px 60px -20px rgba(0,0,0,0.6);
+    /* ---------- Product showcase ---------- */
+  .showcase-stage {
+    max-width: 1100px;
+    margin: 0 auto;
+    position: relative;
   }
-  .phone-dot { width: 6px; height: 6px; border-radius: 3px; background: var(--gold); margin-bottom: 10px; }
-  .phone-row {
-    display: flex; align-items: center; gap: 8px; background: var(--surface);
-    border: 1px solid var(--hairline); border-radius: 10px; padding: 8px 10px; margin-bottom: 6px;
+  .showcase-track {
+    display: flex;
+    gap: 22px;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    scroll-behavior: smooth;
+    padding: 12px 8% 28px;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
   }
-  .phone-row .swatch { width: 8px; height: 8px; border-radius: 4px; flex-shrink: 0; }
-  .phone-row .label { font-size: 10px; font-weight: 600; color: var(--text-primary); }
-  .phone-play {
-    background: var(--gold); color: #1a1608; font-size: 11px; font-weight: 600;
-    text-align: center; padding: 9px; border-radius: 999px; margin: 10px 0;
+  .showcase-track::-webkit-scrollbar { display: none; }
+  .phone-card {
+    text-align: center;
+    flex: 0 0 min(72vw, 260px);
+    scroll-snap-align: center;
+    opacity: 0.45;
+    transform: scale(0.92) translateY(10px);
+    transition: opacity 0.55s ease, transform 0.55s ease, filter 0.55s ease;
+    filter: saturate(0.85);
   }
-  .phone-chip {
-    border: 1px solid var(--hairline); color: var(--text-secondary); font-size: 10px;
-    text-align: center; padding: 8px; border-radius: 999px; margin-bottom: 6px;
+  .phone-card.is-active {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+    filter: none;
   }
-  .phone-streak { text-align: center; margin-top: auto; margin-bottom: auto; }
-  .phone-streak .num { font-family: 'Fraunces', serif; font-size: 40px; color: var(--gold); font-weight: 600; }
-  .phone-streak .label { font-size: 10px; color: var(--text-secondary); margin-top: -6px; }
-  .phone-card h3 { font-size: 16px; margin-bottom: 6px; }
-  .phone-card p { font-size: 13px; color: var(--text-faint); line-height: 1.5; }
+  .phone-frame {
+    position: relative;
+    width: 100%;
+    max-width: 260px;
+    margin: 0 auto 20px;
+    border-radius: 28px;
+    padding: 10px;
+    background: linear-gradient(160deg, #1a1a24 0%, #0a0a10 55%, #14141c 100%);
+    border: 1px solid rgba(237,231,217,0.12);
+    box-shadow: 0 28px 70px -24px rgba(0,0,0,0.75), inset 0 1px 0 rgba(255,255,255,0.04);
+  }
+  .phone-frame::before {
+    content: "";
+    position: absolute;
+    top: 14px; left: 50%;
+    transform: translateX(-50%);
+    width: 64px; height: 6px;
+    border-radius: 999px;
+    background: #050508;
+    z-index: 2;
+  }
+  .phone-frame img {
+    display: block;
+    width: 100%;
+    aspect-ratio: 9 / 19.5;
+    object-fit: cover;
+    border-radius: 20px;
+    background: #12121A;
+  }
+  .phone-card h3 { font-size: 17px; margin-bottom: 6px; }
+  .phone-card p { font-size: 13px; color: var(--text-faint); line-height: 1.55; max-width: 240px; margin: 0 auto; }
+  .showcase-controls {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 14px;
+    margin-top: 4px;
+  }
+  .showcase-dot {
+    width: 7px; height: 7px; border-radius: 50%;
+    border: 0; padding: 0; cursor: pointer;
+    background: rgba(237,231,217,0.22);
+    transition: background 0.35s ease, transform 0.35s ease;
+  }
+  .showcase-dot.is-active {
+    background: var(--gold);
+    transform: scale(1.25);
+  }
+  .showcase-nav {
+    width: 40px; height: 40px; border-radius: 50%;
+    border: 1px solid var(--hairline);
+    background: rgba(18,18,26,0.7);
+    color: var(--cream);
+    cursor: pointer;
+    font-size: 18px; line-height: 1;
+    transition: border-color 0.25s ease, background 0.25s ease;
+  }
+  .showcase-nav:hover { border-color: var(--gold); background: rgba(201,162,75,0.12); }
+  @media (max-width: 720px) {
+    .showcase-track { padding-left: 14%; padding-right: 14%; }
+    .phone-card { flex-basis: min(78vw, 280px); }
+  }
 
-  /* ---------- Honest section ---------- */
+/* ---------- Honest section ---------- */
   .honest-bg { background: var(--bg-elevated); border-top: 1px solid var(--hairline-soft); border-bottom: 1px solid var(--hairline-soft); }
   .honest-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; max-width: 860px; margin: 0 auto; }
   @media (max-width: 720px) { .honest-grid { grid-template-columns: 1fr; } }
@@ -433,45 +495,51 @@
   <div class="section-head">
     <div class="section-eyebrow">What's inside</div>
     <h2>Built to be used, not browsed</h2>
-    <p>Three views into the same idea: put on a tone, and get out of your own way.</p>
+    <p>Five screens from the real app — mix, orb, practice, presets, and your account.</p>
   </div>
 
-  <div class="showcase">
-    <div class="phone-card">
-      <div class="phone">
-        <div class="phone-row"><div class="swatch" style="background:#C9A24B"></div><div class="label">396 Hz</div></div>
-        <div class="phone-row"><div class="swatch" style="background:#4FB3A9"></div><div class="label">852 Hz</div></div>
-        <div class="phone-chip">Entrainment layer · Binaural</div>
-        <div class="phone-play">Play</div>
-      </div>
-      <h3>The mixer</h3>
-      <p>Ten pure tones, one breathing view of the whole mix.</p>
-    </div>
-
-    <div class="phone-card">
-      <div class="phone" style="align-items:center; justify-content:center;">
-        <svg width="110" height="110" viewBox="0 0 110 110" style="margin-bottom:14px;">
-          <circle cx="55" cy="55" r="3" fill="#C9A24B"/>
-          <circle cx="55" cy="55" r="20" fill="none" stroke="#C9A24B" stroke-width="2" opacity="0.7"/>
-          <circle cx="55" cy="55" r="36" fill="none" stroke="#9BAE86" stroke-width="1.6" opacity="0.5"/>
-          <circle cx="55" cy="55" r="50" fill="none" stroke="#4FB3A9" stroke-width="2" opacity="0.4"/>
-        </svg>
-        <div class="phone-play" style="width:70%;">Play</div>
-      </div>
-      <h3>Orb mode</h3>
-      <p>One button, a few quick picks, nothing to figure out.</p>
-    </div>
-
-    <div class="phone-card">
-      <div class="phone">
-        <div class="phone-streak">
-          <div class="num">6</div>
-          <div class="label">days in a row</div>
+  <div class="showcase-stage" data-showcase>
+    <div class="showcase-track" data-showcase-track>
+      <article class="phone-card is-active" data-showcase-card>
+        <div class="phone-frame">
+          <img src="images/app/mixer.webp" width="720" height="1560" alt="Tonaura mixer screen with tone cards and play control" loading="lazy" />
         </div>
-        <div class="phone-play">I showed up today</div>
-      </div>
-      <h3>Practice, not sleep score</h3>
-      <p>A streak for showing up — never for how well you slept.</p>
+        <h3>The mixer</h3>
+        <p>Ten pure tones in one breathing view — build a field, then press play.</p>
+      </article>
+      <article class="phone-card" data-showcase-card>
+        <div class="phone-frame">
+          <img src="images/app/orb.webp" width="720" height="1560" alt="Tonaura orb mode with quick picks" loading="lazy" />
+        </div>
+        <h3>Orb mode</h3>
+        <p>One button, a few quick picks, nothing to figure out.</p>
+      </article>
+      <article class="phone-card" data-showcase-card>
+        <div class="phone-frame">
+          <img src="images/app/practice.webp" width="720" height="1560" alt="Tonaura practice streak screen" loading="lazy" />
+        </div>
+        <h3>Practice, not sleep score</h3>
+        <p>A streak for showing up — never for how well you slept.</p>
+      </article>
+      <article class="phone-card" data-showcase-card>
+        <div class="phone-frame">
+          <img src="images/app/presets.webp" width="720" height="1560" alt="Tonaura presets library" loading="lazy" />
+        </div>
+        <h3>Presets</h3>
+        <p>Deep sleep, focus, morning reset — load a blend and go.</p>
+      </article>
+      <article class="phone-card" data-showcase-card>
+        <div class="phone-frame">
+          <img src="images/app/account.webp" width="720" height="1560" alt="Tonaura account and Premium plans" loading="lazy" />
+        </div>
+        <h3>Account &amp; Premium</h3>
+        <p>Same email as the website. Subscribe once, unlock on your phone.</p>
+      </article>
+    </div>
+    <div class="showcase-controls">
+      <button type="button" class="showcase-nav" data-showcase-prev aria-label="Previous screen">Prev</button>
+      <div class="showcase-dots" data-showcase-dots></div>
+      <button type="button" class="showcase-nav" data-showcase-next aria-label="Next screen">Next</button>
     </div>
   </div>
 </section>
@@ -678,5 +746,68 @@ document.getElementById('cookie-modal-backdrop').addEventListener('click', (e) =
   onScroll();
 })();
 </script>
+
+<script>
+(function () {
+  var root = document.querySelector("[data-showcase]");
+  if (!root) return;
+  var track = root.querySelector("[data-showcase-track]");
+  var cards = Array.prototype.slice.call(root.querySelectorAll("[data-showcase-card]"));
+  var dotsWrap = root.querySelector("[data-showcase-dots]");
+  var prev = root.querySelector("[data-showcase-prev]");
+  var next = root.querySelector("[data-showcase-next]");
+  var index = 0;
+  var timer = null;
+  var reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  cards.forEach(function (_, i) {
+    var b = document.createElement("button");
+    b.type = "button";
+    b.className = "showcase-dot" + (i === 0 ? " is-active" : "");
+    b.setAttribute("aria-label", "Show screen " + (i + 1));
+    b.addEventListener("click", function () { go(i, true); });
+    dotsWrap.appendChild(b);
+  });
+  var dots = Array.prototype.slice.call(dotsWrap.children);
+
+  function go(i, user) {
+    index = (i + cards.length) % cards.length;
+    cards.forEach(function (c, n) { c.classList.toggle("is-active", n === index); });
+    dots.forEach(function (d, n) { d.classList.toggle("is-active", n === index); });
+    var card = cards[index];
+    var left = card.offsetLeft - (track.clientWidth - card.clientWidth) / 2;
+    track.scrollTo({ left: left, behavior: reduce ? "auto" : "smooth" });
+    if (user) restart();
+  }
+
+  function restart() {
+    if (reduce) return;
+    clearInterval(timer);
+    timer = setInterval(function () { go(index + 1, false); }, 4200);
+  }
+
+  prev.addEventListener("click", function () { go(index - 1, true); });
+  next.addEventListener("click", function () { go(index + 1, true); });
+  track.addEventListener("scroll", function () {
+    var mid = track.scrollLeft + track.clientWidth / 2;
+    var best = 0, bestDist = Infinity;
+    cards.forEach(function (c, i) {
+      var d = Math.abs(c.offsetLeft + c.clientWidth / 2 - mid);
+      if (d < bestDist) { bestDist = d; best = i; }
+    });
+    if (best !== index) {
+      index = best;
+      cards.forEach(function (c, n) { c.classList.toggle("is-active", n === index); });
+      dots.forEach(function (d, n) { d.classList.toggle("is-active", n === index); });
+    }
+  }, { passive: true });
+
+  root.addEventListener("mouseenter", function () { clearInterval(timer); });
+  root.addEventListener("mouseleave", restart);
+  go(0, false);
+  restart();
+})();
+</script>
+
 </body>
 </html>
