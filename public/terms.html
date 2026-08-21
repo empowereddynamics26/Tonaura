@@ -87,20 +87,25 @@
     box-shadow: 0 8px 28px rgba(0,0,0,0.35);
   }
   .nav-inner {
-    display: flex; align-items: center; justify-content: space-between;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+    align-items: center;
+    gap: 16px;
     padding: 8px 28px; max-width: 1120px; margin: 0 auto;
   }
-  .brand { display: flex; align-items: center; }
-  .brand img { width: 220px; height: auto; display: block; filter: saturate(1.22) contrast(1.06) brightness(1.04); }
-  .nav-links { display: flex; align-items: center; gap: 24px; }
+  .brand { display: flex; align-items: center; justify-self: start; min-width: 0; }
+  .brand img { width: 168px; height: auto; display: block; filter: saturate(1.22) contrast(1.06) brightness(1.04); }
+  .nav-links { display: flex; align-items: center; gap: 22px; justify-self: center; }
   .nav-links a { font-size: 14px; color: var(--text-secondary); transition: color 0.2s; position: relative; }
   .nav-links a:hover { color: var(--text-primary); }
   .nav-links a::after { content: ''; position: absolute; left: 0; bottom: -6px; width: 0; height: 1px; background: var(--gold); transition: width 0.25s ease; }
   .nav-links a:hover::after { width: 100%; }
+  .nav-end { justify-self: end; display: flex; align-items: center; gap: 12px; }
   .nav-cta {
     background: var(--gold); color: #1a1608; font-weight: 600; font-size: 13px;
     padding: 10px 20px; border-radius: var(--radius-pill); border: none; cursor: pointer;
     transition: transform 0.2s ease, filter 0.2s ease, box-shadow 0.2s ease;
+    white-space: nowrap; text-decoration: none;
   }
   .nav-cta:hover { transform: translateY(-1px); filter: brightness(1.08); box-shadow: 0 6px 16px rgba(201,162,75,0.28); }
   .nav-cta:active { transform: translateY(0) scale(0.97); filter: brightness(0.97); box-shadow: 0 2px 8px rgba(201,162,75,0.22); }
@@ -118,7 +123,7 @@
   @media (max-width: 720px) {
     .nav-mobile-hide { display: none; }
     .nav-hamburger { display: flex; }
-    .nav-inner { padding: 8px 16px; gap: 10px; }
+    .nav-inner { grid-template-columns: 1fr auto; padding: 8px 16px; gap: 10px; }
     .brand img { width: 152px; }
     .nav-cta { padding: 9px 14px; font-size: 12px; white-space: nowrap; }
     nav .nav-links.nav-mobile-hide {
@@ -504,13 +509,17 @@
       <a href="/#inside">Inside</a>
       <a href="/#how">How it works</a>
       <a href="/#pricing">Pricing</a>
-      <a href="about.html">About</a>
+      <a href="/about.html">About</a>
       <a href="/account" data-account-link="1">Account</a>
     </div>
-    <a href="/login" class="nav-cta" style="text-decoration:none;">Sign in</a>
-    <button class="nav-hamburger" type="button" aria-label="Open menu" aria-expanded="false" aria-controls="nav-links-mobile">
-      <span class="bar bar-1"></span><span class="bar bar-2"></span><span class="bar bar-3"></span>
-    </button>
+    <div class="nav-end">
+      <a href="/login" class="nav-cta" style="text-decoration:none;">Sign in</a>
+      <button class="nav-hamburger" type="button" aria-label="Open menu" aria-expanded="false" aria-controls="nav-links-mobile">
+        <span class="bar bar-1"></span>
+        <span class="bar bar-2"></span>
+        <span class="bar bar-3"></span>
+      </button>
+    </div>
   </div>
 </nav>
 
@@ -576,7 +585,7 @@
 
         <section id="subscription-plans-terms">
           <h2><span class="legal-num">5.</span> Subscription plans</h2>
-<p>Tonaura offers a free tier and a paid Premium tier (monthly, yearly, or lifetime). Premium unlocks all tones, the entrainment layer, adaptive suggestions, every theme and ambient pack, unlimited saved presets, and the full-length sleep timer. Current pricing is shown in the app and on our <a class="inline-link" href="index.html#pricing">pricing page</a>.</p>
+<p>Tonaura offers a free tier and a paid Premium tier (monthly, yearly, or lifetime). Premium unlocks all tones, the entrainment layer, adaptive suggestions, every look and Theme Pack, unlimited saved presets, and the full-length sleep timer. Current pricing is shown in the app and on our <a class="inline-link" href="index.html#pricing">pricing page</a>.</p>
         </section>
 
         <section id="payments-terms">
@@ -621,7 +630,7 @@
 
         <section id="changes-service">
           <h2><span class="legal-num">14.</span> Changes to the Service</h2>
-<p>We may add, change, or remove features over time, including which tones or themes are free versus Premium. We'll do our best to communicate significant changes in advance.</p>
+<p>We may add, change, or remove features over time, including which tones, looks, or Theme Packs are free versus Premium. We'll do our best to communicate significant changes in advance.</p>
         </section>
 
         <section id="suspension-termination-terms">

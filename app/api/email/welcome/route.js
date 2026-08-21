@@ -1,31 +1,31 @@
 import { NextResponse } from "next/server";
 import { sendWelcomeEmail } from "@/lib/mail";
+import { getSessionUser } from "@/lib/auth";
+import { clientIp, rateLimit } from "@/lib/security";
 
 const EMAIL = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-const recent = new Map();
 
-function rateOk(ip, email) {
-  const key = `${ip}|${email}`;
-  const now = Date.now();
-  const last = recent.get(key) || 0;
-  if (now - last < 60_000) return false;
-  recent.set(key, now);
-  if (recent.size > 500) {
-    for (const [k, t] of recent) {
-      if (now - t > 300_000) recent.delete(k);
-    }
-  }
-  return true;
-}
-
+/** Welcome mail is only for the signed-in user's own address — not a public mailer. */
 export async function POST(request) {
   try {
-    const body = await request.json();
+    const user = await getSessionUser(request);
+    if (!user?.email) {
+      return NextResponse.json({ error: "Sign in required." }, { status: 401 });
+    }
+
+    const body = await request.json().catch(() => ({}));
     if (body.honey || body._honey) return NextResponse.json({ ok: true });
-    const email = String(body.email || "").trim().toLowerCase();
-    if (!EMAIL.test(email)) return NextResponse.json({ error: "Invalid email." }, { status: 400 });
-    const ip = request.headers.get("x-forwarded-for") || "local";
-    if (!rateOk(ip, email)) return NextResponse.json({ ok: true });
+
+    const email = String(body.email || user.email).trim().toLowerCase();
+    if (!EMAIL.test(email) || email !== user.email.toLowerCase()) {
+      return NextResponse.json({ error: "Forbidden." }, { status: 403 });
+    }
+
+    const ip = clientIp(request);
+    if (!rateLimit({ key: `welcome:${ip}:${email}`, limit: 3, windowMs: 60 * 60_000 })) {
+      return NextResponse.json({ ok: true });
+    }
+
     await sendWelcomeEmail({ to: email });
     return NextResponse.json({ ok: true });
   } catch (err) {

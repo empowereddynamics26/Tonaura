@@ -35,16 +35,6 @@ export function SiteNav({ extra }) {
         <a className="site-brand" href="/">
           <img src="/images/brand/lockup.png" width="168" height="54" alt="Tonaura" />
         </a>
-        <button
-          type="button"
-          className="site-burger"
-          aria-label="Menu"
-          aria-expanded={menuOpen}
-          onClick={() => setMenuOpen((v) => !v)}
-        >
-          <span />
-          <span />
-        </button>
         <div className="site-nav-links">
           <a href="/#inside">Inside</a>
           <a href="/#how">How it works</a>
@@ -57,9 +47,21 @@ export function SiteNav({ extra }) {
           ) : null}
           <a href="/account">Account</a>
           {extra}
+        </div>
+        <div className="site-nav-end">
           <a className="site-nav-cta" href="/login">
             Sign in
           </a>
+          <button
+            type="button"
+            className="site-burger"
+            aria-label="Menu"
+            aria-expanded={menuOpen}
+            onClick={() => setMenuOpen((v) => !v)}
+          >
+            <span />
+            <span />
+          </button>
         </div>
       </div>
     </nav>

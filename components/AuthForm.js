@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { createClient } from "@/lib/supabase/client";
 import { SiteNav } from "./SiteNav";
+import { safeRedirectPath } from "@/lib/security";
 
 export function AuthForm({ mode }) {
   const [email, setEmail] = useState("");
@@ -42,23 +43,24 @@ export function AuthForm({ mode }) {
           options: { emailRedirectTo: `${origin}/auth/callback?next=/account` },
         });
         if (err) throw err;
-        fetch("/api/email/welcome", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ email }),
-        }).catch(() => {});
-        if (!data.session) {
-          setNotice("Check your email to confirm this account, then sign in.");
+        if (data.session) {
+          fetch("/api/email/welcome", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            credentials: "same-origin",
+            body: JSON.stringify({ email }),
+          }).catch(() => {});
+          window.location.href = "/account";
           return;
         }
-        window.location.href = "/account";
+        setNotice("Check your email to confirm this account, then sign in.");
         return;
       }
       const { error: err } = await supabase.auth.signInWithPassword({ email, password });
       if (err) throw err;
       const params = new URLSearchParams(window.location.search);
-      const next = params.get("next");
-      window.location.href = next && next.startsWith("/") ? next : "/account";
+      const next = safeRedirectPath(params.get("next"), "/account");
+      window.location.href = next;
     } catch (err) {
       setError(err.message || "Could not continue.");
     } finally {

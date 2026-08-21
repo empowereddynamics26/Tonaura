@@ -46,7 +46,7 @@ export default function CheckoutSuccessPage() {
             <span className="checkout-step-num">3</span>
             <div>
               <strong>Listen with everything unlocked</strong>
-              <p>All tones, themes, ambience, timers, and presets.</p>
+              <p>All tones, looks, Theme Packs, timers, and presets.</p>
             </div>
           </li>
         </ol>
