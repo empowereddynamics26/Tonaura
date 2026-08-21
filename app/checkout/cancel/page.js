@@ -10,7 +10,7 @@ export default function CheckoutCancelPage() {
     <div className="checkout-scene checkout-scene-quiet">
       <div className="checkout-glow checkout-glow-a" aria-hidden="true" />
 
-      <SiteNav extra={<a href="/account">Account</a>} />
+      <SiteNav />
 
       <div className="shell checkout-shell">
         <div className="checkout-hero">

@@ -12,7 +12,7 @@ export default function CheckoutSuccessPage() {
       <div className="checkout-glow checkout-glow-b" aria-hidden="true" />
       <div className="checkout-ring" aria-hidden="true" />
 
-      <SiteNav extra={<a href="/account">Account</a>} />
+      <SiteNav />
 
       <div className="shell checkout-shell">
         <div className="checkout-hero">

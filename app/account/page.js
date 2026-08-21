@@ -100,7 +100,7 @@ export default function AccountPage() {
   if (!user) {
     return (
       <>
-        <SiteNav extra={<a href="/login">Sign in</a>} />
+        <SiteNav />
         <div className="shell">
           <p className="kicker">Account</p>
           <h1>Sign in to subscribe</h1>

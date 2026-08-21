@@ -55,9 +55,10 @@ export function SiteNav({ extra }) {
               Admin
             </a>
           ) : null}
-          {extra || <a href="/account">Account</a>}
-          <a className="site-nav-cta" href="/#early">
-            Early access
+          <a href="/account">Account</a>
+          {extra}
+          <a className="site-nav-cta" href="/login">
+            Sign in
           </a>
         </div>
       </div>

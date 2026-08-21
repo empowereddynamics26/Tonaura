@@ -82,12 +82,25 @@
 
   function addAccountLink() {
     var links = document.querySelector(".nav-links");
-    if (!links || links.querySelector("[data-account-link]")) return;
+    if (!links) return;
+    var existing = links.querySelectorAll("a[href='/account'], a[href$='/account'], [data-account-link]");
+    var i;
+    // Keep the first Account link only — remove duplicates from HTML + older scripts.
+    for (i = 1; i < existing.length; i++) {
+      existing[i].parentNode.removeChild(existing[i]);
+    }
+    if (existing.length >= 1) {
+      existing[0].setAttribute("data-account-link", "1");
+      if (!existing[0].textContent.trim()) existing[0].textContent = "Account";
+      return;
+    }
     var a = document.createElement("a");
     a.href = "/account";
     a.textContent = "Account";
     a.setAttribute("data-account-link", "1");
-    links.appendChild(a);
+    var cta = links.querySelector(".nav-cta");
+    if (cta) links.insertBefore(a, cta);
+    else links.appendChild(a);
   }
 
   function retargetCtas() {
@@ -138,7 +151,7 @@
   // Fades/slides content up into place as it enters the viewport.
   function scrollReveal() {
     var targets = document.querySelectorAll(
-      ".legal-content section, .support-card, .contact-card, .compare-card, .about-pillars > div, .trust-item"
+      ".legal-content section, .legal-layout, .legal-toc, .support-card, .contact-card, .compare-card, .compare-grid > *, .about-pillars > div, .trust-item, .page-hero, .legal-hero, main .container > section, .faq-item, .status-card"
     );
     if (!targets.length) return;
     var reduceMotion =
@@ -150,8 +163,9 @@
       return;
     }
     targets.forEach(function (el, i) {
+      if (el.classList.contains("reveal") || el.classList.contains("reveal-init")) return;
       el.classList.add("reveal-init");
-      el.style.transitionDelay = (Math.min(i % 6, 5) * 0.07).toFixed(2) + "s";
+      el.style.transitionDelay = (Math.min(i % 6, 5) * 0.08).toFixed(2) + "s";
     });
     var io = new IntersectionObserver(
       function (entries) {
@@ -162,9 +176,9 @@
           }
         });
       },
-      { threshold: 0.12, rootMargin: "0px 0px -40px 0px" }
+      { threshold: 0.08, rootMargin: "0px 0px -4% 0px" }
     );
-    targets.forEach(function (el) {
+    document.querySelectorAll(".reveal-init").forEach(function (el) {
       io.observe(el);
     });
   }

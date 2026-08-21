@@ -34,7 +34,7 @@
     startAmbientCycle();
   }
 
-  // Scroll reveals
+  // Scroll reveals — fire earlier so Inside / chapters feel continuous
   var nodes = document.querySelectorAll(".reveal");
   if ("IntersectionObserver" in window && !window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
     var io = new IntersectionObserver(
@@ -46,7 +46,7 @@
           }
         });
       },
-      { threshold: 0.18, rootMargin: "0px 0px -8% 0px" }
+      { threshold: 0.08, rootMargin: "0px 0px -4% 0px" }
     );
     nodes.forEach(function (n) { io.observe(n); });
   } else {
