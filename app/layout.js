@@ -1,4 +1,5 @@
 import "./globals.css";
+import { PageReveal } from "@/components/PageReveal";
 
 export const metadata = {
   title: "Tonaura",
@@ -16,7 +17,10 @@ export default function RootLayout({ children }) {
           rel="stylesheet"
         />
       </head>
-      <body>{children}</body>
+      <body>
+        {children}
+        <PageReveal />
+      </body>
     </html>
   );
 }

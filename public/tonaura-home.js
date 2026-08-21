@@ -34,9 +34,14 @@
     startAmbientCycle();
   }
 
-  // Scroll reveals — fire earlier so Inside / chapters feel continuous
-  var nodes = document.querySelectorAll(".reveal");
-  if ("IntersectionObserver" in window && !window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+  // Scroll reveals — fire earlier so Inside / chapters feel continuous.
+  // Double-rAF before observe so opacity:0 paints before .is-in is applied.
+  var nodes = Array.prototype.slice.call(document.querySelectorAll(".reveal"));
+  if (
+    nodes.length &&
+    "IntersectionObserver" in window &&
+    !(window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches)
+  ) {
     var io = new IntersectionObserver(
       function (entries) {
         entries.forEach(function (e) {
@@ -46,11 +51,19 @@
           }
         });
       },
-      { threshold: 0.08, rootMargin: "0px 0px -4% 0px" }
+      { threshold: 0.06, rootMargin: "0px 0px -6% 0px" }
     );
-    nodes.forEach(function (n) { io.observe(n); });
+    requestAnimationFrame(function () {
+      requestAnimationFrame(function () {
+        nodes.forEach(function (n) {
+          io.observe(n);
+        });
+      });
+    });
   } else {
-    nodes.forEach(function (n) { n.classList.add("is-in"); });
+    nodes.forEach(function (n) {
+      n.classList.add("is-in");
+    });
   }
 
   // Cookie helpers used by footer

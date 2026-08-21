@@ -324,9 +324,16 @@
     transition: color 0.2s, border-color 0.2s, background 0.2s, transform 0.2s;
   }
   .footer-social a:hover { transform: translateY(-1px); }
-  .footer-social a[aria-label="LinkedIn"]:hover { background: #0A66C2; border-color: #0A66C2; color: #fff; }
-  .footer-social a[aria-label="X"]:hover { background: transparent; border-color: #fff; color: #fff; }
-  .footer-social a[aria-label="Instagram"]:hover { background: #E1306C; border-color: #E1306C; color: #fff; }
+  .footer-social a.social-linkedin:hover { background: #0A66C2; border-color: #0A66C2; color: #fff; }
+  .footer-social a.social-x:hover { background: #000; border-color: #fff; color: #fff; }
+  .footer-social a.social-instagram:hover {
+    background: radial-gradient(circle at 30% 107%, #fdf497 0%, #fdf497 5%, #fd5949 45%, #d6249f 60%, #285AEB 90%);
+    border-color: transparent;
+    color: #fff;
+  }
+  .footer-social a.social-youtube:hover { background: #FF0000; border-color: #FF0000; color: #fff; }
+  .footer-social a.social-tiktok:hover { background: #010101; border-color: #69C9D0; color: #fff; }
+  .footer-social a.social-pinterest:hover { background: #E60023; border-color: #E60023; color: #fff; }
   .footer-col h4 {
     font-size: 12px; letter-spacing: 0.14em; text-transform: uppercase;
     color: #F3EEE4; margin-bottom: 14px; font-weight: 600;
@@ -359,8 +366,19 @@
   @keyframes badgePulse { 0%, 100% { opacity: 1; transform: scale(1); } 50% { opacity: 0.35; transform: scale(1.35); } }
 
   /* --- modernize: scroll reveal (JS adds a per-item stagger via transition-delay) --- */
-  .reveal-init { opacity: 0; transform: translateY(36px); transition: opacity 1s cubic-bezier(0.22,1,0.36,1), transform 1s cubic-bezier(0.22,1,0.36,1); will-change: opacity, transform; }
-  .reveal-in { opacity: 1; transform: translateY(0); }
+  .reveal-init {
+    opacity: 0;
+    transform: translateY(36px);
+    transition:
+      opacity 1s cubic-bezier(0.22, 1, 0.36, 1),
+      transform 1s cubic-bezier(0.22, 1, 0.36, 1);
+    will-change: opacity, transform;
+  }
+  .reveal-init.reveal-in {
+    opacity: 1;
+    transform: translateY(0);
+    will-change: auto;
+  }
 
   /* --- modernize: hero ambience - dot-grid texture + sonar rings (replaces the old glow blob) --- */
   .legal-hero, .page-hero {
@@ -602,9 +620,12 @@
       <img class="footer-lockup" src="/images/brand/lockup.png" alt="Tonaura — Solfeggio Tone Therapy">
       <p class="footer-tagline">Nine tones. One place to be still.</p>
             <div class="footer-social">
-        <a href="https://www.linkedin.com/company/empowered-dynamics/about" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M20.45 20.45h-3.55v-5.57c0-1.33-.03-3.04-1.85-3.04-1.85 0-2.14 1.45-2.14 2.94v5.67H9.36V9h3.41v1.56h.05c.47-.9 1.63-1.85 3.36-1.85 3.6 0 4.27 2.37 4.27 5.45v6.29ZM5.34 7.43a2.06 2.06 0 1 1 0-4.12 2.06 2.06 0 0 1 0 4.12ZM3.56 20.45h3.56V9H3.56v11.45Z"/></svg></a>
-        <a href="https://x.com/PoweredDynamics" target="_blank" rel="noopener noreferrer" aria-label="X"><svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg></a>
-        <a href="https://www.instagram.com/empowereddynamics/" target="_blank" rel="noopener noreferrer" aria-label="Instagram"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838a6.162 6.162 0 1 0 0 12.324 6.162 6.162 0 0 0 0-12.324zM12 16a4 4 0 1 1 0-8 4 4 0 0 1 0 8zm6.406-11.845a1.44 1.44 0 1 0 0 2.881 1.44 1.44 0 0 0 0-2.881z"/></svg></a>
+        <a href="https://www.linkedin.com/company/empowered-dynamics/about" target="_blank" rel="noopener noreferrer" class="social-linkedin" aria-label="LinkedIn"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M20.45 20.45h-3.55v-5.57c0-1.33-.03-3.04-1.85-3.04-1.85 0-2.14 1.45-2.14 2.94v5.67H9.36V9h3.41v1.56h.05c.47-.9 1.63-1.85 3.36-1.85 3.6 0 4.27 2.37 4.27 5.45v6.29ZM5.34 7.43a2.06 2.06 0 1 1 0-4.12 2.06 2.06 0 0 1 0 4.12ZM3.56 20.45h3.56V9H3.56v11.45Z"/></svg></a>
+        <a href="https://x.com/PoweredDynamics" target="_blank" rel="noopener noreferrer" class="social-x" aria-label="X"><svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg></a>
+        <a href="https://www.instagram.com/empowereddynamics/" target="_blank" rel="noopener noreferrer" class="social-instagram" aria-label="Instagram"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838a6.162 6.162 0 1 0 0 12.324 6.162 6.162 0 0 0 0-12.324zM12 16a4 4 0 1 1 0-8 4 4 0 0 1 0 8zm6.406-11.845a1.44 1.44 0 1 0 0 2.881 1.44 1.44 0 0 0 0-2.881z"/></svg></a>
+        <a href="https://www.youtube.com/" target="_blank" rel="noopener noreferrer" class="social-youtube" aria-label="YouTube"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M22 8.4s-.2-1.5-.8-2.2c-.8-.8-1.6-.8-2-.9C16.5 5 12 5 12 5h0s-4.5 0-7.2.3c-.4 0-1.2.1-2 .9-.6.7-.8 2.2-.8 2.2S2 10.2 2 12v1.6c0 1.8.2 3.6.2 3.6s.2 1.5.8 2.2c.8.8 1.8.8 2.3.9 1.7.1 7 .3 7 .3s4.5 0 7.2-.3c.4 0 1.2-.1 2-.9.6-.7.8-2.2.8-2.2s.2-1.8.2-3.6V12c0-1.8-.2-3.6-.2-3.6ZM10 15.2V8.9l5.7 3.2-5.7 3.1Z"/></svg></a>
+        <a href="https://www.tiktok.com/" target="_blank" rel="noopener noreferrer" class="social-tiktok" aria-label="TikTok"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M16.5 3c.3 2.1 1.7 3.8 3.8 4.1v2.8c-1.4 0-2.7-.4-3.8-1.2v6.6c0 3.3-2.7 5.7-5.8 5.7-3.2 0-5.8-2.6-5.8-5.8s2.6-5.8 5.8-5.8c.3 0 .6 0 .9.1v2.9a2.9 2.9 0 1 0 2 2.8V3h2.9Z"/></svg></a>
+        <a href="https://www.pinterest.com/" target="_blank" rel="noopener noreferrer" class="social-pinterest" aria-label="Pinterest"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2C6.5 2 2 6.5 2 12c0 4.2 2.6 7.8 6.3 9.3-.1-.8-.2-2 0-2.9.2-.8 1.3-5.4 1.3-5.4s-.3-.7-.3-1.6c0-1.5.9-2.6 2-2.6.9 0 1.4.7 1.4 1.5 0 .9-.6 2.3-.9 3.5-.3 1.1.5 1.9 1.5 1.9 1.8 0 3.2-1.9 3.2-4.6 0-2.4-1.7-4.1-4.2-4.1-2.9 0-4.5 2.1-4.5 4.3 0 .9.3 1.8.8 2.3.1.1.1.2.1.3l-.3 1.1c0 .2-.1.2-.3.1-1.2-.6-2-2.4-2-3.9 0-3.2 2.3-6.1 6.6-6.1 3.5 0 6.2 2.5 6.2 5.8 0 3.5-2.2 6.2-5.2 6.2-1 0-2-.5-2.3-1.1l-.6 2.4c-.2.9-.8 2-1.2 2.7 1 .3 2 .5 3.1.5 5.5 0 10-4.5 10-10S17.5 2 12 2z"/></svg></a>
       </div>
     </div>
 
@@ -710,6 +731,6 @@ document.getElementById('cookie-modal-backdrop').addEventListener('click', (e) =
 });
 </script>
 
-<script src="/tonaura-site.js?v=8"></script>
+<script src="/tonaura-site.js?v=9"></script>
 </body>
 </html>

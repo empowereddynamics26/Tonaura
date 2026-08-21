@@ -149,37 +149,79 @@
 
   // ---------- Modernize: scroll-triggered reveal ----------
   // Fades/slides content up into place as it enters the viewport.
+  // Double-rAF before observe so the opacity:0 state paints first — otherwise
+  // already-visible sections get reveal-in in the same frame and never animate.
   function scrollReveal() {
-    var targets = document.querySelectorAll(
-      ".legal-content section, .legal-layout, .legal-toc, .support-card, .contact-card, .compare-card, .compare-grid > *, .about-pillars > div, .trust-item, .page-hero, .legal-hero, main .container > section, .faq-item, .status-card"
-    );
+    var selector = [
+      ".page-hero",
+      ".legal-hero",
+      ".legal-layout",
+      ".legal-toc",
+      ".legal-content section",
+      ".support-card",
+      ".contact-card",
+      ".compare-card",
+      ".compare-grid > *",
+      ".table-scroll",
+      ".closer-head",
+      ".closer-item",
+      ".closer-verdict",
+      ".about-pillars > div",
+      ".trust-item",
+      "main .container > section",
+      ".faq-item",
+      ".status-card",
+      ".reveal-init",
+    ].join(", ");
+
+    var seen = typeof WeakSet === "function" ? new WeakSet() : null;
+    var targets = [];
+    document.querySelectorAll(selector).forEach(function (el) {
+      if (el.classList.contains("reveal")) return;
+      if (seen) {
+        if (seen.has(el)) return;
+        seen.add(el);
+      } else if (targets.indexOf(el) !== -1) {
+        return;
+      }
+      targets.push(el);
+    });
     if (!targets.length) return;
+
     var reduceMotion =
       window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     if (reduceMotion || !("IntersectionObserver" in window)) {
       targets.forEach(function (el) {
         el.classList.add("reveal-in");
+        el.classList.remove("reveal-init");
       });
       return;
     }
+
     targets.forEach(function (el, i) {
-      if (el.classList.contains("reveal") || el.classList.contains("reveal-init")) return;
       el.classList.add("reveal-init");
-      el.style.transitionDelay = (Math.min(i % 6, 5) * 0.08).toFixed(2) + "s";
+      if (!el.style.transitionDelay) {
+        el.style.transitionDelay = (Math.min(i % 6, 5) * 0.09).toFixed(2) + "s";
+      }
     });
+
     var io = new IntersectionObserver(
       function (entries) {
         entries.forEach(function (entry) {
-          if (entry.isIntersecting) {
-            entry.target.classList.add("reveal-in");
-            io.unobserve(entry.target);
-          }
+          if (!entry.isIntersecting) return;
+          entry.target.classList.add("reveal-in");
+          io.unobserve(entry.target);
         });
       },
-      { threshold: 0.08, rootMargin: "0px 0px -4% 0px" }
+      { threshold: 0.06, rootMargin: "0px 0px -6% 0px" }
     );
-    document.querySelectorAll(".reveal-init").forEach(function (el) {
-      io.observe(el);
+
+    requestAnimationFrame(function () {
+      requestAnimationFrame(function () {
+        targets.forEach(function (el) {
+          io.observe(el);
+        });
+      });
     });
   }
 
