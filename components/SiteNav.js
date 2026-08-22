@@ -38,6 +38,7 @@ export function SiteNav({ extra }) {
         <div className="site-nav-links">
           <a href="/#inside">Inside</a>
           <a href="/#how">How it works</a>
+          <a href="/compare.html">Compare</a>
           <a href="/#pricing">Pricing</a>
           <a href="/about.html">About</a>
           {isAdmin ? (
