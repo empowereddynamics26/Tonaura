@@ -14,7 +14,6 @@ const NAV = [
     label: "Users & growth",
     items: [
       { href: "/admin/users", label: "Accounts" },
-      { href: "/admin/waitlist", label: "Waitlist" },
     ],
   },
   {
@@ -100,7 +99,6 @@ function Icon({ name }) {
 const ICONS = {
   "/admin": "dash",
   "/admin/users": "users",
-  "/admin/waitlist": "list",
   "/admin/contact": "mail",
   "/admin/subscriptions": "crown",
   "/admin/billing": "card",

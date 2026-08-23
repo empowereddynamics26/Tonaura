@@ -43,13 +43,14 @@ export function AuthForm({ mode }) {
   const [notice, setNotice] = useState("");
   const [loading, setLoading] = useState(false);
   const [oauthLoading, setOauthLoading] = useState(null);
+  const [magicLoading, setMagicLoading] = useState(false);
   const signup = mode === "signup";
   const forgot = mode === "forgot";
   const title = signup ? "Create your account" : forgot ? "Reset password" : "Sign in";
   const subtitle = signup
     ? "This is the same account you use in the Tonaura app. Subscribe here, then sign in on your phone."
     : forgot
-      ? "We’ll email a reset link. You finish it on this website, then sign in on the app with the new password."
+      ? "We’ll email a reset link. Finish it on this website, then sign in on the app with the new password."
       : "Use the same email as in the app. Premium bought here unlocks there after you sign in.";
 
   function redirectNext() {
@@ -82,43 +83,67 @@ export function AuthForm({ mode }) {
     }
   }
 
+  async function sendMagicLink() {
+    setError("");
+    setNotice("");
+    if (!email.trim()) {
+      setError("Enter your email first.");
+      return;
+    }
+    setMagicLoading(true);
+    try {
+      const res = await fetch("/api/auth/magic-link", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email: email.trim(), next: redirectNext() }),
+      });
+      const json = await res.json().catch(() => ({}));
+      if (!res.ok) throw new Error(json.error || "Could not send sign-in link.");
+      setNotice("Check your email for a sign-in link.");
+    } catch (err) {
+      setError(err.message || "Could not send sign-in link.");
+    } finally {
+      setMagicLoading(false);
+    }
+  }
+
   async function onSubmit(e) {
     e.preventDefault();
     setError("");
     setNotice("");
     setLoading(true);
-    const supabase = createClient();
-    const origin = window.location.origin;
     try {
       if (forgot) {
-        const { error: err } = await supabase.auth.resetPasswordForEmail(email, {
-          redirectTo: `${origin}/auth/callback?next=/reset-password`,
+        const res = await fetch("/api/auth/forgot-password", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ email: email.trim() }),
         });
-        if (err) throw err;
-        setNotice("Check your email for the reset link.");
+        const json = await res.json().catch(() => ({}));
+        if (!res.ok) throw new Error(json.error || "Could not send reset link.");
+        setNotice("If that email has an account, a reset link is on its way.");
         return;
       }
       if (signup) {
-        const { data, error: err } = await supabase.auth.signUp({
-          email,
-          password,
-          options: { emailRedirectTo: `${origin}/auth/callback?next=/account` },
+        const res = await fetch("/api/auth/signup", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ email: email.trim(), password }),
         });
-        if (err) throw err;
-        if (data.session) {
-          fetch("/api/email/welcome", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            credentials: "same-origin",
-            body: JSON.stringify({ email }),
-          }).catch(() => {});
-          window.location.href = "/account";
-          return;
-        }
-        setNotice("Check your email to confirm this account, then sign in.");
+        const json = await res.json().catch(() => ({}));
+        if (!res.ok) throw new Error(json.error || "Could not create account.");
+        setNotice(
+          json.needsConfirmation
+            ? "Check your email to confirm this account, then sign in."
+            : "Account created. You can sign in now."
+        );
         return;
       }
-      const { error: err } = await supabase.auth.signInWithPassword({ email, password });
+      const supabase = createClient();
+      const { error: err } = await supabase.auth.signInWithPassword({
+        email: email.trim(),
+        password,
+      });
       if (err) throw err;
       window.location.href = redirectNext();
     } catch (err) {
@@ -128,7 +153,7 @@ export function AuthForm({ mode }) {
     }
   }
 
-  const busy = loading || !!oauthLoading;
+  const busy = loading || !!oauthLoading || magicLoading;
 
   return (
     <>
@@ -193,6 +218,17 @@ export function AuthForm({ mode }) {
           <button type="submit" disabled={busy}>
             {loading ? "Please wait…" : forgot ? "Send reset link" : signup ? "Create account" : "Sign in"}
           </button>
+          {!forgot && !signup ? (
+            <button
+              type="button"
+              className="oauth-btn"
+              style={{ marginTop: 12, width: "100%" }}
+              disabled={busy}
+              onClick={sendMagicLink}
+            >
+              {magicLoading ? "Sending link…" : "Email me a sign-in link"}
+            </button>
+          ) : null}
         </form>
 
         {forgot ? (

@@ -30,54 +30,48 @@ export default function AdminDashboardPage() {
   const plans = Object.entries(stats?.planBreakdown || {});
 
   return (
-    <AdminShell title="Dashboard" subtitle="Accounts, Premium, waitlist, and contact at a glance.">
+    <AdminShell title="Dashboard" subtitle="Accounts, Premium, and contact at a glance.">
       {error ? <div className="ta-error">{error}</div> : null}
       {!data && !error ? <div className="ta-muted">Loading overview…</div> : null}
 
       {stats ? (
         <>
           <div className="ta-stats">
-            <StatTile label="Accounts" value={String(stats.accounts)} hint={`+${stats.accountsWeek} this week`} tint="slate" href="/admin/users" icon="👥" />
-            <StatTile label="Premium active" value={String(stats.premiumActive)} hint={`${stats.accountsMonth} signups / 30d`} tint="gold" href="/admin/subscriptions" icon="✦" />
-            <StatTile label="Waitlist" value={String(stats.waitlist)} hint={`+${stats.waitlistWeek} week`} tint="teal" href="/admin/waitlist" icon="☰" />
-            <StatTile label="Contact" value={String(stats.contact)} hint={`${stats.contactNew} new`} tint="ok" href="/admin/contact" icon="✉" />
-            <StatTile label="Billing events" value={String((data.recentBilling || []).length)} hint="Recent log" tint="slate" href="/admin/billing" icon="◫" />
+            <StatTile
+              label="Accounts"
+              value={String(stats.accounts)}
+              hint={`+${stats.accountsWeek} this week`}
+              tint="slate"
+              href="/admin/users"
+              icon="👥"
+            />
+            <StatTile
+              label="Premium active"
+              value={String(stats.premiumActive)}
+              hint={`${stats.accountsMonth} signups / 30d`}
+              tint="gold"
+              href="/admin/subscriptions"
+              icon="✦"
+            />
+            <StatTile
+              label="Contact"
+              value={String(stats.contact)}
+              hint={`${stats.contactNew} new`}
+              tint="ok"
+              href="/admin/contact"
+              icon="✉"
+            />
+            <StatTile
+              label="Billing events"
+              value={String((data.recentBilling || []).length)}
+              hint="Recent log"
+              tint="slate"
+              href="/admin/billing"
+              icon="◫"
+            />
           </div>
 
           <div className="ta-grid-2">
-            <div className="ta-card">
-              <div className="ta-card-head">
-                <h2>Latest waitlist</h2>
-                <Link href="/admin/waitlist">View all</Link>
-              </div>
-              {(data.waitlist || []).length === 0 ? (
-                <div className="ta-empty">No waitlist signups yet.</div>
-              ) : (
-                <div className="ta-table-wrap">
-                  <table className="ta-table">
-                    <thead>
-                      <tr>
-                        <th>Email</th>
-                        <th>Source</th>
-                        <th>When</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {(data.waitlist || []).slice(0, 8).map((row) => (
-                        <tr key={row.id}>
-                          <td>
-                            <strong>{row.email}</strong>
-                          </td>
-                          <td>{row.source || "—"}</td>
-                          <td>{formatWhen(row.created_at)}</td>
-                        </tr>
-                      ))}
-                    </tbody>
-                  </table>
-                </div>
-              )}
-            </div>
-
             <div className="ta-card">
               <div className="ta-card-head">
                 <h2>Plan mix</h2>
@@ -95,11 +89,14 @@ export default function AdminDashboardPage() {
                   ))}
                 </div>
               )}
-              <div className="ta-card-head" style={{ marginTop: 20 }}>
+            </div>
+
+            <div className="ta-card">
+              <div className="ta-card-head">
                 <h2>New contact</h2>
                 <Link href="/admin/contact">Inbox</Link>
               </div>
-              {(data.messages || []).filter((m) => m.status === "new").slice(0, 4).length === 0 ? (
+              {(data.messages || []).filter((m) => m.status === "new").slice(0, 6).length === 0 ? (
                 <div className="ta-empty">No new messages.</div>
               ) : (
                 <div className="ta-table-wrap">
@@ -107,7 +104,7 @@ export default function AdminDashboardPage() {
                     <tbody>
                       {(data.messages || [])
                         .filter((m) => m.status === "new")
-                        .slice(0, 4)
+                        .slice(0, 6)
                         .map((m) => (
                           <tr key={m.id}>
                             <td>
@@ -117,6 +114,7 @@ export default function AdminDashboardPage() {
                             <td>
                               <Badge tone="warn">new</Badge>
                             </td>
+                            <td>{formatWhen(m.created_at)}</td>
                           </tr>
                         ))}
                     </tbody>

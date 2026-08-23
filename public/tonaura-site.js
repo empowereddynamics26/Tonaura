@@ -30,28 +30,6 @@
       });
   }
 
-  function enhanceWaitlist() {
-    var forms = document.querySelectorAll("form.email-form, form#waitlist-form");
-    forms.forEach(function (form) {
-      if (form.getAttribute("data-tonaura-wired")) return;
-      form.setAttribute("data-tonaura-wired", "1");
-      form.removeAttribute("onsubmit");
-      var input = form.querySelector('input[type="email"]');
-      if (input && !input.getAttribute("name")) input.setAttribute("name", "email");
-      if (!form.querySelector(".tonaura-form-status")) {
-        var p = document.createElement("p");
-        p.className = "tonaura-form-status";
-        p.style.marginTop = "8px";
-        form.appendChild(p);
-      }
-      form.addEventListener("submit", function (e) {
-        e.preventDefault();
-        var email = (form.querySelector('input[type="email"]') || {}).value || "";
-        post("/api/waitlist", { email: email, honey: "", source: "website" }, form, "You’re on the list.");
-      });
-    });
-  }
-
   function enhanceContact() {
     var form = document.getElementById("contact-form");
     if (!form || form.getAttribute("data-tonaura-wired")) return;
@@ -308,7 +286,6 @@
     });
   }
 
-  enhanceWaitlist();
   enhanceContact();
   addAccountLink();
   retargetCtas();

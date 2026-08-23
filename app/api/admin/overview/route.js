@@ -11,9 +11,6 @@ export async function GET(request) {
   const since30 = new Date(Date.now() - 30 * 24 * 60 * 60 * 1000).toISOString();
 
   const [
-    { count: waitlistCount },
-    { count: waitlistWeek },
-    { data: waitlist },
     { count: contactCount },
     { count: contactNew },
     { data: messages },
@@ -25,9 +22,6 @@ export async function GET(request) {
     { count: signupMonth },
     { data: allActivePlans },
   ] = await Promise.all([
-    admin.from("waitlist").select("*", { count: "exact", head: true }),
-    admin.from("waitlist").select("*", { count: "exact", head: true }).gte("created_at", since7),
-    admin.from("waitlist").select("id,email,source,created_at").order("created_at", { ascending: false }).limit(100),
     admin.from("contact_messages").select("*", { count: "exact", head: true }),
     admin.from("contact_messages").select("*", { count: "exact", head: true }).eq("status", "new"),
     admin
@@ -66,14 +60,11 @@ export async function GET(request) {
       accounts: profileCount || 0,
       accountsWeek: signupWeek || 0,
       accountsMonth: signupMonth || 0,
-      waitlist: waitlistCount || 0,
-      waitlistWeek: waitlistWeek || 0,
       contact: contactCount || 0,
       contactNew: contactNew || 0,
       premiumActive: premiumActive || 0,
       planBreakdown,
     },
-    waitlist: waitlist || [],
     messages: messages || [],
     premium: entitlements || [],
     recentBilling: recentBilling || [],

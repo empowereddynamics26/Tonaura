@@ -36,10 +36,12 @@ export async function POST(request) {
     if (error) return NextResponse.json({ error: "Could not send that message." }, { status: 500 });
 
     const mailResults = await Promise.allSettled([
-      sendContactAckEmail({ to: email, name }),
+      sendContactAckEmail({ to: email, name, topic }),
       notifySupportInbox({
-        subject: `Contact: ${topic || "general"} — ${name}`,
-        text: `From: ${name} <${email}>\nTopic: ${topic}\n\n${message}`,
+        name,
+        email,
+        topic: topic || "general",
+        message,
       }),
     ]);
     const mailed = mailResults.every(
