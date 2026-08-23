@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
+import Link from "next/link";
 import { AdminShell } from "@/components/admin/AdminShell";
 import { Badge, formatWhen, shortId } from "@/components/admin/ui";
 
@@ -93,11 +94,13 @@ export default function AdminUsersPage() {
                 {filtered.map((u) => (
                   <tr key={u.id}>
                     <td>
-                      <strong>{u.email || shortId(u.id)}</strong>
+                      <Link href={`/admin/users/${u.id}`}>
+                        <strong>{u.email || shortId(u.id)}</strong>
+                      </Link>
                       <div className="ta-muted">{u.display_name || shortId(u.id)}</div>
                     </td>
                     <td>
-                      <Badge tone={u.role === "admin" ? "teal" : "default"}>{u.role || "user"}</Badge>
+                      <Badge tone={u.role === "user" ? "default" : "teal"}>{u.role || "user"}</Badge>
                     </td>
                     <td>
                       {u.premium_active ? (
@@ -109,6 +112,9 @@ export default function AdminUsersPage() {
                     <td>{formatWhen(u.created_at)}</td>
                     <td>
                       <div className="ta-row-actions">
+                        <Link className="ta-btn ta-btn-ghost ta-btn-sm" href={`/admin/users/${u.id}`}>
+                          Open
+                        </Link>
                         {u.premium_active ? (
                           <button
                             type="button"

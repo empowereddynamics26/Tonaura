@@ -19,12 +19,7 @@ export function AdminShell({ title, subtitle, children }) {
           if (alive) setState({ loading: false, ok: false, email: "", error: "signed-out" });
           return;
         }
-        const { data: profile } = await supabase
-          .from("profiles")
-          .select("role")
-          .eq("id", data.user.id)
-          .maybeSingle();
-        // Probe API so ADMIN_EMAILS promotion runs server-side
+        // The API is authoritative for support/admin/super_admin and ADMIN_EMAILS.
         const res = await fetch("/api/admin/overview");
         if (!res.ok) {
           if (alive)
@@ -32,7 +27,7 @@ export function AdminShell({ title, subtitle, children }) {
               loading: false,
               ok: false,
               email: data.user.email || "",
-              error: profile?.role === "admin" ? "api" : "forbidden",
+              error: res.status === 403 ? "forbidden" : "api",
             });
           return;
         }

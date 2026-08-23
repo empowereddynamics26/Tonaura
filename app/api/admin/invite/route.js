@@ -3,13 +3,15 @@ import { createAdminClient } from "@/lib/supabase/admin";
 import { requireAdmin } from "@/lib/auth";
 import { sendAdminInviteEmail } from "@/lib/mail";
 import { clientIp, rateLimit } from "@/lib/security";
+import { writeAuditLog } from "@/lib/admin";
 
 const EMAIL = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+const ROLES = new Set(["support", "admin", "super_admin"]);
 
-/** Invite an admin — branded email + profiles.role = admin. */
+/** Invite an admin — branded email + profiles.role. */
 export async function POST(request) {
   try {
-    const { ok, user } = await requireAdmin(request);
+    const { ok, user } = await requireAdmin(request, { full: true });
     if (!ok) return NextResponse.json({ error: "Forbidden" }, { status: 403 });
 
     const ip = clientIp(request);
@@ -19,6 +21,7 @@ export async function POST(request) {
 
     const body = await request.json().catch(() => ({}));
     const email = String(body.email || "").trim().toLowerCase();
+    const role = ROLES.has(body.role) ? body.role : "admin";
     if (!EMAIL.test(email)) return NextResponse.json({ error: "Enter a valid email." }, { status: 400 });
 
     const origin = (process.env.NEXT_PUBLIC_SITE_URL || "https://tonaura.io").replace(/\/$/, "");
@@ -37,7 +40,7 @@ export async function POST(request) {
     const invitedUserId = data?.user?.id;
     if (invitedUserId) {
       await admin.from("profiles").upsert(
-        { id: invitedUserId, role: "admin", updated_at: new Date().toISOString() },
+        { id: invitedUserId, role, updated_at: new Date().toISOString() },
         { onConflict: "id" }
       );
     }
@@ -53,7 +56,16 @@ export async function POST(request) {
       ]);
     }
 
-    return NextResponse.json({ ok: true, emailed: Boolean(inviteUrl) });
+    await writeAuditLog({
+      actorId: user?.id,
+      actorEmail: user?.email,
+      action: "admin.invite",
+      targetType: "user",
+      targetId: invitedUserId || email,
+      meta: { email, role },
+    });
+
+    return NextResponse.json({ ok: true, emailed: Boolean(inviteUrl), role });
   } catch (err) {
     console.error("[admin/invite]", err?.message || err);
     return NextResponse.json({ error: "Could not send invite." }, { status: 500 });

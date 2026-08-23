@@ -5,6 +5,10 @@ import Link from "next/link";
 import { AdminShell } from "@/components/admin/AdminShell";
 import { Badge, StatTile, formatWhen, shortId } from "@/components/admin/ui";
 
+function gbp(n) {
+  return new Intl.NumberFormat("en-GB", { style: "currency", currency: "GBP" }).format(Number(n) || 0);
+}
+
 export default function AdminDashboardPage() {
   const [data, setData] = useState(null);
   const [error, setError] = useState("");
@@ -28,15 +32,31 @@ export default function AdminDashboardPage() {
 
   const stats = data?.stats;
   const plans = Object.entries(stats?.planBreakdown || {});
+  const flags = data?.flags || {};
 
   return (
-    <AdminShell title="Dashboard" subtitle="Accounts, Premium, and contact at a glance.">
+    <AdminShell title="Dashboard" subtitle="Revenue, accounts, Premium, and contact at a glance.">
       {error ? <div className="ta-error">{error}</div> : null}
       {!data && !error ? <div className="ta-muted">Loading overview…</div> : null}
 
       {stats ? (
         <>
+          {flags.maintenance_mode ? (
+            <div className="ta-error" style={{ marginBottom: 16 }}>
+              Maintenance mode is on.{" "}
+              <Link href="/admin/flags">Manage flags</Link>
+            </div>
+          ) : null}
+
           <div className="ta-stats">
+            <StatTile
+              label="Est. MRR"
+              value={gbp(stats.mrr)}
+              hint={`ARR ${gbp(stats.arr)} · ${stats.lifetimeCount || 0} lifetime`}
+              tint="gold"
+              href="/admin/subscriptions"
+              icon="£"
+            />
             <StatTile
               label="Accounts"
               value={String(stats.accounts)}
@@ -60,14 +80,6 @@ export default function AdminDashboardPage() {
               tint="ok"
               href="/admin/contact"
               icon="✉"
-            />
-            <StatTile
-              label="Billing events"
-              value={String((data.recentBilling || []).length)}
-              hint="Recent log"
-              tint="slate"
-              href="/admin/billing"
-              icon="◫"
             />
           </div>
 
@@ -99,58 +111,49 @@ export default function AdminDashboardPage() {
               {(data.messages || []).filter((m) => m.status === "new").slice(0, 6).length === 0 ? (
                 <div className="ta-empty">No new messages.</div>
               ) : (
-                <div className="ta-table-wrap">
-                  <table className="ta-table">
-                    <tbody>
-                      {(data.messages || [])
-                        .filter((m) => m.status === "new")
-                        .slice(0, 6)
-                        .map((m) => (
-                          <tr key={m.id}>
-                            <td>
-                              <strong>{m.name || m.email}</strong>
-                              <div className="ta-muted">{m.topic || "General"}</div>
-                            </td>
-                            <td>
-                              <Badge tone="warn">new</Badge>
-                            </td>
-                            <td>{formatWhen(m.created_at)}</td>
-                          </tr>
-                        ))}
-                    </tbody>
-                  </table>
-                </div>
+                <ul className="ta-list">
+                  {(data.messages || [])
+                    .filter((m) => m.status === "new")
+                    .slice(0, 6)
+                    .map((m) => (
+                      <li key={m.id}>
+                        <strong>{m.name || m.email}</strong>
+                        <span className="ta-muted"> · {formatWhen(m.created_at)}</span>
+                        <div className="ta-muted">{(m.message || "").slice(0, 80)}</div>
+                      </li>
+                    ))}
+                </ul>
               )}
             </div>
           </div>
 
-          <div className="ta-card" style={{ marginTop: 12 }}>
+          <div className="ta-card" style={{ marginTop: 16 }}>
             <div className="ta-card-head">
-              <h2>Recent Premium</h2>
-              <Link href="/admin/subscriptions">Manage</Link>
+              <h2>Recent billing</h2>
+              <Link href="/admin/billing">All events</Link>
             </div>
-            {(data.premium || []).length === 0 ? (
-              <div className="ta-empty">No active entitlements in the latest window.</div>
+            {(data.recentBilling || []).slice(0, 8).length === 0 ? (
+              <div className="ta-empty">No billing events yet.</div>
             ) : (
               <div className="ta-table-wrap">
                 <table className="ta-table">
                   <thead>
                     <tr>
+                      <th>Event</th>
                       <th>User</th>
-                      <th>Plan</th>
-                      <th>Source</th>
-                      <th>Expires</th>
+                      <th>When</th>
                     </tr>
                   </thead>
                   <tbody>
-                    {(data.premium || []).slice(0, 8).map((row) => (
-                      <tr key={row.user_id}>
-                        <td>{shortId(row.user_id)}</td>
+                    {(data.recentBilling || []).slice(0, 8).map((e) => (
+                      <tr key={e.event_id}>
                         <td>
-                          <Badge tone="gold">{row.plan_key || "premium"}</Badge>
+                          <Badge tone="teal">{e.event_type}</Badge>
                         </td>
-                        <td>{row.source || "—"}</td>
-                        <td>{row.expires_at ? formatWhen(row.expires_at) : "—"}</td>
+                        <td>
+                          <Link href={`/admin/users/${e.user_id}`}>{shortId(e.user_id)}</Link>
+                        </td>
+                        <td>{formatWhen(e.processed_at)}</td>
                       </tr>
                     ))}
                   </tbody>

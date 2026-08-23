@@ -1,11 +1,12 @@
 import { NextResponse } from "next/server";
 import { requireAdmin } from "@/lib/auth";
 import { createAdminClient } from "@/lib/supabase/admin";
+import { writeAuditLog } from "@/lib/admin";
 
 const PLANS = new Set(["monthly", "yearly", "lifetime"]);
 
 export async function POST(request) {
-  const { ok, user } = await requireAdmin(request);
+  const { ok, user } = await requireAdmin(request, { full: true });
   if (!ok) return NextResponse.json({ error: "Forbidden" }, { status: 403 });
 
   let body;
@@ -31,20 +32,26 @@ export async function POST(request) {
   if (!profile) return NextResponse.json({ error: "User not found." }, { status: 404 });
 
   if (action === "revoke") {
-    const { error } = await admin
-      .from("entitlement_cache")
-      .upsert(
-        {
-          user_id: userId,
-          is_active: false,
-          source: "manual",
-          updated_at: new Date().toISOString(),
-          plan_key: planKey,
-          environment: "admin",
-        },
-        { onConflict: "user_id" }
-      );
+    const { error } = await admin.from("entitlement_cache").upsert(
+      {
+        user_id: userId,
+        is_active: false,
+        source: "manual",
+        updated_at: new Date().toISOString(),
+        plan_key: planKey,
+        environment: "admin",
+      },
+      { onConflict: "user_id" }
+    );
     if (error) return NextResponse.json({ error: "Could not revoke." }, { status: 500 });
+    await writeAuditLog({
+      actorId: user?.id,
+      actorEmail: user?.email,
+      action: "entitlement.revoke",
+      targetType: "user",
+      targetId: userId,
+      meta: { plan_key: planKey },
+    });
     return NextResponse.json({ ok: true, action: "revoke", by: user.email });
   }
 
@@ -69,5 +76,13 @@ export async function POST(request) {
   );
 
   if (error) return NextResponse.json({ error: error.message || "Could not grant." }, { status: 500 });
+  await writeAuditLog({
+    actorId: user?.id,
+    actorEmail: user?.email,
+    action: "entitlement.grant",
+    targetType: "user",
+    targetId: userId,
+    meta: { plan_key: planKey },
+  });
   return NextResponse.json({ ok: true, action: "grant", plan_key: planKey, by: user.email });
 }

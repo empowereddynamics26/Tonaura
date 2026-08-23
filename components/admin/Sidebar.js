@@ -8,17 +8,21 @@ const NAV = [
     label: "Overview",
     items: [
       { href: "/admin", label: "Dashboard", match: (p) => p === "/admin" },
+      { href: "/admin/health", label: "System health" },
+      { href: "/admin/insights", label: "Insights" },
     ],
   },
   {
     label: "Users & growth",
-    items: [
-      { href: "/admin/users", label: "Accounts" },
-    ],
+    items: [{ href: "/admin/users", label: "Accounts" }],
   },
   {
     label: "Support",
-    items: [{ href: "/admin/contact", label: "Contact inbox" }],
+    items: [
+      { href: "/admin/contact", label: "Contact inbox" },
+      { href: "/admin/templates", label: "Email templates" },
+      { href: "/admin/broadcasts", label: "Broadcasts" },
+    ],
   },
   {
     label: "Revenue",
@@ -29,7 +33,11 @@ const NAV = [
   },
   {
     label: "Administration",
-    items: [{ href: "/admin/settings", label: "Settings" }],
+    items: [
+      { href: "/admin/flags", label: "Feature flags" },
+      { href: "/admin/audit", label: "Audit log" },
+      { href: "/admin/settings", label: "Settings" },
+    ],
   },
 ];
 
@@ -59,15 +67,6 @@ function Icon({ name }) {
         <path d="M22 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75" />
       </svg>
     );
-  if (name === "list")
-    return (
-      <svg {...common}>
-        <path d="M8 6h13M8 12h13M8 18h13" />
-        <circle cx="4" cy="6" r="1.2" fill="currentColor" stroke="none" />
-        <circle cx="4" cy="12" r="1.2" fill="currentColor" stroke="none" />
-        <circle cx="4" cy="18" r="1.2" fill="currentColor" stroke="none" />
-      </svg>
-    );
   if (name === "mail")
     return (
       <svg {...common}>
@@ -88,6 +87,46 @@ function Icon({ name }) {
         <path d="M3 10h18" />
       </svg>
     );
+  if (name === "pulse")
+    return (
+      <svg {...common}>
+        <path d="M3 12h4l2-5 4 10 2-5h6" />
+      </svg>
+    );
+  if (name === "flag")
+    return (
+      <svg {...common}>
+        <path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z" />
+        <path d="M4 22v-7" />
+      </svg>
+    );
+  if (name === "audit")
+    return (
+      <svg {...common}>
+        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+        <path d="M14 2v6h6M16 13H8M16 17H8M10 9H8" />
+      </svg>
+    );
+  if (name === "broadcast")
+    return (
+      <svg {...common}>
+        <path d="M4 10v4M8 7v10M12 4v16M16 7v10M20 10v4" />
+      </svg>
+    );
+  if (name === "chart")
+    return (
+      <svg {...common}>
+        <path d="M3 3v18h18" />
+        <path d="M7 14l4-4 3 3 5-6" />
+      </svg>
+    );
+  if (name === "template")
+    return (
+      <svg {...common}>
+        <rect x="4" y="4" width="16" height="16" rx="2" />
+        <path d="M8 9h8M8 13h5" />
+      </svg>
+    );
   return (
     <svg {...common}>
       <circle cx="12" cy="12" r="3" />
@@ -103,6 +142,12 @@ const ICONS = {
   "/admin/subscriptions": "crown",
   "/admin/billing": "card",
   "/admin/settings": "gear",
+  "/admin/health": "pulse",
+  "/admin/flags": "flag",
+  "/admin/audit": "audit",
+  "/admin/broadcasts": "broadcast",
+  "/admin/insights": "chart",
+  "/admin/templates": "template",
 };
 
 export function AdminSidebar({ open, onClose }) {
@@ -127,7 +172,9 @@ export function AdminSidebar({ open, onClose }) {
             <div className="ta-nav-section" key={section.label}>
               <div className="ta-nav-label">{section.label}</div>
               {section.items.map((item) => {
-                const active = item.match ? item.match(pathname) : pathname === item.href || pathname.startsWith(`${item.href}/`);
+                const active = item.match
+                  ? item.match(pathname)
+                  : pathname === item.href || pathname.startsWith(`${item.href}/`);
                 return (
                   <Link
                     key={item.href}
