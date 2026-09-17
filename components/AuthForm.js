@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { createClient } from "@/lib/supabase/client";
 import { SiteNav } from "./SiteNav";
 import { safeRedirectPath } from "@/lib/security";
@@ -36,6 +36,24 @@ function AppleIcon() {
   );
 }
 
+function oauthHelp(provider, message) {
+  const raw = String(message || "");
+  if (/not enabled|unsupported provider|validation_failed/i.test(raw)) {
+    return provider === "apple"
+      ? "Apple sign-in is not enabled yet. In Supabase go to Authentication → Providers → Apple, turn it on, and add your Apple Services ID credentials."
+      : "Google sign-in is not enabled yet. In Supabase go to Authentication → Providers → Google, turn it on, and paste your Google OAuth Client ID and secret.";
+  }
+  return (
+    raw ||
+    (provider === "apple"
+      ? "Apple sign-in failed. Try again or use email."
+      : "Google sign-in failed. Try again or use email.")
+  );
+}
+
+/** Apple OAuth stays in code for later; production CTA is hidden while Apple is disabled in Supabase. */
+const APPLE_SIGN_IN_ENABLED = process.env.NEXT_PUBLIC_ENABLE_APPLE_AUTH === "true";
+
 export function AuthForm({ mode }) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -53,6 +71,17 @@ export function AuthForm({ mode }) {
       ? "We’ll email a reset link. Finish it on this website, then sign in on the app with the new password."
       : "Use the same email as in the app. Premium bought here unlocks there after you sign in.";
 
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    const params = new URLSearchParams(window.location.search);
+    if (params.get("cancelled") === "1") {
+      setNotice("Sign-in was cancelled.");
+      return;
+    }
+    const fromUrl = params.get("error");
+    if (fromUrl) setError(decodeURIComponent(fromUrl.replace(/\+/g, " ")));
+  }, []);
+
   function redirectNext() {
     const params = new URLSearchParams(window.location.search);
     return safeRedirectPath(params.get("next"), "/account");
@@ -65,20 +94,42 @@ export function AuthForm({ mode }) {
     try {
       const supabase = createClient();
       const next = redirectNext();
-      const { error: err } = await supabase.auth.signInWithOAuth({
+      // Exact path allowlisted in Supabase; `next` is app-level after code exchange.
+      const redirectTo = `${window.location.origin}/auth/callback?next=${encodeURIComponent(next)}`;
+      const { data, error: err } = await supabase.auth.signInWithOAuth({
         provider,
         options: {
-          redirectTo: `${window.location.origin}/auth/callback?next=${encodeURIComponent(next)}`,
+          redirectTo,
+          skipBrowserRedirect: true,
+          queryParams: provider === "google" ? { prompt: "select_account" } : undefined,
         },
       });
       if (err) throw err;
+      if (!data?.url) {
+        throw new Error(
+          provider === "apple" ? "Apple sign-in is not available." : "Google sign-in is not available."
+        );
+      }
+
+      // If the provider is disabled, Supabase authorize returns JSON 400.
+      try {
+        const probe = await fetch(data.url, { method: "GET", redirect: "manual", mode: "cors" });
+        if (probe.type !== "opaque" && probe.status >= 400) {
+          const body = await probe.text();
+          if (/not enabled|unsupported provider|validation_failed/i.test(body)) {
+            throw new Error(body);
+          }
+        }
+      } catch (probeErr) {
+        if (/not enabled|unsupported provider|validation_failed/i.test(String(probeErr?.message || ""))) {
+          throw probeErr;
+        }
+        // CORS / network: continue to redirect.
+      }
+
+      window.location.assign(data.url);
     } catch (err) {
-      setError(
-        err.message ||
-          (provider === "apple"
-            ? "Apple sign-in needs the Apple provider enabled in Supabase."
-            : "Google sign-in needs the Google provider enabled in Supabase.")
-      );
+      setError(oauthHelp(provider, err?.message));
       setOauthLoading(null);
     }
   }
@@ -174,15 +225,17 @@ export function AuthForm({ mode }) {
               <GoogleIcon />
               {oauthLoading === "google" ? "Redirecting…" : "Continue with Google"}
             </button>
-            <button
-              type="button"
-              className="oauth-btn oauth-apple"
-              disabled={busy}
-              onClick={() => startOAuth("apple")}
-            >
-              <AppleIcon />
-              {oauthLoading === "apple" ? "Redirecting…" : "Continue with Apple"}
-            </button>
+            {APPLE_SIGN_IN_ENABLED ? (
+              <button
+                type="button"
+                className="oauth-btn oauth-apple"
+                disabled={busy}
+                onClick={() => startOAuth("apple")}
+              >
+                <AppleIcon />
+                {oauthLoading === "apple" ? "Redirecting…" : "Continue with Apple"}
+              </button>
+            ) : null}
             <div className="oauth-divider" role="separator">
               <span>or use email</span>
             </div>

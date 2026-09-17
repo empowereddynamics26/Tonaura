@@ -22,7 +22,7 @@ export async function POST(request) {
       return NextResponse.json({ ok: true });
     }
 
-    const origin = (process.env.NEXT_PUBLIC_SITE_URL || "https://tonaura.io").replace(/\/$/, "");
+    const origin = (process.env.NEXT_PUBLIC_SITE_URL || "https://tonaura.com").replace(/\/$/, "");
     const admin = createAdminClient();
     const { data, error } = await admin.auth.admin.generateLink({
       type: "recovery",
