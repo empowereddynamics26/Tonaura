@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Status — Tonaura</title>
+<meta name="description" content="Live Tonaura service status. Systems we cannot measure are marked Status Unavailable.">
+<link rel="canonical" href="https://tonaura.com/status.html">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Tonaura">
+<meta property="og:url" content="https://tonaura.com/status.html">
+<meta property="og:title" content="Status — Tonaura">
+<meta property="og:description" content="Live Tonaura service status. Systems we cannot measure are marked Status Unavailable.">
+<meta property="og:image" content="https://tonaura.com/images/brand/lockup.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Status — Tonaura">
+<meta name="twitter:description" content="Live Tonaura service status. Systems we cannot measure are marked Status Unavailable.">
+<meta name="twitter:image" content="https://tonaura.com/images/brand/lockup.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #050508;
+    --bg-elevated: #0c0c12;
+    --surface: #14141c;
+    --hairline: rgba(243,238,228,0.1);
+    --hairline-soft: rgba(243,238,228,0.08);
+    --text-primary: #F3EEE4;
+    --text-secondary: #A8A3B5;
+    --text-faint: #6E6A7A;
+    --gold: #C9A24B;
+    --teal: #4FB3A9;
+    --cream: #F3EEE4;
+    --radius-md: 16px;
+    --radius-lg: 28px;
+    --radius-pill: 999px;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    background:
+      radial-gradient(ellipse 900px 480px at 50% -40px, rgba(79,179,169,0.1), transparent 65%),
+      radial-gradient(ellipse 700px 360px at 80% 20%, rgba(201,162,75,0.06), transparent 55%),
+      var(--bg);
+    color: var(--text-primary);
+    font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
+    -webkit-font-smoothing: antialiased;
+  }
+  a { color: inherit; text-decoration: none; }
+  a:focus-visible, button:focus-visible { outline: 2px solid var(--gold); outline-offset: 3px; }
+  .wrap { max-width: 760px; margin: 0 auto; padding: 0 28px; }
+  nav {
+    position: sticky; top: 0; z-index: 50;
+    background: rgba(5,5,8,0.72);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--hairline-soft);
+  }
+  .nav-inner {
+    max-width: 1120px; margin: 0 auto; padding: 10px 28px;
+    display: flex; align-items: center; justify-content: space-between; gap: 16px;
+  }
+  .brand img { width: 148px; height: auto; display: block; filter: saturate(1.22) contrast(1.06) brightness(1.04); }
+  .nav-links { display: flex; gap: 18px; align-items: center; }
+  .nav-links a { font-size: 14px; color: var(--text-secondary); }
+  .nav-links a:hover { color: var(--text-primary); }
+  main { padding: 56px 0 80px; }
+  .kicker {
+    color: var(--gold); font-size: 12px; letter-spacing: 1.6px; text-transform: uppercase;
+    font-weight: 600; margin-bottom: 12px;
+  }
+  h1 { margin: 0 0 12px; font-size: clamp(28px, 4vw, 40px); font-weight: 600; letter-spacing: -0.02em; }
+  .lede { color: var(--text-secondary); font-size: 16px; line-height: 1.6; margin: 0 0 28px; max-width: 54ch; }
+  .meta {
+    display: flex; flex-wrap: wrap; gap: 12px 20px; align-items: center;
+    margin-bottom: 28px; color: var(--text-faint); font-size: 13px;
+  }
+  .meta strong { color: var(--cream); font-weight: 600; }
+  .panel {
+    background: linear-gradient(180deg, rgba(20,20,28,0.95), rgba(12,12,18,0.98));
+    border: 1px solid var(--hairline);
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+  }
+  .row {
+    display: grid; grid-template-columns: 1fr auto; gap: 12px 20px; align-items: start;
+    padding: 20px 22px; border-bottom: 1px solid var(--hairline-soft);
+  }
+  .row:last-child { border-bottom: none; }
+  .row h2 { margin: 0 0 6px; font-size: 16px; font-weight: 600; }
+  .row p { margin: 0; color: var(--text-secondary); font-size: 13px; line-height: 1.5; }
+  .badge {
+    display: inline-flex; align-items: center; gap: 8px;
+    padding: 7px 12px; border-radius: var(--radius-pill);
+    font-size: 12px; font-weight: 600; letter-spacing: 0.02em;
+    border: 1px solid var(--hairline); white-space: nowrap;
+  }
+  .badge::before {
+    content: ""; width: 8px; height: 8px; border-radius: 50%; background: currentColor;
+  }
+  .badge.operational { color: var(--teal); background: rgba(79,179,169,0.1); border-color: rgba(79,179,169,0.28); }
+  .badge.degraded { color: var(--gold); background: rgba(201,162,75,0.12); border-color: rgba(201,162,75,0.32); }
+  .badge.unavailable { color: var(--text-secondary); background: rgba(168,163,181,0.08); border-color: var(--hairline); }
+  .note {
+    margin-top: 22px; padding: 16px 18px; border-radius: var(--radius-md);
+    border: 1px solid rgba(201,162,75,0.25); background: rgba(201,162,75,0.08);
+    color: var(--text-secondary); font-size: 13px; line-height: 1.55;
+  }
+  .actions { margin-top: 28px; display: flex; flex-wrap: wrap; gap: 12px; }
+  .btn {
+    display: inline-flex; align-items: center; justify-content: center;
+    padding: 11px 18px; border-radius: var(--radius-pill); font-size: 13px; font-weight: 600;
+    border: 1px solid var(--hairline); color: var(--text-secondary); background: transparent; cursor: pointer;
+  }
+  .btn:hover { color: var(--text-primary); border-color: rgba(243,238,228,0.22); }
+  .btn.primary { background: var(--gold); color: #1a1608; border: none; }
+  footer {
+    border-top: 1px solid var(--hairline); padding: 28px; color: var(--text-faint); font-size: 13px;
+  }
+  footer a { color: var(--text-secondary); }
+  footer a:hover { color: var(--gold); }
+  @media (max-width: 560px) {
+    .row { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+<nav>
+  <div class="nav-inner">
+    <a class="brand" href="/"><img src="/images/brand/lockup.png" alt="Tonaura"></a>
+    <div class="nav-links">
+      <a href="support.html">Support</a>
+      <a href="contact.html">Contact</a>
+      <a href="/login">Sign in</a>
+    </div>
+  </div>
+</nav>
+
+<main>
+  <div class="wrap">
+    <p class="kicker">Service status</p>
+    <h1>Tonaura status</h1>
+    <p class="lede">
+      We only mark a system green when it can be measured from here.
+      Everything else shows <strong style="color:var(--cream);font-weight:600;">Status Unavailable</strong> — not assumed healthy.
+    </p>
+    <div class="meta">
+      <span>Last checked: <strong id="checked-at">Checking…</strong></span>
+      <span id="summary-label"></span>
+    </div>
+    <div class="panel" id="status-panel" aria-live="polite">
+      <div class="row">
+        <div>
+          <h2>Loading checks</h2>
+          <p>Fetching the latest measurable signals.</p>
+        </div>
+        <span class="badge unavailable">Checking</span>
+      </div>
+    </div>
+    <p class="note" id="status-note">
+      Core tone listening in the app works offline. Sign-in, sync, billing, and email depend on online services.
+    </p>
+    <div class="actions">
+      <button type="button" class="btn primary" id="refresh-btn">Check again</button>
+      <a class="btn" href="support.html">Back to Support</a>
+      <a class="btn" href="contact.html">Contact us</a>
+    </div>
+  </div>
+</main>
+
+<footer>
+  <div class="wrap">
+    © 2026 Tonaura · <a href="https://tonaura.com">tonaura.com</a> ·
+    <a href="mailto:support@tonaura.io">support@tonaura.io</a>
+  </div>
+</footer>
+
+<script>
+(function () {
+  var labels = {
+    operational: "Operational",
+    degraded: "Degraded",
+    unavailable: "Status Unavailable"
+  };
+
+  function formatTime(iso) {
+    try {
+      return new Date(iso).toLocaleString(undefined, {
+        dateStyle: "medium",
+        timeStyle: "short"
+      });
+    } catch (e) {
+      return iso || "Unknown";
+    }
+  }
+
+  function render(data) {
+    var panel = document.getElementById("status-panel");
+    var checked = document.getElementById("checked-at");
+    var summary = document.getElementById("summary-label");
+    var note = document.getElementById("status-note");
+    checked.textContent = formatTime(data && data.checkedAt);
+    summary.textContent = data && data.note ? data.note : "";
+    if (data && data.note) note.textContent = data.note;
+
+    var checks = (data && data.checks) || [];
+    if (!checks.length) {
+      panel.innerHTML =
+        '<div class="row"><div><h2>Status Unavailable</h2><p>No measurable checks were returned.</p></div>' +
+        '<span class="badge unavailable">Status Unavailable</span></div>';
+      return;
+    }
+
+    panel.innerHTML = checks.map(function (c) {
+      var st = labels[c.status] ? c.status : "unavailable";
+      return (
+        '<div class="row"><div><h2>' + escapeHtml(c.name || c.id) + '</h2>' +
+        '<p>' + escapeHtml(c.detail || "No detail.") + '</p></div>' +
+        '<span class="badge ' + st + '">' + labels[st] + '</span></div>'
+      );
+    }).join("");
+  }
+
+  function escapeHtml(value) {
+    return String(value == null ? "" : value)
+      .replace(/&/g, "&amp;")
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;")
+      .replace(/"/g, "&quot;");
+  }
+
+  function fail() {
+    var now = new Date().toISOString();
+    render({
+      checkedAt: now,
+      note: "Status API could not be reached. Showing Status Unavailable rather than inventing green checks.",
+      checks: [
+        { id: "website", name: "Website", status: "unavailable", detail: "Status endpoint did not respond." },
+        { id: "auth", name: "Sign-in & sync", status: "unavailable", detail: "Not measurable right now." },
+        { id: "billing", name: "Billing (Stripe)", status: "unavailable", detail: "Not publicly measurable from this page." },
+        { id: "email", name: "Transactional email", status: "unavailable", detail: "Not publicly measurable from this page." }
+      ]
+    });
+  }
+
+  function load() {
+    document.getElementById("checked-at").textContent = "Checking…";
+    fetch("/api/status", { cache: "no-store" })
+      .then(function (res) {
+        if (!res.ok) throw new Error("bad status");
+        return res.json();
+      })
+      .then(render)
+      .catch(fail);
+  }
+
+  document.getElementById("refresh-btn").addEventListener("click", load);
+  load();
+})();
+</script>
+</body>
+</html>

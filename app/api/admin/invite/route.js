@@ -24,7 +24,7 @@ export async function POST(request) {
     const role = ROLES.has(body.role) ? body.role : "admin";
     if (!EMAIL.test(email)) return NextResponse.json({ error: "Enter a valid email." }, { status: 400 });
 
-    const origin = (process.env.NEXT_PUBLIC_SITE_URL || "https://tonaura.io").replace(/\/$/, "");
+    const origin = (process.env.NEXT_PUBLIC_SITE_URL || "https://tonaura.com").replace(/\/$/, "");
     const admin = createAdminClient();
     const { data, error } = await admin.auth.admin.generateLink({
       type: "invite",

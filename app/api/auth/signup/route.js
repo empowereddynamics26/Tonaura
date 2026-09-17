@@ -30,7 +30,7 @@ export async function POST(request) {
       return NextResponse.json({ error: "Too many signups for this email." }, { status: 429 });
     }
 
-    const origin = (process.env.NEXT_PUBLIC_SITE_URL || "https://tonaura.io").replace(/\/$/, "");
+    const origin = (process.env.NEXT_PUBLIC_SITE_URL || "https://tonaura.com").replace(/\/$/, "");
     const admin = createAdminClient();
     const { data, error } = await admin.auth.admin.generateLink({
       type: "signup",

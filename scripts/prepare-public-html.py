@@ -21,8 +21,8 @@ REPLACEMENTS = [
         "We use the following categories of sub-processor: authentication (Supabase) and payment processing (Stripe). Each is bound by its own data protection terms.",
     ),
     (
-        "Subscriptions are purchased through the App Store (iOS), Google Play (Android), or — where offered — directly on tonaura.io via Stripe. Which option you see depends on your platform and region.",
-        "Subscriptions and lifetime access are purchased on tonaura.io via Stripe. The Tonaura app uses the same signed-in account and does not sell Premium inside the App Store or Google Play.",
+        "Subscriptions are purchased through the App Store (iOS), Google Play (Android), or — where offered — directly on tonaura.com via Stripe. Which option you see depends on your platform and region.",
+        "Subscriptions and lifetime access are purchased on tonaura.com via Stripe. The Tonaura app uses the same signed-in account and does not sell Premium inside the App Store or Google Play.",
     ),
     (
         "App Store and Google Play purchases are billed by Apple or Google respectively, to the payment method on file with your Apple ID or Google account. Web purchases via Stripe are billed directly by Tonaura/Empowered Dynamics FZ-LLC.",
@@ -111,7 +111,7 @@ if APP_ENV.exists():
                 insert_at = i + 1
                 break
         out.insert(insert_at, "")
-        out.insert(insert_at + 1, "EXPO_PUBLIC_WEB_URL=https://tonaura.io")
+        out.insert(insert_at + 1, "EXPO_PUBLIC_WEB_URL=https://tonaura.com")
     body = "\n".join(out).rstrip() + "\n"
     APP_ENV.write_text(body, encoding="utf-8")
 
