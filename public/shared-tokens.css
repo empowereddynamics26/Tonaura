@@ -1,0 +1,250 @@
+/* ==========================================================================
+   Tonaura Design Tokens — single source of truth
+   Phase 3 · Foundation
+   
+   Every color, font, spacing value, radius, and motion curve used across
+   the marketing site, auth pages, account pages, checkout, and legal pages.
+   
+   Colors are extracted from the official Tonaura lockup:
+     · Gold     — the wordmark and central orb
+     · Teal     — the outer rings and tagline
+     · Bronze   — the transitional warm tone between the two
+     · Cream    — the highlight of the inner ring
+   
+   Admin console (app/admin/admin-console.css) is intentionally separate —
+   it uses --ta-* prefixed tokens and does not consume this file.
+   ========================================================================== */
+
+:root {
+  /* ==================================================================
+     BACKGROUNDS
+     ================================================================== */
+  --bg: #050507;                        /* deepest — page background */
+  --bg-elev: #0a0a10;                   /* elevated — cards, panels */
+  --bg-soft: #0f0f15;                   /* mid — hover states, subtle layers */
+  --surface: #131318;                   /* highest — inputs, chips */
+  --surface-alt: #1a1a20;
+
+  /* ==================================================================
+     BRAND GOLD — from the wordmark and central orb
+     ================================================================== */
+  --gold: #d4a95e;                      /* primary brand gold */
+  --gold-bright: #f0c878;               /* highlight — the orb's shine */
+  --gold-pale: #e8d5a8;                 /* outer glow — ring decay */
+  --gold-deep: #a67c3a;                 /* shadow — ring edges */
+  --gold-soft: rgba(212, 169, 94, 0.12);
+  --gold-line: rgba(212, 169, 94, 0.28);
+  --gold-glow: rgba(212, 169, 94, 0.22);
+
+  /* ==================================================================
+     BRAND TEAL — from the outer rings and tagline
+     ================================================================== */
+  --teal: #4fb3a9;                      /* primary brand teal */
+  --teal-bright: #6ed0c5;               /* highlight */
+  --teal-deep: #2e7d76;                 /* shadow */
+  --teal-soft: rgba(79, 179, 169, 0.14);
+  --teal-line: rgba(79, 179, 169, 0.3);
+  --teal-glow: rgba(79, 179, 169, 0.18);
+
+  /* ==================================================================
+     BRAND BRONZE — the warm transition between gold and teal
+     (Hidden in your logo's ring gradient. Now it's a token.)
+     ================================================================== */
+  --bronze: #b8865a;
+  --bronze-soft: rgba(184, 134, 90, 0.14);
+  --bronze-line: rgba(184, 134, 90, 0.32);
+
+  /* ==================================================================
+     TEXT
+     ================================================================== */
+  --text: #f2ead9;                      /* warm cream — primary */
+  --text-2: #a8a4b0;                    /* muted lavender-gray — secondary */
+  --text-3: #6e6a76;                    /* faint — tertiary */
+  --text-gold: #e8d5a8;                 /* gold-tinted emphasis */
+
+  /* ==================================================================
+     SEMANTIC
+     ================================================================== */
+  --danger: #e8a0a0;
+  --ok: #4fb3a9;
+
+  /* ==================================================================
+     BORDERS & SHAPE
+     ================================================================== */
+  --line: rgba(242, 234, 217, 0.08);
+  --line-medium: rgba(242, 234, 217, 0.14);
+  --line-strong: rgba(242, 234, 217, 0.24);
+  --line-gold: rgba(212, 169, 94, 0.28);
+  --line-teal: rgba(79, 179, 169, 0.3);
+
+  --radius: 20px;
+  --radius-sm: 10px;
+  --radius-md: 16px;
+  --radius-lg: 24px;
+  --radius-xl: 32px;
+  --radius-pill: 999px;
+
+  /* ==================================================================
+     LAYOUT
+     ================================================================== */
+  --max: 1120px;
+  --max-wide: 1200px;
+  --max-narrow: 720px;
+  --gutter: 28px;
+  --gutter-sm: 24px;
+
+  /* ==================================================================
+     TYPOGRAPHY
+     ================================================================== */
+
+  /* Display serif — Instrument Serif, self-hosted via next/font.
+     Falls back to Bodoni Moda, then to Georgia if the custom font
+     hasn't loaded yet. */
+  --font-display: var(--font-instrument-serif), 'Bodoni Moda', Georgia, serif;
+
+  /* Body sans — Plus Jakarta Sans, self-hosted via next/font.
+     Falls back to the system UI stack. */
+  --font-sans: var(--font-plus-jakarta), system-ui, -apple-system, sans-serif;
+
+  /* Legacy alias — many existing rules use --font-sans, keep it */
+  --font: var(--font-sans);
+
+  /* Type scale — editorial, dramatic */
+  --fs-mega: clamp(52px, 8vw, 88px);    /* hero h1 */
+  --fs-display: clamp(38px, 5.5vw, 60px); /* section h2 */
+  --fs-h1: clamp(32px, 4.5vw, 44px);
+  --fs-h2: clamp(26px, 3.5vw, 34px);
+  --fs-h3: 22px;
+  --fs-h4: 18px;
+  --fs-body: 17px;                      /* was 16 — reading comfort */
+  --fs-body-lg: 19px;                   /* for ledes */
+  --fs-small: 14px;
+  --fs-xs: 12px;
+  --fs-micro: 11px;
+
+  /* Line heights */
+  --lh-tight: 1.05;
+  --lh-display: 1.08;                   /* serif headings need room */
+  --lh-snug: 1.25;
+  --lh-normal: 1.6;
+  --lh-loose: 1.75;
+
+  /* Letter spacing */
+  --ls-tight: -0.02em;                  /* serif headings tighten */
+  --ls-normal: 0;
+  --ls-wide: 0.14em;
+  --ls-wider: 0.22em;
+  --ls-widest: 0.32em;                  /* for eyebrow labels */
+
+  /* ==================================================================
+     MOTION — slow, breathing, sound-shaped
+     ================================================================== */
+  --ease-calm: cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-out: cubic-bezier(0.4, 0, 0.2, 1);
+  --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+
+  --dur-fast: 0.2s;
+  --dur-base: 0.35s;
+  --dur-slow: 0.9s;
+  --dur-slower: 1.05s;
+  --dur-breath: 4s;
+  --dur-drift: 25s;
+
+  /* ==================================================================
+     SHADOWS
+     ================================================================== */
+  --shadow-sm: 0 4px 12px -6px rgba(0, 0, 0, 0.5);
+  --shadow-md: 0 20px 48px -18px rgba(0, 0, 0, 0.7);
+  --shadow-lg: 0 30px 80px -28px rgba(0, 0, 0, 0.75);
+  --shadow-gold: 0 20px 50px -20px rgba(212, 169, 94, 0.28);
+  --shadow-teal: 0 20px 50px -20px rgba(79, 179, 169, 0.24);
+
+  /* ==================================================================
+     LEGACY ALIASES — keep existing code working
+     These resolve to values defined above. Change them here, everything
+     that references them updates.
+     ================================================================== */
+
+  /* Backgrounds */
+  --navy: var(--bg);
+  --navy-2: var(--bg-elev);
+  --ink: var(--bg);
+  --bg-elevated: var(--bg-elev);
+
+  /* Text */
+  --cream: var(--text);
+  --muted: var(--text-2);
+  --text-primary: var(--text);
+  --text-secondary: var(--text-2);
+  --text-faint: var(--text-3);
+
+  /* Borders */
+  --hairline: var(--line);
+  --hairline-soft: rgba(242, 234, 217, 0.06);
+
+  /* Color aliases (from the old flat palette) */
+  --gold-legacy: #c9a24b;               /* the old gold — kept for reference */
+  --teal-legacy: #4fb3a9;               /* the old teal — identical */
+}
+/* === Ambient background system === */
+
+/* Grain — kills gradient banding, adds tactile warmth */
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  opacity: 0.035;
+  mix-blend-mode: overlay;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+/* Ambient wave field — sound-wave metaphor, not decoration */
+.ambient-field {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+.ambient-blob {
+  width: 60vw;
+  height: 60vw;
+  border-radius: 50%;
+  opacity: 0.07;
+  animation: ambientDrift 38s ease-in-out infinite alternate;
+}
+
+.ambient-blob--teal {
+  background: radial-gradient(
+    circle at center,
+    var(--teal) 0%,
+    transparent 65%
+  );
+  top: -12%;
+  left: -12%;
+}
+
+.ambient-blob--gold {
+  background: radial-gradient(
+    circle at center,
+    var(--gold) 0%,
+    transparent 65%
+  );
+  bottom: -16%;
+  right: -10%;
+  animation-duration: 46s;
+  animation-delay: -10s;
+}
+@keyframes ambientDrift {
+  0%   { transform: translate(0, 0) scale(1); }
+  100% { transform: translate(7%, 9%) scale(1.15); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .ambient-blob { animation: none; }
+}
+
+/* Everything else must sit above z-index 1 */
+.site-nav { z-index: 50; } /* already true in your file */
+main, .shell, header.hero--solo, section { position: relative; z-index: 2; }

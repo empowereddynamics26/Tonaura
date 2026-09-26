@@ -1,0 +1,75 @@
+.ta-skel-accounts {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.ta-skel-accounts-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+  margin-bottom: 4px;
+}
+
+.ta-skel-accounts-table {
+  border-radius: 16px;
+  border: 1px solid var(--ta-line);
+  background: var(--ta-card);
+  overflow: hidden;
+}
+
+.ta-skel-accounts-head {
+  display: grid;
+  grid-template-columns: 1.5fr 100px 110px 140px 160px;
+  gap: 20px;
+  padding: 14px 20px;
+  border-bottom: 1px solid var(--ta-line);
+  align-items: center;
+}
+
+.ta-skel-accounts-row {
+  display: grid;
+  grid-template-columns: 1.5fr 100px 110px 140px 160px;
+  gap: 20px;
+  padding: 16px 20px;
+  border-bottom: 1px solid var(--ta-line);
+  align-items: center;
+}
+
+.ta-skel-accounts-row:last-child {
+  border-bottom: none;
+}
+
+.ta-skel-accounts-cell-user {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-width: 0;
+}
+
+.ta-skel-accounts-cell-user-copy {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.ta-skel-accounts-cell-actions {
+  display: flex;
+  gap: 8px;
+  justify-content: flex-end;
+}
+
+@media (max-width: 900px) {
+  .ta-skel-accounts-head {
+    display: none;
+  }
+  .ta-skel-accounts-row {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+  .ta-skel-accounts-cell-actions {
+    justify-content: flex-start;
+  }
+}

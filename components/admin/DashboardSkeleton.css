@@ -1,0 +1,92 @@
+/* ==========================================================================
+   DASHBOARD SKELETON — mirrors the dashboard layout
+   ========================================================================== */
+
+.ta-skel-dash {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+/* Hero stat */
+.ta-skel-dash-hero {
+  padding: 28px 28px 26px;
+  border-radius: 20px;
+  border: 1px solid var(--ta-line);
+  background: var(--ta-card);
+}
+
+/* Three compact stats */
+.ta-skel-dash-stats {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 16px;
+}
+
+@media (max-width: 900px) {
+  .ta-skel-dash-stats {
+    grid-template-columns: 1fr;
+  }
+}
+
+.ta-skel-dash-stat {
+  padding: 20px;
+  border-radius: 16px;
+  border: 1px solid var(--ta-line);
+  background: var(--ta-card);
+}
+
+/* Two-column grid */
+.ta-skel-dash-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+
+@media (max-width: 900px) {
+  .ta-skel-dash-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.ta-skel-dash-card {
+  padding: 22px;
+  border-radius: 16px;
+  border: 1px solid var(--ta-line);
+  background: var(--ta-card);
+}
+
+/* Table */
+.ta-skel-dash-table {
+  padding: 22px;
+  border-radius: 16px;
+  border: 1px solid var(--ta-line);
+  background: var(--ta-card);
+}
+
+.ta-skel-dash-table-rows {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  margin-top: 22px;
+}
+
+.ta-skel-dash-row {
+  display: grid;
+  grid-template-columns: 90px 1fr 100px;
+  gap: 20px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid var(--ta-line);
+}
+
+.ta-skel-dash-row:last-child {
+  border-bottom: none;
+  padding-bottom: 0;
+}
+
+@media (max-width: 640px) {
+  .ta-skel-dash-row {
+    grid-template-columns: 1fr;
+    gap: 10px;
+  }
+}

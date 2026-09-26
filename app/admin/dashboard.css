@@ -1,0 +1,446 @@
+/* ==========================================================================
+   Tonaura Admin Console — Dashboard
+   The overview page. Imported only by app/admin/page.js.
+   All rules reference the tokens in admin-console.css.
+   ========================================================================== */
+
+/* ==========================================================================
+   LAYOUT
+   ========================================================================== */
+
+.ta-dashboard {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+/* ==========================================================================
+   BANNER — maintenance mode notification
+   ========================================================================== */
+
+.ta-banner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+  padding: 12px 18px;
+  border-radius: 12px;
+  font-size: 13.5px;
+  line-height: 1.5;
+}
+
+.ta-banner--warn {
+  background: rgba(212, 169, 94, 0.1);
+  border: 1px solid var(--ta-brand-line);
+  color: var(--ta-brand-pale);
+}
+
+.ta-banner-link {
+  font-weight: 500;
+  color: var(--ta-brand-bright);
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 2px;
+  border-bottom: 1px solid transparent;
+  transition: border-color 0.2s var(--ta-ease), color 0.2s var(--ta-ease);
+}
+
+.ta-banner-link:hover {
+  color: var(--ta-brand-bright);
+  border-bottom-color: var(--ta-brand-line);
+  text-decoration: none;
+}
+
+/* ==========================================================================
+   STAT TILES — hero and compact
+   ========================================================================== */
+
+.ta-stat {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding: 20px;
+  background: var(--ta-card);
+  border: 1px solid var(--ta-line);
+  border-radius: 16px;
+  text-decoration: none;
+  color: inherit;
+  transition:
+    border-color 0.25s var(--ta-ease),
+    box-shadow 0.25s var(--ta-ease),
+    transform 0.25s var(--ta-ease);
+}
+
+.ta-stat:hover {
+  text-decoration: none;
+}
+
+a.ta-stat:hover {
+  border-color: var(--ta-brand-line);
+  box-shadow: 0 12px 32px -20px rgba(0, 0, 0, 0.9);
+  transform: translateY(-1px);
+}
+
+/* --- The hero variant — MRR card, one per page --- */
+
+.ta-stat--hero {
+  position: relative;
+  padding: 28px 28px 26px;
+  border-color: var(--ta-brand-line);
+  background:
+    radial-gradient(
+      ellipse 60% 100% at 0% 0%,
+      rgba(212, 169, 94, 0.08) 0%,
+      transparent 60%
+    ),
+    linear-gradient(
+      180deg,
+      rgba(20, 20, 28, 0.55) 0%,
+      rgba(10, 10, 16, 0.6) 100%
+    );
+  overflow: hidden;
+}
+
+.ta-stat--hero::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 24px;
+  right: 24px;
+  height: 1px;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(212, 169, 94, 0.5) 50%,
+    transparent 100%
+  );
+  pointer-events: none;
+}
+
+/* --- Head: icon + label --- */
+
+.ta-stat-head {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.ta-stat-icon {
+  width: 32px;
+  height: 32px;
+  border-radius: 10px;
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+}
+
+.ta-stat--hero .ta-stat-icon {
+  width: 40px;
+  height: 40px;
+  border-radius: 12px;
+}
+
+.ta-stat-icon.gold {
+  background: var(--ta-brand-soft);
+  color: var(--ta-brand);
+}
+
+.ta-stat-icon.teal {
+  background: var(--ta-teal-soft);
+  color: var(--ta-teal-bright);
+}
+
+.ta-stat-icon.slate {
+  background: rgba(242, 234, 217, 0.08);
+  color: var(--ta-text-2);
+}
+
+.ta-stat-icon.ok {
+  background: rgba(79, 179, 169, 0.14);
+  color: var(--ta-teal-bright);
+}
+
+.ta-stat-label {
+  font-family: var(--ta-font-sans);
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--ta-text-2);
+}
+
+/* --- Body: value + trend --- */
+
+.ta-stat-body {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+}
+
+.ta-stat-value {
+  font-family: var(--ta-font-sans);
+  font-feature-settings: "tnum";
+  font-weight: 600;
+  color: var(--ta-text);
+  line-height: 1;
+  letter-spacing: -0.02em;
+}
+
+.ta-stat-value--default {
+  font-size: 28px;
+}
+
+.ta-stat-value--hero {
+  font-size: 44px;
+  letter-spacing: -0.03em;
+}
+
+.ta-stat-trend {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 22px;
+  height: 22px;
+  border-radius: 6px;
+}
+
+.ta-stat-trend--up {
+  color: var(--ta-teal-bright);
+  background: rgba(79, 179, 169, 0.12);
+}
+
+.ta-stat-trend--down {
+  color: #f5bdbd;
+  background: var(--ta-danger-soft);
+}
+
+.ta-stat-hint {
+  font-family: var(--ta-font-sans);
+  font-size: 12px;
+  line-height: 1.5;
+  color: var(--ta-text-3);
+}
+
+/* --- The compact stats grid (three across at desktop) --- */
+
+.ta-stats {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+}
+
+@media (min-width: 900px) {
+  .ta-stats {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+/* ==========================================================================
+   PLAN MIX — ranked list with proportional bars
+   ========================================================================== */
+
+.ta-plan-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.ta-plan-list-item {
+  display: grid;
+  grid-template-columns: 32px auto 1fr;
+  align-items: center;
+  gap: 12px;
+}
+
+.ta-plan-list-count {
+  font-family: var(--ta-font-sans);
+  font-feature-settings: "tnum";
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--ta-text);
+  text-align: right;
+}
+
+.ta-plan-list-name {
+  font-family: var(--ta-font-sans);
+  font-size: 13px;
+  color: var(--ta-text-2);
+  text-transform: capitalize;
+}
+
+.ta-plan-list-bar {
+  display: block;
+  height: 4px;
+  border-radius: 999px;
+  background: rgba(242, 234, 217, 0.06);
+  overflow: hidden;
+  position: relative;
+}
+
+.ta-plan-list-bar-fill {
+  display: block;
+  height: 100%;
+  border-radius: 999px;
+  background: linear-gradient(
+    90deg,
+    var(--ta-brand-600) 0%,
+    var(--ta-brand) 50%,
+    var(--ta-brand-bright) 100%
+  );
+  transition: width 0.5s var(--ta-ease);
+}
+
+/* ==========================================================================
+   MESSAGES — new contact list
+   ========================================================================== */
+
+.ta-msg-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.ta-msg-item {
+  padding: 14px 0;
+  border-bottom: 1px solid var(--ta-line);
+}
+
+.ta-msg-item:last-child {
+  border-bottom: none;
+}
+
+.ta-msg-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 4px;
+}
+
+.ta-msg-head strong {
+  font-family: var(--ta-font-sans);
+  font-size: 13.5px;
+  font-weight: 500;
+  color: var(--ta-text);
+}
+
+.ta-msg-when {
+  font-family: var(--ta-font-sans);
+  font-size: 11.5px;
+  color: var(--ta-text-3);
+  white-space: nowrap;
+}
+
+.ta-msg-body {
+  margin: 0;
+  font-family: var(--ta-font-sans);
+  font-size: 13px;
+  line-height: 1.5;
+  color: var(--ta-text-2);
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+/* ==========================================================================
+   TWO-COLUMN GRID BELOW THE STATS
+   ========================================================================== */
+
+.ta-grid-2 {
+  display: grid;
+  gap: 16px;
+}
+
+@media (min-width: 900px) {
+  .ta-grid-2 {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+/* ==========================================================================
+   FEATURE CARD — Recent billing
+   ========================================================================== */
+
+.ta-card--feature {
+  position: relative;
+}
+
+.ta-card--feature::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 24px;
+  right: 24px;
+  height: 1px;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(212, 169, 94, 0.4) 50%,
+    transparent 100%
+  );
+  pointer-events: none;
+}
+
+/* ==========================================================================
+   TABLE REFINEMENTS
+   ========================================================================== */
+
+.ta-table td.ta-table-when {
+  color: var(--ta-text-3);
+  font-feature-settings: "tnum";
+  white-space: nowrap;
+}
+
+.ta-table a {
+  color: var(--ta-text-2);
+  text-decoration: none;
+  transition: color 0.2s var(--ta-ease);
+}
+
+.ta-table a:hover {
+  color: var(--ta-brand-pale);
+}
+
+/* ==========================================================================
+   RESPONSIVE
+   ========================================================================== */
+
+@media (max-width: 640px) {
+  .ta-stat-value--hero {
+    font-size: 34px;
+  }
+
+  .ta-stat--hero {
+    padding: 22px;
+  }
+
+  .ta-msg-head {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 2px;
+  }
+}
+
+/* ==========================================================================
+   REDUCED MOTION
+   ========================================================================== */
+
+@media (prefers-reduced-motion: reduce) {
+  .ta-plan-list-bar-fill {
+    transition: none;
+  }
+  .ta-stat,
+  a.ta-stat:hover {
+    transition: none;
+    transform: none;
+  }
+}

@@ -1,0 +1,386 @@
+/* ==========================================================================
+   Admin — Billing events
+   ========================================================================== */
+
+/* ==========================================================================
+   SUMMARY
+   ========================================================================== */
+
+.ta-bill-summary {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 14px;
+  margin-bottom: 24px;
+}
+
+@media (min-width: 700px) {
+  .ta-bill-summary {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+.ta-bill-summary-item {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 20px 22px;
+  border-radius: 16px;
+  border: 1px solid var(--ta-line);
+  background: var(--ta-card);
+}
+
+.ta-bill-summary-label {
+  font-family: var(--ta-font-sans);
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--ta-brand-pale);
+  opacity: 0.85;
+  padding-left: 0.22em;
+}
+
+.ta-bill-summary-value {
+  font-family: var(--ta-font-sans);
+  font-feature-settings: "tnum";
+  font-size: 30px;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  line-height: 1;
+  color: var(--ta-text);
+}
+
+.ta-bill-summary-value.is-danger {
+  color: #f5bdbd;
+}
+
+.ta-bill-summary-hint {
+  font-family: var(--ta-font-sans);
+  font-size: 12px;
+  color: var(--ta-text-3);
+  line-height: 1.4;
+}
+
+/* ==========================================================================
+   FILTERS
+   ========================================================================== */
+
+.ta-bill-filters {
+  margin-bottom: 20px;
+}
+
+/* ==========================================================================
+   GROUPS
+   ========================================================================== */
+
+.ta-bill-groups {
+  display: flex;
+  flex-direction: column;
+  gap: 28px;
+}
+
+.ta-bill-group {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.ta-bill-group-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
+  padding-left: 2px;
+}
+
+.ta-bill-group-label {
+  font-family: var(--ta-font-sans);
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  color: var(--ta-brand-pale);
+  opacity: 0.85;
+  padding-left: 0.24em;
+}
+
+.ta-bill-group-count {
+  font-family: var(--ta-font-sans);
+  font-size: 11.5px;
+  color: var(--ta-text-3);
+  font-feature-settings: "tnum";
+}
+
+/* ==========================================================================
+   LIST — one row per event
+   ========================================================================== */
+
+.ta-bill-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.ta-bill-item {
+  border-radius: 14px;
+  border: 1px solid var(--ta-line);
+  background: var(--ta-card);
+  overflow: hidden;
+  transition:
+    border-color 0.2s var(--ta-ease),
+    background-color 0.2s var(--ta-ease);
+}
+
+.ta-bill-item:hover {
+  border-color: var(--ta-line-medium);
+  background: rgba(20, 20, 28, 0.5);
+}
+
+.ta-bill-item.is-open {
+  border-color: var(--ta-brand-line);
+}
+
+/* --- The clickable header --- */
+
+.ta-bill-item-head {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  width: 100%;
+  padding: 14px 20px;
+  border: 0;
+  background: transparent;
+  cursor: pointer;
+  text-align: left;
+  color: inherit;
+  font: inherit;
+}
+
+.ta-bill-item-head:focus {
+  outline: none;
+}
+
+.ta-bill-item-head:focus-visible {
+  outline: 2px solid var(--ta-brand-line);
+  outline-offset: -4px;
+  border-radius: 14px;
+}
+
+/* --- The icon — colored by category --- */
+
+.ta-bill-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 28px;
+  height: 28px;
+  border-radius: 8px;
+}
+
+.ta-bill-icon.is-money-in {
+  background: rgba(79, 179, 169, 0.14);
+  color: var(--ta-teal-bright);
+}
+
+.ta-bill-icon.is-money-out {
+  background: rgba(148, 163, 184, 0.1);
+  color: var(--ta-text-2);
+}
+
+.ta-bill-icon.is-failure {
+  background: var(--ta-danger-soft);
+  color: #f5bdbd;
+}
+
+.ta-bill-icon.is-neutral {
+  background: rgba(242, 234, 217, 0.06);
+  color: var(--ta-text-3);
+}
+
+/* --- Main text --- */
+
+.ta-bill-main {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  min-width: 0;
+  flex: 1;
+}
+
+.ta-bill-label {
+  font-family: var(--ta-font-sans);
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--ta-text);
+  line-height: 1.3;
+}
+
+.ta-bill-sub {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-wrap: wrap;
+  font-family: var(--ta-font-sans);
+  font-size: 12px;
+  line-height: 1.4;
+}
+
+.ta-bill-email {
+  color: var(--ta-text-2);
+  text-decoration: none;
+  word-break: break-all;
+}
+
+.ta-bill-email:hover {
+  color: var(--ta-brand-pale);
+  text-decoration: none;
+}
+
+.ta-bill-email--muted {
+  color: var(--ta-text-3);
+  font-family: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+  font-size: 11.5px;
+}
+
+.ta-bill-dot {
+  color: var(--ta-text-3);
+  opacity: 0.6;
+}
+
+.ta-bill-code {
+  font-family: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+  font-size: 11px;
+  color: var(--ta-text-3);
+}
+
+/* --- Right side --- */
+
+.ta-bill-end {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  flex-shrink: 0;
+}
+
+.ta-bill-when {
+  font-family: var(--ta-font-sans);
+  font-size: 12px;
+  color: var(--ta-text-3);
+  font-feature-settings: "tnum";
+  white-space: nowrap;
+}
+
+.ta-bill-chev {
+  font-size: 11px;
+  color: var(--ta-text-3);
+  width: 14px;
+  text-align: center;
+}
+
+/* ==========================================================================
+   PAYLOAD — expanded detail
+   ========================================================================== */
+
+.ta-bill-payload {
+  padding: 18px 20px 20px;
+  border-top: 1px solid var(--ta-line);
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.ta-bill-payload-head {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  min-width: 0;
+}
+
+.ta-bill-payload-label {
+  font-family: var(--ta-font-sans);
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--ta-text-3);
+  padding-left: 0.22em;
+  flex-shrink: 0;
+  min-width: 90px;
+}
+
+.ta-bill-payload-code {
+  font-family: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+  font-size: 12px;
+  color: var(--ta-text-2);
+  word-break: break-all;
+}
+
+.ta-bill-payload-value {
+  font-family: var(--ta-font-sans);
+  font-size: 12.5px;
+  color: var(--ta-text-2);
+  font-feature-settings: "tnum";
+}
+
+.ta-bill-payload-body {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: 4px;
+}
+
+.ta-bill-payload-pre {
+  margin: 0;
+  padding: 14px 16px;
+  border-radius: 12px;
+  border: 1px solid var(--ta-line);
+  background: rgba(0, 0, 0, 0.28);
+  font-family: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+  font-size: 11.5px;
+  line-height: 1.6;
+  color: var(--ta-text-2);
+  overflow-x: auto;
+  max-height: 360px;
+  overflow-y: auto;
+  white-space: pre;
+}
+
+.ta-bill-payload-empty {
+  margin: 0;
+  font-family: var(--ta-font-sans);
+  font-size: 12.5px;
+  color: var(--ta-text-3);
+  font-style: italic;
+}
+
+/* ==========================================================================
+   RESPONSIVE
+   ========================================================================== */
+
+@media (max-width: 640px) {
+  .ta-bill-item-head {
+    padding: 12px 16px;
+    gap: 12px;
+  }
+
+  .ta-bill-icon {
+    width: 24px;
+    height: 24px;
+  }
+
+  .ta-bill-code {
+    display: none;
+  }
+
+  .ta-bill-payload {
+    padding: 16px;
+  }
+
+  .ta-bill-payload-label {
+    min-width: 0;
+  }
+}

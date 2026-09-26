@@ -1,0 +1,405 @@
+/* ==========================================================================
+   Admin — System health
+   ========================================================================== */
+
+.ta-health {
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+}
+
+/* ==========================================================================
+   HERO — overall status
+   ========================================================================== */
+
+.ta-health-hero {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  padding: 28px 32px;
+  border-radius: 20px;
+  border: 1px solid var(--ta-line-medium);
+  background:
+    radial-gradient(
+      ellipse 60% 100% at 0% 0%,
+      rgba(212, 169, 94, 0.05) 0%,
+      transparent 65%
+    ),
+    linear-gradient(
+      180deg,
+      rgba(20, 20, 28, 0.5) 0%,
+      rgba(12, 12, 18, 0.35) 100%
+    );
+  overflow: hidden;
+  isolation: isolate;
+}
+
+.ta-health-hero::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 24px;
+  right: 24px;
+  height: 1px;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(212, 169, 94, 0.4) 50%,
+    transparent 100%
+  );
+  pointer-events: none;
+}
+
+/* --- The status dot --- */
+
+.ta-health-hero-dot {
+  display: inline-block;
+  flex-shrink: 0;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  position: relative;
+}
+
+.ta-health-hero.is-healthy .ta-health-hero-dot {
+  background: var(--ta-teal);
+  box-shadow:
+    0 0 0 4px rgba(79, 179, 169, 0.15),
+    0 0 16px rgba(79, 179, 169, 0.6);
+  animation: ta-health-pulse-teal 2.4s ease-in-out infinite;
+}
+
+.ta-health-hero.is-attention .ta-health-hero-dot {
+  background: var(--ta-brand);
+  box-shadow:
+    0 0 0 4px rgba(212, 169, 94, 0.15),
+    0 0 16px rgba(212, 169, 94, 0.6);
+  animation: ta-health-pulse-gold 2.4s ease-in-out infinite;
+}
+
+@keyframes ta-health-pulse-teal {
+  0%, 100% {
+    box-shadow:
+      0 0 0 4px rgba(79, 179, 169, 0.15),
+      0 0 16px rgba(79, 179, 169, 0.6);
+  }
+  50% {
+    box-shadow:
+      0 0 0 6px rgba(79, 179, 169, 0.22),
+      0 0 24px rgba(79, 179, 169, 0.8);
+  }
+}
+
+@keyframes ta-health-pulse-gold {
+  0%, 100% {
+    box-shadow:
+      0 0 0 4px rgba(212, 169, 94, 0.15),
+      0 0 16px rgba(212, 169, 94, 0.6);
+  }
+  50% {
+    box-shadow:
+      0 0 0 6px rgba(212, 169, 94, 0.22),
+      0 0 24px rgba(212, 169, 94, 0.8);
+  }
+}
+
+/* --- The hero copy --- */
+
+.ta-health-hero-copy {
+  min-width: 0;
+  flex: 1;
+}
+
+.ta-health-hero-title {
+  margin: 0 0 6px;
+  font-family: var(--ta-font-display);
+  font-weight: 400;
+  font-size: 26px;
+  line-height: 1.15;
+  letter-spacing: -0.01em;
+  color: var(--ta-text);
+}
+
+.ta-health-hero-sub {
+  margin: 0;
+  font-family: var(--ta-font-sans);
+  font-size: 13px;
+  color: var(--ta-text-2);
+  line-height: 1.5;
+}
+
+/* ==========================================================================
+   SECTIONS
+   ========================================================================== */
+
+.ta-health-section {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.ta-health-section-head h3 {
+  margin: 0 0 4px;
+  font-family: var(--ta-font-sans);
+  font-size: 15px;
+  font-weight: 600;
+  letter-spacing: -0.005em;
+  color: var(--ta-text);
+}
+
+.ta-health-section-head p {
+  margin: 0;
+  font-family: var(--ta-font-sans);
+  font-size: 13px;
+  line-height: 1.55;
+  color: var(--ta-text-3);
+  max-width: 62ch;
+}
+
+.ta-health-section-head a {
+  color: var(--ta-brand-pale);
+  text-decoration: none;
+  border-bottom: 1px solid var(--ta-brand-line);
+  padding-bottom: 1px;
+}
+
+.ta-health-section-head a:hover {
+  color: var(--ta-brand-bright);
+}
+
+/* ==========================================================================
+   CHECKS
+   ========================================================================== */
+
+.ta-health-checks {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  border: 1px solid var(--ta-line);
+  border-radius: 16px;
+  background: var(--ta-card);
+  overflow: hidden;
+}
+
+.ta-health-check {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+  padding: 16px 22px;
+  border-bottom: 1px solid var(--ta-line);
+  transition: background-color 0.2s var(--ta-ease);
+}
+
+.ta-health-check:last-child {
+  border-bottom: none;
+}
+
+.ta-health-check:hover {
+  background: rgba(242, 234, 217, 0.02);
+}
+
+/* --- The status icon --- */
+
+.ta-health-check-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  margin-top: 1px;
+}
+
+.ta-health-check-icon--ok {
+  background: rgba(79, 179, 169, 0.14);
+  color: var(--ta-teal-bright);
+}
+
+.ta-health-check-icon--warn {
+  background: rgba(212, 169, 94, 0.14);
+  color: var(--ta-brand-bright);
+}
+
+/* --- The check body --- */
+
+.ta-health-check-body {
+  flex: 1;
+  min-width: 0;
+}
+
+.ta-health-check-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 4px;
+}
+
+.ta-health-check-label {
+  font-family: var(--ta-font-sans);
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--ta-text);
+  line-height: 1.35;
+}
+
+.ta-health-check-status {
+  font-family: var(--ta-font-sans);
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  flex-shrink: 0;
+  padding-left: 0.14em;
+}
+
+.ta-health-check-status.is-ok {
+  color: var(--ta-teal-bright);
+}
+
+.ta-health-check-status.is-warn {
+  color: var(--ta-brand-bright);
+}
+
+.ta-health-check-desc {
+  margin: 0;
+  font-family: var(--ta-font-sans);
+  font-size: 12.5px;
+  line-height: 1.55;
+  color: var(--ta-text-3);
+}
+
+.ta-health-check-detail {
+  margin: 6px 0 0;
+  font-family: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+  font-size: 11.5px;
+  line-height: 1.5;
+  color: var(--ta-text-2);
+  word-break: break-word;
+  padding: 6px 10px;
+  border-radius: 6px;
+  background: rgba(242, 234, 217, 0.03);
+  border: 1px solid var(--ta-line);
+}
+
+/* ==========================================================================
+   FLAGS
+   ========================================================================== */
+
+.ta-health-flags {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  border: 1px solid var(--ta-line);
+  border-radius: 16px;
+  background: var(--ta-card);
+  overflow: hidden;
+}
+
+.ta-health-flag {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 16px 22px;
+  border-bottom: 1px solid var(--ta-line);
+  transition: background-color 0.2s var(--ta-ease);
+}
+
+.ta-health-flag:last-child {
+  border-bottom: none;
+}
+
+.ta-health-flag:hover {
+  background: rgba(242, 234, 217, 0.02);
+}
+
+.ta-health-flag-name {
+  font-family: var(--ta-font-sans);
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--ta-text);
+}
+
+.ta-health-flag-state {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 5px 12px 5px 10px;
+  border-radius: 999px;
+  border: 1px solid var(--ta-line);
+  font-family: var(--ta-font-sans);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  padding-left: 10px;
+}
+
+.ta-health-flag-state.is-on {
+  border-color: rgba(79, 179, 169, 0.3);
+  background: rgba(79, 179, 169, 0.08);
+  color: var(--ta-teal-bright);
+}
+
+.ta-health-flag-state.is-off {
+  border-color: var(--ta-line-medium);
+  background: rgba(242, 234, 217, 0.02);
+  color: var(--ta-text-3);
+}
+
+.ta-health-flag-dot {
+  display: inline-block;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.ta-health-flag-state.is-on .ta-health-flag-dot {
+  background: var(--ta-teal);
+  box-shadow: 0 0 8px rgba(79, 179, 169, 0.6);
+}
+
+.ta-health-flag-state.is-off .ta-health-flag-dot {
+  background: var(--ta-text-3);
+}
+
+/* ==========================================================================
+   RESPONSIVE
+   ========================================================================== */
+
+@media (max-width: 640px) {
+  .ta-health-hero {
+    padding: 22px 20px;
+    gap: 16px;
+  }
+
+  .ta-health-hero-title {
+    font-size: 22px;
+  }
+
+  .ta-health-check,
+  .ta-health-flag {
+    padding: 14px 18px;
+  }
+
+  .ta-health-check-head {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 4px;
+  }
+}
+
+/* ==========================================================================
+   REDUCED MOTION
+   ========================================================================== */
+
+@media (prefers-reduced-motion: reduce) {
+  .ta-health-hero.is-healthy .ta-health-hero-dot,
+  .ta-health-hero.is-attention .ta-health-hero-dot {
+    animation: none;
+  }
+}

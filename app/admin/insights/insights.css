@@ -1,0 +1,265 @@
+/* ==========================================================================
+   Tonaura Admin Console — Insights
+   Growth, conversion, and revenue patterns.
+   ========================================================================== */
+
+.ta-insights {
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+}
+
+/* ==========================================================================
+   HEADLINE — the conversion hero card
+   ========================================================================== */
+
+.ta-insight-hero {
+  position: relative;
+  padding: 32px 32px 28px;
+  border-radius: 20px;
+  border: 1px solid var(--ta-brand-line);
+  background:
+    radial-gradient(
+      ellipse 60% 100% at 0% 0%,
+      rgba(212, 169, 94, 0.09) 0%,
+      transparent 60%
+    ),
+    linear-gradient(
+      180deg,
+      rgba(20, 20, 28, 0.55) 0%,
+      rgba(10, 10, 16, 0.6) 100%
+    );
+  overflow: hidden;
+  isolation: isolate;
+}
+
+/* Warm gold hairline at the top edge */
+.ta-insight-hero::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 24px;
+  right: 24px;
+  height: 1px;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(212, 169, 94, 0.55) 50%,
+    transparent 100%
+  );
+  pointer-events: none;
+}
+
+.ta-insight-hero-head {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.ta-insight-hero-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 10px;
+  background: var(--ta-brand-soft);
+  color: var(--ta-brand);
+  flex-shrink: 0;
+}
+
+.ta-insight-hero-label {
+  font-family: var(--ta-font-sans);
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  color: var(--ta-brand-pale);
+  padding-left: 0.28em;
+}
+
+.ta-insight-hero-value {
+  font-family: var(--ta-font-sans);
+  font-feature-settings: "tnum";
+  font-size: 56px;
+  font-weight: 600;
+  letter-spacing: -0.035em;
+  line-height: 1;
+  color: var(--ta-text);
+  margin-bottom: 10px;
+}
+
+.ta-insight-hero-unit {
+  font-size: 40px;
+  color: var(--ta-text-2);
+  margin-left: 4px;
+  font-weight: 500;
+}
+
+.ta-insight-hero-desc {
+  margin: 0 0 24px;
+  font-family: var(--ta-font-sans);
+  font-size: 14px;
+  line-height: 1.55;
+  color: var(--ta-text-2);
+  max-width: 52ch;
+}
+
+/* --- The progress bar --- */
+
+.ta-insight-bar {
+  height: 6px;
+  border-radius: 999px;
+  background: rgba(242, 234, 217, 0.06);
+  overflow: hidden;
+  position: relative;
+}
+
+.ta-insight-bar-fill {
+  display: block;
+  height: 100%;
+  border-radius: 999px;
+  background: linear-gradient(
+    90deg,
+    var(--ta-brand-600) 0%,
+    var(--ta-brand) 50%,
+    var(--ta-brand-bright) 100%
+  );
+  transition: width 0.6s var(--ta-ease);
+  box-shadow: 0 0 12px rgba(212, 169, 94, 0.4);
+}
+
+/* ==========================================================================
+   SECTIONS
+   ========================================================================== */
+
+.ta-insights-section {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.ta-insights-section-head h2 {
+  margin: 0 0 4px;
+  font-family: var(--ta-font-sans);
+  font-size: 15px;
+  font-weight: 600;
+  letter-spacing: -0.005em;
+  color: var(--ta-text);
+}
+
+.ta-insights-section-head p {
+  margin: 0;
+  font-family: var(--ta-font-sans);
+  font-size: 13px;
+  line-height: 1.5;
+  color: var(--ta-text-3);
+  max-width: 52ch;
+}
+
+/* ==========================================================================
+   PLAN MIX — ranked list with labels above bars
+   ========================================================================== */
+
+.ta-plan-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.ta-plan-list-item {
+  display: grid;
+  grid-template-columns: 100px 80px 1fr;
+  align-items: center;
+  gap: 16px;
+}
+
+.ta-plan-list-name {
+  font-family: var(--ta-font-sans);
+  font-size: 13.5px;
+  color: var(--ta-text);
+  font-weight: 500;
+  text-transform: capitalize;
+}
+
+.ta-plan-list-count {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 8px;
+  font-family: var(--ta-font-sans);
+  font-feature-settings: "tnum";
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--ta-text);
+}
+
+.ta-plan-list-pct {
+  font-size: 11.5px;
+  font-weight: 500;
+  color: var(--ta-text-3);
+  letter-spacing: 0.02em;
+}
+
+.ta-plan-list-bar {
+  display: block;
+  height: 6px;
+  border-radius: 999px;
+  background: rgba(242, 234, 217, 0.06);
+  overflow: hidden;
+  position: relative;
+}
+
+.ta-plan-list-bar-fill {
+  display: block;
+  height: 100%;
+  border-radius: 999px;
+  background: linear-gradient(
+    90deg,
+    var(--ta-brand-600) 0%,
+    var(--ta-brand) 50%,
+    var(--ta-brand-bright) 100%
+  );
+  transition: width 0.6s var(--ta-ease);
+}
+
+/* ==========================================================================
+   RESPONSIVE
+   ========================================================================== */
+
+@media (max-width: 700px) {
+  .ta-insight-hero {
+    padding: 24px 22px 22px;
+  }
+
+  .ta-insight-hero-value {
+    font-size: 44px;
+  }
+
+  .ta-insight-hero-unit {
+    font-size: 32px;
+  }
+
+  .ta-plan-list-item {
+    grid-template-columns: 1fr;
+    gap: 8px;
+  }
+
+  .ta-plan-list-count {
+    justify-content: flex-start;
+  }
+}
+
+/* ==========================================================================
+   REDUCED MOTION
+   ========================================================================== */
+
+@media (prefers-reduced-motion: reduce) {
+  .ta-insight-bar-fill,
+  .ta-plan-list-bar-fill {
+    transition: none;
+  }
+}

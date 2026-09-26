@@ -1,0 +1,12 @@
+User-agent: *
+Allow: /
+
+Disallow: /admin
+Disallow: /admin/
+Disallow: /api/
+Disallow: /account
+Disallow: /account/
+Disallow: /checkout/
+Disallow: /auth/
+
+Sitemap: https://tonaura.com/sitemap.xml

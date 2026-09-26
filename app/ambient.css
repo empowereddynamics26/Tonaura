@@ -1,0 +1,196 @@
+/* ==========================================================================
+   AMBIENT — atmospheric background for the whole site
+
+   Layers:
+   1. Two soft gradient blobs (gold + teal) — no runtime blur
+   2. A small periodic ripple at the top-center of the viewport
+      (behind the navbar), expanding downward like a drip.
+      Thin stroke, fixed to the viewport, no scroll movement.
+
+   Performance:
+   · Blur baked into gradients
+   · Only transform and opacity animate
+   · SVG stroke uses vector-effect: non-scaling-stroke (fixed thinness)
+   · Respects prefers-reduced-motion
+   ========================================================================== */
+
+.ambient-field {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+/* --------------------------------------------------------------------
+   Layer 1 — Two soft gradient blobs (gold + teal)
+   -------------------------------------------------------------------- */
+.ambient-blob {
+  position: absolute;
+  border-radius: 50%;
+  will-change: transform;
+}
+
+.ambient-blob--gold {
+  top: -10%;
+  left: 35%;
+  width: 640px;
+  height: 640px;
+  margin-left: -320px;
+  background: radial-gradient(
+    circle at center,
+    rgba(212, 169, 94, 0.24) 0%,
+    rgba(212, 169, 94, 0.20) 10%,
+    rgba(212, 169, 94, 0.16) 20%,
+    rgba(212, 169, 94, 0.12) 30%,
+    rgba(212, 169, 94, 0.09) 40%,
+    rgba(212, 169, 94, 0.06) 50%,
+    rgba(212, 169, 94, 0.04) 60%,
+    rgba(212, 169, 94, 0.02) 72%,
+    rgba(212, 169, 94, 0.01) 85%,
+    transparent 100%
+  );
+  animation: ambientDriftGold 42s ease-in-out infinite alternate;
+}
+
+.ambient-blob--teal {
+  bottom: -12%;
+  right: -8%;
+  width: 580px;
+  height: 580px;
+  background: radial-gradient(
+    circle at center,
+    rgba(79, 179, 169, 0.20) 0%,
+    rgba(79, 179, 169, 0.17) 10%,
+    rgba(79, 179, 169, 0.13) 20%,
+    rgba(79, 179, 169, 0.10) 30%,
+    rgba(79, 179, 169, 0.07) 40%,
+    rgba(79, 179, 169, 0.05) 50%,
+    rgba(79, 179, 169, 0.03) 60%,
+    rgba(79, 179, 169, 0.02) 72%,
+    rgba(79, 179, 169, 0.01) 85%,
+    transparent 100%
+  );
+  animation: ambientDriftTeal 52s ease-in-out infinite alternate;
+  animation-delay: -14s;
+}
+
+@keyframes ambientDriftGold {
+  0%   { transform: translate(0, 0) scale(1); }
+  100% { transform: translate(40px, 30px) scale(1.06); }
+}
+
+@keyframes ambientDriftTeal {
+  0%   { transform: translate(0, 0) scale(1); }
+  100% { transform: translate(-40px, -30px) scale(1.08); }
+}
+
+/* --------------------------------------------------------------------
+   Layer 2 — Small periodic ripple at top-center of viewport
+   Pinned to viewport via `position: fixed` on the wrapper.
+   Thin stroke via SVG + vector-effect: non-scaling-stroke.
+   -------------------------------------------------------------------- */
+
+.ambient-drop {
+  position: fixed;
+  top: 72px;                     /* below the fixed navbar */
+  left: 50%;
+  transform: translateX(-50%);
+  width: 0;
+  height: 0;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.ambient-drop-svg {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 480px;
+  height: 480px;
+  margin-top: -240px;
+  margin-left: -240px;
+  overflow: visible;
+  pointer-events: none;
+}
+
+.ambient-drop-ring {
+  fill: none;
+  stroke-width: 1;
+  /* This is the magic: the stroke stays 1px no matter how much we scale */
+  vector-effect: non-scaling-stroke;
+  transform-origin: 240px 240px;
+  opacity: 0;
+  will-change: transform, opacity;
+  animation: ambientDrop 6s cubic-bezier(0.16, 1, 0.3, 1) infinite;
+}
+
+.ambient-drop-ring--1 {
+  stroke: rgba(212, 169, 94, 0.55);
+  animation-delay: 0s;
+}
+
+.ambient-drop-ring--2 {
+  stroke: rgba(79, 179, 169, 0.45);
+  animation-delay: 3s;
+}
+
+@keyframes ambientDrop {
+  0% {
+    transform: scale(0.15);
+    opacity: 0;
+  }
+  10% {
+    opacity: 0.85;
+  }
+  55% {
+    opacity: 0.3;
+  }
+  100% {
+    transform: scale(1.2);
+    opacity: 0;
+  }
+}
+
+/* --------------------------------------------------------------------
+   Mobile — tighter blobs, slightly smaller drop
+   -------------------------------------------------------------------- */
+@media (max-width: 768px) {
+  .ambient-blob--gold {
+    width: 480px;
+    height: 480px;
+    margin-left: -240px;
+    top: -15%;
+  }
+  .ambient-blob--teal {
+    width: 460px;
+    height: 460px;
+    bottom: -18%;
+    right: -15%;
+  }
+  .ambient-drop {
+    top: 64px;
+  }
+  .ambient-drop-svg {
+    width: 360px;
+    height: 360px;
+    margin-top: -180px;
+    margin-left: -180px;
+  }
+  .ambient-drop-ring {
+    transform-origin: 180px 180px;
+  }
+}
+
+/* --------------------------------------------------------------------
+   Reduced motion
+   -------------------------------------------------------------------- */
+@media (prefers-reduced-motion: reduce) {
+  .ambient-blob,
+  .ambient-drop-ring {
+    animation: none !important;
+  }
+  .ambient-drop-ring {
+    display: none;
+  }
+}

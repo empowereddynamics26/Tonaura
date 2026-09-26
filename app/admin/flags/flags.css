@@ -1,0 +1,372 @@
+/* ==========================================================================
+   Admin — Feature flags
+   ========================================================================== */
+
+/* ==========================================================================
+   WARNING BANNER — visible when a critical flag is on
+   ========================================================================== */
+
+.ta-flag-warning {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+  padding: 16px 20px;
+  border-radius: 14px;
+  border: 1px solid rgba(212, 169, 94, 0.32);
+  background: rgba(212, 169, 94, 0.08);
+  margin-bottom: 24px;
+  color: var(--ta-brand-pale);
+}
+
+.ta-flag-warning-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 28px;
+  height: 28px;
+  border-radius: 8px;
+  background: rgba(212, 169, 94, 0.16);
+  color: var(--ta-brand-bright);
+}
+
+.ta-flag-warning-body {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 0;
+  font-family: var(--ta-font-sans);
+  line-height: 1.5;
+}
+
+.ta-flag-warning-body strong {
+  color: var(--ta-text);
+  font-size: 13.5px;
+  font-weight: 600;
+}
+
+.ta-flag-warning-body span {
+  font-size: 12.5px;
+  color: var(--ta-brand-pale);
+  word-break: break-word;
+}
+
+/* ==========================================================================
+   SECTIONS
+   ========================================================================== */
+
+.ta-flags-section {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  margin-bottom: 40px;
+}
+
+.ta-flags-section:last-child {
+  margin-bottom: 0;
+}
+
+.ta-flags-section-head {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.ta-flags-section-title-row {
+  display: flex;
+  align-items: baseline;
+  gap: 12px;
+}
+
+.ta-flags-section-head h2 {
+  margin: 0;
+  font-family: var(--ta-font-sans);
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  color: var(--ta-brand-pale);
+  opacity: 0.9;
+  padding-left: 0.28em;
+}
+
+.ta-flags-section-count {
+  display: inline-flex;
+  align-items: center;
+  padding: 2px 9px;
+  border-radius: 999px;
+  font-family: var(--ta-font-sans);
+  font-size: 10.5px;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  background: rgba(212, 169, 94, 0.12);
+  border: 1px solid var(--ta-brand-line);
+  color: var(--ta-brand-pale);
+}
+
+.ta-flags-section-head p {
+  margin: 0;
+  font-family: var(--ta-font-sans);
+  font-size: 13px;
+  line-height: 1.55;
+  color: var(--ta-text-3);
+  max-width: 60ch;
+}
+
+/* ==========================================================================
+   LIST
+   ========================================================================== */
+
+.ta-flags-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.ta-flag-item {
+  border-radius: 16px;
+  border: 1px solid var(--ta-line);
+  background: var(--ta-card);
+  overflow: hidden;
+  transition:
+    border-color 0.25s var(--ta-ease),
+    background-color 0.25s var(--ta-ease);
+}
+
+.ta-flag-item.is-on {
+  border-color: var(--ta-brand-line);
+  background:
+    radial-gradient(
+      ellipse 60% 100% at 0% 0%,
+      rgba(212, 169, 94, 0.05) 0%,
+      transparent 60%
+    ),
+    var(--ta-card);
+}
+
+.ta-flag-item.is-confirming {
+  border-color: rgba(212, 169, 94, 0.5);
+}
+
+.ta-flag-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 18px;
+  padding: 18px 22px;
+}
+
+/* ==========================================================================
+   TOGGLE SWITCH
+   ========================================================================== */
+
+.ta-flag-toggle {
+  display: inline-flex;
+  align-items: center;
+  flex-shrink: 0;
+  margin-top: 2px;
+  cursor: pointer;
+  position: relative;
+}
+
+.ta-flag-toggle input {
+  position: absolute;
+  opacity: 0;
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  cursor: pointer;
+}
+
+.ta-flag-toggle-track {
+  position: relative;
+  display: inline-block;
+  width: 44px;
+  height: 26px;
+  border-radius: 999px;
+  background: rgba(242, 234, 217, 0.06);
+  border: 1px solid var(--ta-line-medium);
+  transition:
+    background-color 0.25s var(--ta-ease),
+    border-color 0.25s var(--ta-ease);
+}
+
+.ta-flag-toggle-knob {
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: var(--ta-text-3);
+  transition:
+    transform 0.28s cubic-bezier(0.16, 1, 0.3, 1),
+    background-color 0.25s var(--ta-ease);
+}
+
+.ta-flag-toggle:hover .ta-flag-toggle-track {
+  border-color: rgba(242, 234, 217, 0.24);
+}
+
+.ta-flag-toggle.is-on .ta-flag-toggle-track {
+  background: rgba(212, 169, 94, 0.18);
+  border-color: var(--ta-brand-line);
+}
+
+.ta-flag-toggle.is-on .ta-flag-toggle-knob {
+  transform: translateX(18px);
+  background: var(--ta-brand-bright);
+  box-shadow: 0 0 10px rgba(212, 169, 94, 0.6);
+}
+
+.ta-flag-toggle.is-busy {
+  cursor: wait;
+  opacity: 0.65;
+}
+
+.ta-flag-toggle input:focus-visible ~ .ta-flag-toggle-track {
+  outline: 2px solid var(--ta-brand-line);
+  outline-offset: 3px;
+}
+
+.ta-flag-toggle input:disabled ~ .ta-flag-toggle-track {
+  cursor: wait;
+}
+
+/* ==========================================================================
+   FLAG COPY
+   ========================================================================== */
+
+.ta-flag-copy {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  min-width: 0;
+  flex: 1;
+}
+
+.ta-flag-title-row {
+  display: flex;
+  align-items: baseline;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.ta-flag-label {
+  font-family: var(--ta-font-sans);
+  font-size: 15px;
+  font-weight: 500;
+  letter-spacing: -0.005em;
+  color: var(--ta-text);
+  line-height: 1.3;
+}
+
+.ta-flag-state {
+  font-family: var(--ta-font-sans);
+  font-size: 10.5px;
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  padding-left: 0.16em;
+}
+
+.ta-flag-state.is-on {
+  color: var(--ta-brand-bright);
+}
+
+.ta-flag-state.is-off {
+  color: var(--ta-text-3);
+}
+
+.ta-flag-desc {
+  margin: 0;
+  font-family: var(--ta-font-sans);
+  font-size: 13px;
+  line-height: 1.55;
+  color: var(--ta-text-2);
+}
+
+.ta-flag-meta {
+  margin: 2px 0 0;
+  font-family: var(--ta-font-sans);
+  font-size: 11.5px;
+  color: var(--ta-text-3);
+  line-height: 1.4;
+}
+
+/* ==========================================================================
+   INLINE CONFIRMATION
+   ========================================================================== */
+
+.ta-flag-confirm {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  padding: 18px 22px 20px;
+  border-top: 1px solid rgba(212, 169, 94, 0.24);
+  background: rgba(212, 169, 94, 0.05);
+}
+
+.ta-flag-confirm-text {
+  margin: 0;
+  font-family: var(--ta-font-sans);
+  font-size: 13.5px;
+  line-height: 1.55;
+  color: var(--ta-text-2);
+  max-width: 68ch;
+}
+
+.ta-flag-confirm-text strong {
+  color: var(--ta-text);
+  font-weight: 600;
+}
+
+.ta-flag-confirm-actions {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+/* ==========================================================================
+   RESPONSIVE
+   ========================================================================== */
+
+@media (max-width: 640px) {
+  .ta-flag-row {
+    padding: 16px 18px;
+    gap: 14px;
+  }
+
+  .ta-flag-label {
+    font-size: 14px;
+  }
+
+  .ta-flag-confirm {
+    padding: 16px 18px 18px;
+  }
+
+  .ta-flag-confirm-actions {
+    flex-direction: column-reverse;
+    align-items: stretch;
+  }
+
+  .ta-flag-confirm-actions .ta-btn {
+    width: 100%;
+    justify-content: center;
+  }
+}
+
+/* ==========================================================================
+   REDUCED MOTION
+   ========================================================================== */
+
+@media (prefers-reduced-motion: reduce) {
+  .ta-flag-toggle-track,
+  .ta-flag-toggle-knob,
+  .ta-flag-item {
+    transition: none !important;
+  }
+}

@@ -1,0 +1,173 @@
+/* ==========================================================================
+   Admin — Accounts list
+   ========================================================================== */
+
+/* ==========================================================================
+   TOOLBAR
+   ========================================================================== */
+
+.ta-list-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+  margin-bottom: 16px;
+}
+
+.ta-list-toolbar-left {
+  flex: 1;
+  min-width: 240px;
+}
+
+.ta-list-toolbar-right {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  flex-shrink: 0;
+}
+
+.ta-input--search {
+  width: 100%;
+  max-width: 420px;
+}
+
+.ta-list-count {
+  font-family: var(--ta-font-sans);
+  font-size: 12.5px;
+  color: var(--ta-text-2);
+  letter-spacing: 0.01em;
+  white-space: nowrap;
+}
+
+.ta-list-count strong {
+  color: var(--ta-text);
+  font-weight: 600;
+  font-feature-settings: "tnum";
+}
+
+.ta-list-count-sub {
+  color: var(--ta-text-3);
+}
+
+/* ==========================================================================
+   TABLE — users variant
+   ========================================================================== */
+
+.ta-card--table {
+  padding: 0;
+  overflow: hidden;
+}
+
+.ta-table--users th {
+  padding: 14px 20px;
+}
+
+.ta-table--users td {
+  padding: 14px 20px;
+}
+
+.ta-table-th-actions {
+  text-align: right;
+}
+
+.ta-table-td-actions {
+  text-align: right;
+}
+
+.ta-table-td-actions .ta-row-actions {
+  justify-content: flex-end;
+}
+
+/* ==========================================================================
+   USER CELL — avatar + email + name
+   ========================================================================== */
+
+.ta-user-cell {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  text-decoration: none;
+  min-width: 0;
+}
+
+.ta-user-cell-avatar {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  border: 1px solid var(--ta-brand-line);
+  background:
+    radial-gradient(
+      circle at 30% 30%,
+      rgba(240, 200, 120, 0.22) 0%,
+      rgba(12, 12, 18, 0.9) 75%
+    );
+  color: var(--ta-brand-bright);
+  font-family: var(--ta-font-display);
+  font-size: 14px;
+  line-height: 1;
+  flex-shrink: 0;
+  box-shadow: 0 0 0 1px rgba(212, 169, 94, 0.08) inset;
+}
+
+.ta-user-cell-copy {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.ta-user-cell-email {
+  font-family: var(--ta-font-sans);
+  font-size: 13.5px;
+  font-weight: 500;
+  color: var(--ta-text);
+  text-decoration: none;
+  line-height: 1.3;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.ta-user-cell:hover .ta-user-cell-email {
+  color: var(--ta-brand-pale);
+}
+
+.ta-user-cell-name {
+  font-family: var(--ta-font-sans);
+  font-size: 11.5px;
+  color: var(--ta-text-3);
+  line-height: 1.3;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* ==========================================================================
+   RESPONSIVE
+   ========================================================================== */
+
+@media (max-width: 900px) {
+  .ta-list-toolbar {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .ta-list-toolbar-right {
+    justify-content: space-between;
+  }
+
+  .ta-input--search {
+    max-width: none;
+  }
+}
+
+@media (max-width: 640px) {
+  .ta-table--users th,
+  .ta-table--users td {
+    padding: 12px 14px;
+  }
+}

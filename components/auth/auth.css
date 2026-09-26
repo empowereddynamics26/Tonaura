@@ -1,0 +1,588 @@
+/* ==========================================================================
+   AUTH PAGES — login, signup, forgot, reset
+   The Threshold — warmer, more focused, quietly luxurious.
+   ========================================================================== */
+
+/* --------------------------------------------------------------------------
+   Shell
+   -------------------------------------------------------------------------- */
+.auth-shell {
+  position: relative;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background: transparent; /* global AmbientField shows through */
+  overflow: hidden;
+  isolation: isolate;
+}
+
+/* --------------------------------------------------------------------------
+   Top nav — Back to home is now gold
+   -------------------------------------------------------------------------- */
+.auth-nav {
+  position: relative;
+  z-index: 2;
+  padding: 28px 40px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+}
+
+.auth-nav-brand {
+  display: block;
+  flex-shrink: 0;
+}
+.auth-nav-brand img {
+  width: 160px;
+  height: auto;
+  filter: saturate(1.15) brightness(1.05);
+}
+
+.auth-nav-back {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--font-sans);
+  font-size: 11.5px;
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  text-decoration: none;
+  white-space: nowrap;
+  padding: 10px 20px;
+  border-radius: 999px;
+  background: linear-gradient(
+    180deg,
+    var(--gold-bright) 0%,
+    var(--gold) 55%,
+    var(--gold-deep) 100%
+  );
+  color: #1a1408;
+  box-shadow:
+    0 1px 0 rgba(255, 255, 255, 0.18) inset,
+    0 6px 18px -8px rgba(212, 169, 94, 0.6);
+  transition:
+    transform 0.25s var(--ease-calm),
+    box-shadow 0.25s var(--ease-calm),
+    filter 0.25s var(--ease-calm);
+}
+.auth-nav-back:hover {
+  transform: translateY(-1px);
+  filter: brightness(1.08);
+  box-shadow:
+    0 1px 0 rgba(255, 255, 255, 0.22) inset,
+    0 12px 28px -10px rgba(212, 169, 94, 0.75);
+}
+.auth-nav-back:active {
+  transform: translateY(0) scale(0.98);
+}
+.auth-nav-back span {
+  transition: transform 0.3s var(--ease-calm);
+}
+.auth-nav-back:hover span {
+  transform: translateX(-3px);
+}
+
+/* --------------------------------------------------------------------------
+   Main content area
+   -------------------------------------------------------------------------- */
+.auth-main {
+  position: relative;
+  z-index: 1;
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 32px 24px 60px;
+}
+
+/* --------------------------------------------------------------------------
+   Auth card — the letter card
+   -------------------------------------------------------------------------- */
+.auth-card {
+  position: relative;
+  width: 100%;
+  max-width: 440px;
+  padding: 48px 40px 36px;
+  border-radius: 26px;
+  border: 1px solid rgba(242, 234, 217, 0.08);
+  background:
+    radial-gradient(
+      ellipse 90% 55% at 50% 0%,
+      rgba(212, 169, 94, 0.07) 0%,
+      transparent 60%
+    ),
+    linear-gradient(
+      180deg,
+      rgba(20, 20, 28, 0.82) 0%,
+      rgba(12, 12, 18, 0.72) 100%
+    );
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  isolation: isolate;
+  opacity: 0;
+  animation: authCardIn 0.9s cubic-bezier(0.16, 1, 0.3, 1) 0.1s forwards;
+}
+
+@keyframes authCardIn {
+  to { opacity: 1; }
+}
+
+/* Top gold hairline */
+.auth-card::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 25%;
+  right: 25%;
+  height: 1px;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(212, 169, 94, 0.5) 50%,
+    transparent 100%
+  );
+  pointer-events: none;
+  border-top-left-radius: 28px;
+  border-top-right-radius: 28px;
+}
+
+/* --------------------------------------------------------------------------
+   Card head — diamond + mark + eyebrow + title + subtitle
+   -------------------------------------------------------------------------- */
+.auth-card-head {
+  text-align: center;
+  margin-bottom: 32px;
+}
+
+.auth-card-diamond {
+  display: block;
+  width: 7px;
+  height: 7px;
+  background: var(--gold);
+  transform: rotate(45deg);
+  box-shadow:
+    0 0 10px rgba(212, 169, 94, 0.5),
+    0 0 20px rgba(212, 169, 94, 0.2);
+  margin: 0 auto 20px;
+  animation: authDiamondPulse 5s ease-in-out infinite;
+}
+
+@keyframes authDiamondPulse {
+  0%, 100% {
+    box-shadow:
+      0 0 10px rgba(212, 169, 94, 0.5),
+      0 0 20px rgba(212, 169, 94, 0.2);
+    transform: rotate(45deg) scale(1);
+  }
+  50% {
+    box-shadow:
+      0 0 16px rgba(212, 169, 94, 0.7),
+      0 0 32px rgba(212, 169, 94, 0.3);
+    transform: rotate(45deg) scale(1.15);
+  }
+}
+
+.auth-card-mark {
+  display: block;
+  width: 52px;
+  height: 52px;
+  margin: 0 auto 20px;
+  filter: saturate(1.15) brightness(1.05);
+}
+.auth-card-eyebrow {
+  font-family: var(--font-sans);
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: 0.34em;
+  text-transform: uppercase;
+  color: var(--teal);
+ margin: 0 0 12px;
+  padding-left: 0.34em;
+  opacity: 0.85;
+}
+
+.auth-card-title {
+  font-family: var(--font-display);
+  font-weight: 400;
+  font-size: 32px;
+  line-height: 1.08;
+  letter-spacing: -0.02em;
+  color: var(--text);
+  margin: 0 0 10px;
+}
+
+.auth-card-subtitle {
+  font-family: var(--font-sans);
+  font-size: 14.5px;
+  line-height: 1.6;
+  color: var(--text-2);
+  margin: 0 auto;
+  max-width: 340px;
+}
+
+/* --------------------------------------------------------------------------
+   OAuth — the premium quick path
+   -------------------------------------------------------------------------- */
+.auth-oauth {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.auth-oauth-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+  width: 100%;
+  padding: 13px 20px;
+  border-radius: 14px;
+  border: 1px solid var(--line-medium);
+  background: rgba(242, 234, 217, 0.04);
+  color: var(--text);
+  font-family: var(--font-sans);
+  font-size: 14.5px;
+  font-weight: 500;
+  letter-spacing: 0.01em;
+  cursor: pointer;
+  transition:
+    border-color 0.3s var(--ease-calm),
+    background-color 0.3s var(--ease-calm),
+    transform 0.3s var(--ease-calm),
+    box-shadow 0.3s var(--ease-calm);
+}
+
+.auth-oauth-btn:hover:not(:disabled) {
+  border-color: var(--gold-line);
+  background: rgba(212, 169, 94, 0.06);
+  transform: translateY(-1px);
+  box-shadow: 0 12px 28px -14px rgba(212, 169, 94, 0.45);
+}
+
+.auth-oauth-btn:disabled {
+  opacity: 0.55;
+  cursor: wait;
+  transform: none;
+}
+
+/* Small white circle behind the Google logo */
+.auth-oauth-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: #fff;
+  flex-shrink: 0;
+}
+
+.auth-oauth-divider {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin: 18px 0;
+  font-family: var(--font-sans);
+  font-size: 10.5px;
+  font-weight: 500;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--text-3);
+  opacity: 0.75;
+}
+.auth-oauth-divider::before,
+.auth-oauth-divider::after {
+  content: "";
+  flex: 1;
+  height: 1px;
+  background: var(--line);
+}
+
+/* --------------------------------------------------------------------------
+   Form — floating-label underlined fields
+   -------------------------------------------------------------------------- */
+.auth-form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.auth-field {
+  position: relative;
+  padding-top: 18px;
+  padding-bottom: 8px;
+}
+
+.auth-field-label {
+  position: absolute;
+  top: 24px;
+  left: 0;
+  font-family: var(--font-sans);
+  font-size: 15px;
+  font-weight: 400;
+  color: var(--text-3);
+  pointer-events: none;
+  transition:
+    top 0.3s var(--ease-calm),
+    font-size 0.3s var(--ease-calm),
+    color 0.3s var(--ease-calm),
+    letter-spacing 0.3s var(--ease-calm);
+}
+
+.auth-field.is-focused .auth-field-label,
+.auth-field.has-value .auth-field-label {
+  top: 0;
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--gold-pale);
+}
+
+.auth-field.is-focused .auth-field-label {
+  color: var(--gold);
+}
+
+.auth-field-input {
+  width: 100%;
+  background: transparent;
+  border: 0;
+  border-bottom: 1px solid rgba(242, 234, 217, 0.18);
+  border-radius: 0;
+  padding: 8px 0 12px;
+  font-family: var(--font-sans);
+  font-size: 15.5px;
+  line-height: 1.5;
+  color: var(--text);
+  transition: border-color 0.3s var(--ease-calm);
+  outline: none;
+  -webkit-appearance: none;
+  appearance: none;
+  box-shadow: none;
+}
+
+/* Kill the browser's default focus outline — we handle it ourselves */
+.auth-field-input:focus,
+.auth-field-input:focus-visible,
+.auth-field-input:active {
+  outline: none;
+  outline-offset: 0;
+  box-shadow: none;
+  border-top: 0;
+  border-left: 0;
+  border-right: 0;
+}
+
+/* Kill Chrome's autofill yellow/blue background */
+.auth-field-input:-webkit-autofill,
+.auth-field-input:-webkit-autofill:hover,
+.auth-field-input:-webkit-autofill:focus,
+.auth-field-input:-webkit-autofill:active {
+  -webkit-box-shadow: 0 0 0 1000px transparent inset;
+  -webkit-text-fill-color: var(--text);
+  transition: background-color 5000s ease-in-out 0s;
+  box-shadow: 0 0 0 1000px transparent inset;
+}
+
+.auth-field-input:focus {
+  border-bottom-color: rgba(212, 169, 94, 0.4);
+}
+
+.auth-field-underline {
+  position: absolute;
+  left: 0;
+  right: 0;
+   bottom: 8px;
+  height: 1px;
+  background: linear-gradient(
+    90deg,
+    var(--gold) 0%,
+    var(--gold-bright) 50%,
+    var(--gold) 100%
+  );
+  transform: scaleX(0);
+  transform-origin: left center;
+  transition: transform 0.45s var(--ease-calm);
+  pointer-events: none;
+}
+.auth-field.is-focused .auth-field-underline {
+  transform: scaleX(1);
+}
+
+/* --------------------------------------------------------------------------
+   Form actions
+   -------------------------------------------------------------------------- */
+.auth-submit {
+  width: 100%;
+  justify-content: center;
+  margin-top: 4px;
+}
+
+.auth-magic {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  width: 100%;
+    padding: 12px 18px;
+  background: transparent;
+  border: 1px solid var(--line-medium);
+  border-radius: 14px;
+  color: var(--text-2);
+  font-family: var(--font-sans);
+  font-size: 13px;
+  font-weight: 500;
+  letter-spacing: 0.02em;
+  cursor: pointer;
+  transition:
+    border-color 0.25s var(--ease-calm),
+    color 0.25s var(--ease-calm),
+    background-color 0.25s var(--ease-calm);
+}
+.auth-magic:hover:not(:disabled) {
+  border-color: var(--gold-line);
+  color: var(--gold-pale);
+  background: rgba(212, 169, 94, 0.04);
+}
+.auth-magic:disabled {
+  opacity: 0.55;
+  cursor: wait;
+}
+
+/* --------------------------------------------------------------------------
+   Notices + errors
+   -------------------------------------------------------------------------- */
+.auth-notice {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  font-family: var(--font-sans);
+  font-size: 13.5px;
+  line-height: 1.55;
+  padding: 14px 16px;
+  border-radius: 12px;
+  margin-top: 20px;
+}
+.auth-notice::before {
+  content: "";
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  flex-shrink: 0;
+  margin-top: 7px;
+}
+.auth-notice--error {
+  color: #e8a0a0;
+  background: rgba(232, 160, 160, 0.08);
+  border: 1px solid rgba(232, 160, 160, 0.2);
+}
+.auth-notice--error::before {
+  background: #e8a0a0;
+}
+.auth-notice--ok {
+  color: var(--teal);
+  background: rgba(79, 179, 169, 0.08);
+  border: 1px solid rgba(79, 179, 169, 0.22);
+}
+.auth-notice--ok::before {
+  background: var(--teal);
+  box-shadow: 0 0 8px var(--teal-glow);
+}
+
+/* --------------------------------------------------------------------------
+   Aside — cross-links
+   -------------------------------------------------------------------------- */
+.auth-aside {
+  text-align: center;
+  margin-top: 24px;
+  padding-top: 20px;
+  border-top: 1px solid rgba(242, 234, 217, 0.06);
+}
+.auth-aside-line {
+  font-family: var(--font-sans);
+  font-size: 13.5px;
+  color: var(--text-3);
+  margin: 0 0 8px;
+}
+.auth-aside-line:last-child {
+  margin-bottom: 0;
+}
+
+.auth-aside a {
+  color: var(--gold-pale);
+  text-decoration: none;
+  font-weight: 500;
+  border-bottom: 1px solid rgba(212, 169, 94, 0.3);
+  transition:
+    color 0.25s var(--ease-calm),
+    border-color 0.25s var(--ease-calm);
+}
+.auth-aside a:hover {
+  color: var(--gold);
+  border-bottom-color: var(--gold);
+}
+
+/* --------------------------------------------------------------------------
+   Responsive
+   -------------------------------------------------------------------------- */
+@media (max-width: 560px) {
+  .auth-nav {
+    padding: 20px 20px;
+  }
+  .auth-nav-brand img {
+    width: 130px;
+  }
+ .auth-nav-back {
+  font-size: 10.5px;
+  letter-spacing: 0.14em;
+  padding: 9px 16px;
+}
+  .auth-main {
+    padding: 20px 16px 60px;
+    align-items: flex-start;
+  }
+  .auth-card {
+    padding: 48px 26px 36px;
+    border-radius: 22px;
+  }
+  .auth-card-diamond {
+    margin-bottom: 24px;
+  }
+  .auth-card-mark {
+    width: 52px;
+    height: 52px;
+    margin-bottom: 24px;
+  }
+  .auth-card-title {
+    font-size: 30px;
+  }
+  .auth-oauth-btn {
+    padding: 14px 18px;
+    font-size: 14px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .auth-card,
+  .auth-card-diamond {
+    opacity: 1 !important;
+    animation: none !important;
+  }
+  .auth-field-label,
+  .auth-field-underline,
+  .auth-field-input,
+  .auth-oauth-btn,
+  .auth-magic,
+  .auth-nav-back,
+  .auth-nav-back span {
+    transition: none !important;
+  }
+  .auth-oauth-btn:hover,
+  .auth-nav-back:hover,
+  .auth-nav-back:hover span {
+    transform: none;
+  }
+}

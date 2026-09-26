@@ -1,0 +1,357 @@
+/* ==========================================================================
+   Admin — Premium subscribers
+   ========================================================================== */
+
+/* ==========================================================================
+   PLAN BREAKDOWN — top stat row
+   ========================================================================== */
+
+.ta-sub-stats {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 14px;
+  margin-bottom: 24px;
+}
+
+@media (min-width: 900px) {
+  .ta-sub-stats {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+}
+
+.ta-sub-stat {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 20px 22px;
+  border-radius: 16px;
+  border: 1px solid var(--ta-line);
+  background: var(--ta-card);
+}
+
+.ta-sub-stat-label {
+  font-family: var(--ta-font-sans);
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--ta-brand-pale);
+  opacity: 0.85;
+  padding-left: 0.22em;
+}
+
+.ta-sub-stat-value {
+  font-family: var(--ta-font-sans);
+  font-feature-settings: "tnum";
+  font-size: 32px;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  line-height: 1;
+  color: var(--ta-text);
+}
+
+.ta-sub-stat-hint {
+  font-family: var(--ta-font-sans);
+  font-size: 12px;
+  color: var(--ta-text-3);
+  line-height: 1.4;
+}
+
+/* ==========================================================================
+   TOOLBAR
+   ========================================================================== */
+
+.ta-sub-toolbar {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-bottom: 16px;
+}
+
+.ta-sub-toolbar .ta-input--search {
+  flex: 1;
+  min-width: 240px;
+  max-width: 420px;
+}
+
+.ta-sub-filter {
+  min-width: 140px;
+  flex: 0 0 auto;
+}
+
+.ta-sub-count {
+  margin-left: auto;
+  font-family: var(--ta-font-sans);
+  font-size: 12.5px;
+  color: var(--ta-text-2);
+  white-space: nowrap;
+  letter-spacing: 0.01em;
+}
+
+.ta-sub-count strong {
+  color: var(--ta-text);
+  font-weight: 600;
+  font-feature-settings: "tnum";
+}
+
+/* ==========================================================================
+   LIST — one card per subscriber
+   ========================================================================== */
+
+.ta-sub-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.ta-sub-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  padding: 18px 22px;
+  border-radius: 16px;
+  border: 1px solid var(--ta-line);
+  background: var(--ta-card);
+  transition:
+    border-color 0.25s var(--ta-ease),
+    background-color 0.25s var(--ta-ease);
+}
+
+.ta-sub-item:hover {
+  border-color: var(--ta-line-medium);
+  background: rgba(20, 20, 28, 0.5);
+}
+
+.ta-sub-item-main {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  min-width: 0;
+  flex: 1;
+}
+
+.ta-sub-avatar {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: 1px solid var(--ta-brand-line);
+  background:
+    radial-gradient(
+      circle at 30% 30%,
+      rgba(240, 200, 120, 0.22) 0%,
+      rgba(12, 12, 18, 0.9) 75%
+    );
+  color: var(--ta-brand-bright);
+  font-family: var(--ta-font-display);
+  font-size: 17px;
+  line-height: 1;
+  box-shadow: 0 0 0 1px rgba(212, 169, 94, 0.08) inset;
+}
+
+.ta-sub-copy {
+  min-width: 0;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.ta-sub-title-row {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.ta-sub-email {
+  font-family: var(--ta-font-sans);
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--ta-text);
+  text-decoration: none;
+  line-height: 1.35;
+  word-break: break-all;
+}
+
+.ta-sub-email:hover {
+  color: var(--ta-brand-pale);
+  text-decoration: none;
+}
+
+.ta-sub-warn {
+  display: inline-flex;
+  align-items: center;
+  padding: 2px 8px;
+  border-radius: 6px;
+  background: rgba(212, 169, 94, 0.12);
+  border: 1px solid rgba(212, 169, 94, 0.28);
+  color: var(--ta-brand-pale);
+  font-family: var(--ta-font-sans);
+  font-size: 10.5px;
+  font-weight: 500;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  padding-left: 0.06em;
+}
+
+.ta-sub-meta {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-wrap: wrap;
+  font-family: var(--ta-font-sans);
+  font-size: 12.5px;
+  color: var(--ta-text-3);
+}
+
+.ta-sub-sep {
+  opacity: 0.5;
+}
+
+.ta-sub-source {
+  font-feature-settings: "tnum";
+}
+
+/* ==========================================================================
+   RIGHT SIDE — plan + expiration + actions
+   ========================================================================== */
+
+.ta-sub-item-end {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  flex-shrink: 0;
+}
+
+.ta-sub-plan {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 6px;
+  min-width: 130px;
+}
+
+.ta-sub-exp {
+  font-family: var(--ta-font-sans);
+  font-size: 12px;
+  font-feature-settings: "tnum";
+  color: var(--ta-text-3);
+  white-space: nowrap;
+  letter-spacing: 0.01em;
+}
+
+.ta-sub-exp--ok {
+  color: var(--ta-text-3);
+}
+
+.ta-sub-exp--soon {
+  color: var(--ta-brand-bright);
+}
+
+.ta-sub-exp--expired {
+  color: #f5bdbd;
+}
+
+.ta-sub-exp--none {
+  color: var(--ta-teal-bright);
+}
+
+.ta-sub-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-shrink: 0;
+}
+
+/* --- Inline confirmation --- */
+
+.ta-sub-confirm {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 8px 12px 8px 16px;
+  border-radius: 10px;
+  border: 1px solid rgba(232, 160, 160, 0.32);
+  background: rgba(232, 160, 160, 0.06);
+}
+
+.ta-sub-confirm-text {
+  font-family: var(--ta-font-sans);
+  font-size: 12.5px;
+  color: #f5bdbd;
+  line-height: 1.4;
+  max-width: 260px;
+}
+
+.ta-sub-confirm-actions {
+  display: flex;
+  gap: 6px;
+  flex-shrink: 0;
+}
+
+/* ==========================================================================
+   RESPONSIVE
+   ========================================================================== */
+
+@media (max-width: 900px) {
+  .ta-sub-item {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 14px;
+  }
+
+  .ta-sub-item-end {
+    width: 100%;
+    justify-content: space-between;
+  }
+
+  .ta-sub-plan {
+    align-items: flex-start;
+  }
+}
+
+@media (max-width: 640px) {
+  .ta-sub-toolbar {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .ta-sub-toolbar .ta-input--search,
+  .ta-sub-filter {
+    max-width: none;
+    width: 100%;
+  }
+
+  .ta-sub-count {
+    margin-left: 0;
+    text-align: right;
+  }
+
+  .ta-sub-item {
+    padding: 16px 18px;
+  }
+
+  .ta-sub-confirm {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+    width: 100%;
+  }
+
+  .ta-sub-confirm-actions {
+    width: 100%;
+  }
+
+  .ta-sub-confirm-actions .ta-btn {
+    flex: 1;
+  }
+}

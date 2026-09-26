@@ -1,0 +1,310 @@
+/* ==========================================================================
+   Admin — Contact inbox
+   ========================================================================== */
+
+/* ==========================================================================
+   TOOLBAR — filters with counts
+   ========================================================================== */
+
+.ta-inbox-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+  margin-bottom: 20px;
+}
+
+.ta-inbox-toolbar .ta-chip {
+  gap: 8px;
+}
+
+.ta-chip-count {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 18px;
+  height: 18px;
+  padding: 0 6px;
+  border-radius: 999px;
+  background: rgba(242, 234, 217, 0.06);
+  color: var(--ta-text-3);
+  font-family: var(--ta-font-sans);
+  font-size: 10.5px;
+  font-weight: 600;
+  font-feature-settings: "tnum";
+  line-height: 1;
+}
+
+.ta-chip.is-active .ta-chip-count {
+  background: rgba(212, 169, 94, 0.18);
+  color: var(--ta-brand-pale);
+}
+
+/* ==========================================================================
+   INBOX — the list of messages
+   ========================================================================== */
+
+.ta-inbox {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.ta-inbox-item {
+  position: relative;
+  padding: 20px 22px 18px;
+  border-radius: 16px;
+  border: 1px solid var(--ta-line);
+  background: var(--ta-card);
+  transition:
+    border-color 0.25s var(--ta-ease),
+    box-shadow 0.25s var(--ta-ease);
+}
+
+.ta-inbox-item:hover {
+  border-color: var(--ta-line-medium);
+}
+
+.ta-inbox-item.is-replying {
+  border-color: var(--ta-brand-line);
+  box-shadow: 0 8px 32px -20px rgba(212, 169, 94, 0.4);
+}
+
+/* ==========================================================================
+   HEADER — avatar + from + status + time
+   ========================================================================== */
+
+.ta-inbox-head {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-bottom: 16px;
+}
+
+.ta-inbox-avatar {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: 1px solid var(--ta-brand-line);
+  background:
+    radial-gradient(
+      circle at 30% 30%,
+      rgba(240, 200, 120, 0.2) 0%,
+      rgba(12, 12, 18, 0.9) 75%
+    );
+  color: var(--ta-brand-bright);
+  font-family: var(--ta-font-display);
+  font-size: 18px;
+  line-height: 1;
+  box-shadow: 0 0 0 1px rgba(212, 169, 94, 0.08) inset;
+}
+
+.ta-inbox-from {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.ta-inbox-name {
+  font-family: var(--ta-font-sans);
+  font-size: 14.5px;
+  font-weight: 500;
+  color: var(--ta-text);
+  line-height: 1.3;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.ta-inbox-meta {
+  font-family: var(--ta-font-sans);
+  font-size: 12.5px;
+  color: var(--ta-text-3);
+  line-height: 1.4;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.ta-inbox-status {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-shrink: 0;
+}
+
+.ta-inbox-when {
+  font-family: var(--ta-font-sans);
+  font-size: 12px;
+  color: var(--ta-text-3);
+  white-space: nowrap;
+  font-feature-settings: "tnum";
+}
+
+/* ==========================================================================
+   BODY — the message itself
+   ========================================================================== */
+
+.ta-inbox-body {
+  padding-left: 54px;
+  margin-bottom: 16px;
+}
+
+.ta-inbox-body p {
+  margin: 0;
+  font-family: var(--ta-font-sans);
+  font-size: 14px;
+  line-height: 1.65;
+  color: var(--ta-text-2);
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+/* ==========================================================================
+   PREVIOUS REPLY — shown above actions
+   ========================================================================== */
+
+.ta-inbox-previous {
+  margin-left: 54px;
+  padding: 14px 16px;
+  border-radius: 12px;
+  border-left: 2px solid var(--ta-brand-line);
+  background: rgba(212, 169, 94, 0.04);
+  margin-bottom: 14px;
+}
+
+.ta-inbox-previous-label {
+  display: block;
+  font-family: var(--ta-font-sans);
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--ta-brand-pale);
+  opacity: 0.85;
+  padding-left: 0.22em;
+  margin-bottom: 6px;
+}
+
+.ta-inbox-previous p {
+  margin: 0;
+  font-family: var(--ta-font-sans);
+  font-size: 13px;
+  line-height: 1.6;
+  color: var(--ta-text-2);
+  white-space: pre-wrap;
+}
+
+/* ==========================================================================
+   ACTIONS — a row of buttons under each message
+   ========================================================================== */
+
+.ta-inbox-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  padding-left: 54px;
+}
+
+/* ==========================================================================
+   COMPOSER — the expanded reply form
+   ========================================================================== */
+
+.ta-inbox-composer {
+  padding-left: 54px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.ta-inbox-composer .ta-field-label {
+  font-family: var(--ta-font-sans);
+  font-size: 11.5px;
+  font-weight: 500;
+  letter-spacing: 0.02em;
+  color: var(--ta-text-2);
+}
+
+.ta-inbox-composer .ta-textarea {
+  width: 100%;
+  resize: vertical;
+  min-height: 100px;
+  font-family: var(--ta-font-sans);
+  line-height: 1.6;
+}
+
+.ta-inbox-composer-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 4px;
+}
+
+/* ==========================================================================
+   RESPONSIVE
+   ========================================================================== */
+
+@media (max-width: 700px) {
+  .ta-inbox-item {
+    padding: 18px 18px 16px;
+  }
+
+  .ta-inbox-body,
+  .ta-inbox-actions,
+  .ta-inbox-previous,
+  .ta-inbox-composer {
+    padding-left: 0;
+    margin-left: 0;
+  }
+
+  .ta-inbox-head {
+    align-items: flex-start;
+  }
+
+  .ta-inbox-status {
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 6px;
+  }
+
+  .ta-inbox-when {
+    font-size: 11px;
+  }
+}
+/* ==========================================================================
+   CONTACT FILTERS — enforce horizontal row layout
+   ========================================================================== */
+
+.ta-inbox-toolbar .ta-filters {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  gap: 8px;
+  align-items: center;
+  width: auto;
+}
+
+.ta-inbox-toolbar .ta-chip {
+  display: inline-flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 8px;
+  width: auto;
+  max-width: fit-content;
+  flex: 0 0 auto;        /* don't grow, don't shrink, size to content */
+  white-space: nowrap;
+}
+
+.ta-inbox-toolbar .ta-chip-count {
+  flex-shrink: 0;
+}

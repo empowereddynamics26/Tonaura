@@ -1,0 +1,520 @@
+/* ==========================================================================
+   Admin — Audit log
+   ========================================================================== */
+
+/* ==========================================================================
+   SUMMARY
+   ========================================================================== */
+
+.ta-audit-summary {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 14px;
+  margin-bottom: 24px;
+}
+
+@media (min-width: 700px) {
+  .ta-audit-summary {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+.ta-audit-summary-item {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 20px 22px;
+  border-radius: 16px;
+  border: 1px solid var(--ta-line);
+  background: var(--ta-card);
+}
+
+.ta-audit-summary-label {
+  font-family: var(--ta-font-sans);
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--ta-brand-pale);
+  opacity: 0.85;
+  padding-left: 0.22em;
+}
+
+.ta-audit-summary-value {
+  font-family: var(--ta-font-sans);
+  font-feature-settings: "tnum";
+  font-size: 30px;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  line-height: 1;
+  color: var(--ta-text);
+}
+
+.ta-audit-summary-value.is-danger {
+  color: #f5bdbd;
+}
+
+.ta-audit-summary-hint {
+  font-family: var(--ta-font-sans);
+  font-size: 12px;
+  color: var(--ta-text-3);
+  line-height: 1.4;
+}
+
+/* ==========================================================================
+   TOOLBAR
+   ========================================================================== */
+
+.ta-audit-toolbar {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-bottom: 20px;
+  width: 100%;
+}
+.ta-audit-toolbar .ta-input--search {
+  flex: 1;
+  min-width: 240px;
+  max-width: 420px;
+}
+
+.ta-audit-filters {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  gap: 6px;
+  align-items: center;
+  flex: 0 0 auto;
+  width: auto;
+}
+
+.ta-audit-filters .ta-chip {
+  display: inline-flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 6px;
+  width: auto;
+  max-width: fit-content;
+  flex: 0 0 auto;
+  white-space: nowrap;
+}
+
+.ta-audit-time {
+  min-width: 160px;
+  flex: 0 0 auto;
+}
+
+.ta-audit-count {
+  margin-left: auto;
+  font-family: var(--ta-font-sans);
+  font-size: 12.5px;
+  color: var(--ta-text-2);
+  white-space: nowrap;
+}
+
+.ta-audit-count strong {
+  color: var(--ta-text);
+  font-weight: 600;
+  font-feature-settings: "tnum";
+}
+
+/* ==========================================================================
+   GROUPS
+   ========================================================================== */
+
+.ta-audit-groups {
+  display: flex;
+  flex-direction: column;
+  gap: 28px;
+}
+
+.ta-audit-group {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.ta-audit-group-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
+  padding-left: 2px;
+}
+
+.ta-audit-group-label {
+  font-family: var(--ta-font-sans);
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  color: var(--ta-brand-pale);
+  opacity: 0.85;
+  padding-left: 0.24em;
+}
+
+.ta-audit-group-count {
+  font-family: var(--ta-font-sans);
+  font-size: 11.5px;
+  color: var(--ta-text-3);
+  font-feature-settings: "tnum";
+}
+
+/* ==========================================================================
+   ITEMS
+   ========================================================================== */
+
+.ta-audit-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.ta-audit-item {
+  border-radius: 14px;
+  border: 1px solid var(--ta-line);
+  background: var(--ta-card);
+  overflow: hidden;
+  transition:
+    border-color 0.2s var(--ta-ease),
+    background-color 0.2s var(--ta-ease);
+}
+
+.ta-audit-item:hover {
+  border-color: var(--ta-line-medium);
+  background: rgba(20, 20, 28, 0.5);
+}
+
+.ta-audit-item.is-open {
+  border-color: var(--ta-brand-line);
+}
+
+/* --- Header --- */
+
+.ta-audit-item-head {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  width: 100%;
+  padding: 14px 20px;
+  border: 0;
+  background: transparent;
+  cursor: pointer;
+  text-align: left;
+  color: inherit;
+  font: inherit;
+}
+
+.ta-audit-item-head:focus {
+  outline: none;
+}
+
+.ta-audit-item-head:focus-visible {
+  outline: 2px solid var(--ta-brand-line);
+  outline-offset: -4px;
+  border-radius: 14px;
+}
+
+/* --- Category icon --- */
+
+.ta-audit-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 28px;
+  height: 28px;
+  border-radius: 8px;
+}
+
+.ta-audit-icon.is-write {
+  background: rgba(212, 169, 94, 0.14);
+  color: var(--ta-brand-bright);
+}
+
+.ta-audit-icon.is-destructive {
+  background: var(--ta-danger-soft);
+  color: #f5bdbd;
+}
+
+.ta-audit-icon.is-read {
+  background: rgba(79, 179, 169, 0.14);
+  color: var(--ta-teal-bright);
+}
+
+.ta-audit-icon.is-system {
+  background: rgba(242, 234, 217, 0.06);
+  color: var(--ta-text-3);
+}
+
+/* --- Main text --- */
+
+.ta-audit-main {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  min-width: 0;
+  flex: 1;
+}
+
+.ta-audit-action {
+  font-family: var(--ta-font-sans);
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--ta-text);
+  line-height: 1.3;
+}
+
+.ta-audit-sub {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-wrap: wrap;
+  font-family: var(--ta-font-sans);
+  font-size: 12px;
+  line-height: 1.4;
+}
+
+.ta-audit-actor {
+  color: var(--ta-text-2);
+  word-break: break-all;
+}
+
+.ta-audit-actor--muted {
+  color: var(--ta-text-3);
+  font-family: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+  font-size: 11.5px;
+}
+
+.ta-audit-dot {
+  color: var(--ta-text-3);
+  opacity: 0.6;
+}
+
+.ta-audit-target {
+  color: var(--ta-text-3);
+  font-family: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+  font-size: 11.5px;
+}
+
+/* --- Right side --- */
+
+.ta-audit-end {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  flex-shrink: 0;
+}
+
+.ta-audit-when {
+  font-family: var(--ta-font-sans);
+  font-size: 12px;
+  color: var(--ta-text-3);
+  font-feature-settings: "tnum";
+  white-space: nowrap;
+}
+
+.ta-audit-chev {
+  font-size: 11px;
+  color: var(--ta-text-3);
+  width: 14px;
+  text-align: center;
+}
+
+/* ==========================================================================
+   DETAIL — expanded
+   ========================================================================== */
+
+.ta-audit-detail {
+  padding: 18px 20px 20px;
+  border-top: 1px solid var(--ta-line);
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.ta-audit-detail-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+}
+
+@media (min-width: 900px) {
+  .ta-audit-detail-grid {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+}
+
+.ta-audit-detail-cell {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  min-width: 0;
+}
+
+.ta-audit-detail-label {
+  font-family: var(--ta-font-sans);
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--ta-text-3);
+  padding-left: 0.22em;
+}
+
+.ta-audit-detail-value {
+  font-family: var(--ta-font-sans);
+  font-size: 13px;
+  color: var(--ta-text);
+  word-break: break-all;
+  line-height: 1.4;
+}
+
+.ta-audit-detail-code {
+  font-family: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+  font-size: 12px;
+  color: var(--ta-text-2);
+  background: rgba(242, 234, 217, 0.04);
+  border: 1px solid var(--ta-line);
+  border-radius: 6px;
+  padding: 3px 8px;
+  word-break: break-all;
+  display: inline-block;
+}
+
+/* --- Metadata --- */
+
+.ta-audit-meta {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.ta-audit-meta-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 8px 20px;
+}
+
+@media (min-width: 700px) {
+  .ta-audit-meta-list {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+.ta-audit-meta-item {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+  padding: 8px 12px;
+  border-radius: 8px;
+  border: 1px solid var(--ta-line);
+  background: rgba(242, 234, 217, 0.02);
+}
+
+.ta-audit-meta-key {
+  font-family: var(--ta-font-sans);
+  font-size: 10.5px;
+  font-weight: 500;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--ta-text-3);
+}
+
+.ta-audit-meta-value {
+  font-family: var(--ta-font-sans);
+  font-size: 13px;
+  color: var(--ta-text);
+  word-break: break-word;
+  font-feature-settings: "tnum";
+}
+
+/* --- Related links --- */
+
+.ta-audit-links {
+  display: flex;
+  gap: 16px;
+  flex-wrap: wrap;
+  padding-top: 8px;
+  border-top: 1px solid var(--ta-line);
+}
+
+.ta-audit-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-family: var(--ta-font-sans);
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--ta-brand-pale);
+  text-decoration: none;
+  transition: color 0.2s var(--ta-ease);
+}
+
+.ta-audit-link:hover {
+  color: var(--ta-brand-bright);
+  text-decoration: none;
+}
+
+/* ==========================================================================
+   RESPONSIVE
+   ========================================================================== */
+
+@media (max-width: 900px) {
+  .ta-audit-toolbar {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .ta-audit-toolbar .ta-input--search {
+    max-width: none;
+  }
+
+  .ta-audit-time {
+    min-width: 0;
+  }
+
+  .ta-audit-count {
+    margin-left: 0;
+    text-align: right;
+  }
+}
+
+@media (max-width: 640px) {
+  .ta-audit-item-head {
+    padding: 12px 16px;
+    gap: 12px;
+  }
+
+  .ta-audit-icon {
+    width: 24px;
+    height: 24px;
+  }
+
+  .ta-audit-target {
+    display: none;
+  }
+
+  .ta-audit-detail-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .ta-audit-meta-list {
+    grid-template-columns: 1fr;
+  }
+
+  .ta-audit-detail {
+    padding: 16px;
+  }
+}

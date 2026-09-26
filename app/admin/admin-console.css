@@ -1,0 +1,623 @@
+/* ==========================================================================
+   Tonaura Admin Console — Foundation
+   ── The Room at Night ──
+   Same house as the marketing site and account pages, cooler light.
+
+   This file contains:
+     · Design tokens (colors, fonts, motion)
+     · Shared primitives used across every admin page
+       (buttons, badges, inputs, cards, tables, chips)
+
+   It does NOT contain:
+     · The shell (sidebar, topbar, gate) — see admin-shell.css
+     · Page-specific layout — see dashboard.css, settings/settings.css, etc.
+   ========================================================================== */
+
+/* ==========================================================================
+   TOKENS
+   ========================================================================== */
+
+.ta-admin-root {
+  /* Backgrounds — cool navy layered system */
+  --ta-navy-950: #06060b;
+  --ta-navy-900: #0a0a12;
+  --ta-navy-800: #11111a;
+  --ta-navy-700: #1a1a24;
+  --ta-surface: #0f0f15;
+  --ta-card: #0a0a10;
+
+  /* Brand — same values as the marketing site */
+  --ta-brand: #d4a95e;
+  --ta-brand-600: #a67c3a;
+  --ta-brand-bright: #f0c878;
+  --ta-brand-pale: #e8d5a8;
+  --ta-brand-soft: rgba(212, 169, 94, 0.12);
+  --ta-brand-line: rgba(212, 169, 94, 0.28);
+
+  --ta-teal: #4fb3a9;
+  --ta-teal-bright: #6ed0c5;
+  --ta-teal-soft: rgba(79, 179, 169, 0.14);
+
+  /* Text */
+  --ta-text: #f2ead9;
+  --ta-text-2: #a8a4b0;
+  --ta-text-3: #6e6a76;
+  --ta-muted: #a8a4b0;
+
+  /* Borders */
+  --ta-line: rgba(242, 234, 217, 0.08);
+  --ta-line-medium: rgba(242, 234, 217, 0.14);
+  --ta-line-strong: rgba(242, 234, 217, 0.24);
+
+  /* Semantic */
+  --ta-ok: #4fb3a9;
+  --ta-warn: #d4a95e;
+  --ta-danger: #e8a0a0;
+  --ta-danger-soft: rgba(232, 160, 160, 0.1);
+
+  /* Typography */
+  --ta-font-display: var(--font-display, 'Instrument Serif', Georgia, serif);
+  --ta-font-sans: var(--font-sans, 'Plus Jakarta Sans', system-ui, sans-serif);
+
+  /* Motion */
+  --ta-ease: cubic-bezier(0.22, 1, 0.36, 1);
+
+  color: var(--ta-text);
+  font-family: var(--ta-font-sans);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+/* ==========================================================================
+   BUTTONS
+   ========================================================================== */
+
+.ta-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  border-radius: 999px;
+  padding: 8px 18px;
+  font-family: var(--ta-font-sans);
+  font-size: 13px;
+  font-weight: 500;
+  letter-spacing: 0.01em;
+  line-height: 1.2;
+  border: 1px solid transparent;
+  cursor: pointer;
+  text-decoration: none;
+  white-space: nowrap;
+  width: auto;
+  transition:
+    transform 0.25s var(--ta-ease),
+    background-color 0.25s var(--ta-ease),
+    border-color 0.25s var(--ta-ease),
+    color 0.25s var(--ta-ease),
+    box-shadow 0.25s var(--ta-ease),
+    filter 0.25s var(--ta-ease);
+}
+
+.ta-btn:hover {
+  text-decoration: none;
+}
+
+.ta-btn:active:not(:disabled) {
+  transform: scale(0.98);
+}
+
+.ta-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.ta-btn:focus {
+  outline: none;
+}
+
+.ta-btn:focus-visible {
+  outline: 2px solid var(--ta-brand-line);
+  outline-offset: 3px;
+}
+
+.ta-btn-gold,
+.ta-btn-primary {
+  background: linear-gradient(
+    180deg,
+    var(--ta-brand-bright) 0%,
+    var(--ta-brand) 55%,
+    var(--ta-brand-600) 100%
+  );
+  color: #1a1408;
+  font-weight: 600;
+  box-shadow:
+    0 1px 0 rgba(255, 255, 255, 0.18) inset,
+    0 6px 18px -10px rgba(212, 169, 94, 0.7);
+}
+
+.ta-btn-gold:hover:not(:disabled),
+.ta-btn-primary:hover:not(:disabled) {
+  transform: translateY(-1px);
+  filter: brightness(1.06);
+  box-shadow:
+    0 1px 0 rgba(255, 255, 255, 0.22) inset,
+    0 10px 24px -10px rgba(212, 169, 94, 0.85);
+}
+
+.ta-btn-ghost {
+  background: rgba(242, 234, 217, 0.03);
+  color: var(--ta-text-2);
+  border-color: var(--ta-line-medium);
+}
+
+.ta-btn-ghost:hover:not(:disabled) {
+  border-color: var(--ta-brand-line);
+  color: var(--ta-text);
+  background: rgba(212, 169, 94, 0.06);
+  transform: translateY(-1px);
+}
+
+.ta-btn-danger {
+  background: var(--ta-danger-soft);
+  color: #f5bdbd;
+  border-color: rgba(232, 160, 160, 0.28);
+}
+
+.ta-btn-danger:hover:not(:disabled) {
+  background: rgba(232, 160, 160, 0.16);
+  border-color: rgba(232, 160, 160, 0.45);
+  color: #ffd0d0;
+  transform: translateY(-1px);
+}
+
+.ta-btn-sm {
+  padding: 8px 16px;
+  font-size: 12.5px;
+  letter-spacing: 0.02em;
+  line-height: 1.2;
+}
+
+/* ==========================================================================
+   BADGES
+   ========================================================================== */
+
+.ta-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 3px 10px;
+  border-radius: 999px;
+  font-family: var(--ta-font-sans);
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.02em;
+  line-height: 1.4;
+  background: rgba(242, 234, 217, 0.06);
+  color: var(--ta-text-2);
+  border: 1px solid rgba(242, 234, 217, 0.08);
+}
+
+.ta-badge-gold {
+  background: var(--ta-brand-soft);
+  color: var(--ta-brand-pale);
+  border-color: var(--ta-brand-line);
+}
+
+.ta-badge-teal {
+  background: var(--ta-teal-soft);
+  color: var(--ta-teal-bright);
+  border-color: rgba(79, 179, 169, 0.3);
+}
+
+.ta-badge-ok {
+  background: rgba(79, 179, 169, 0.12);
+  color: var(--ta-teal-bright);
+  border-color: rgba(79, 179, 169, 0.28);
+}
+
+.ta-badge-warn {
+  background: rgba(212, 169, 94, 0.12);
+  color: var(--ta-brand-pale);
+  border-color: rgba(212, 169, 94, 0.28);
+}
+
+.ta-badge-danger {
+  background: var(--ta-danger-soft);
+  color: #f5bdbd;
+  border-color: rgba(232, 160, 160, 0.28);
+}
+
+/* ==========================================================================
+   INPUTS, SELECTS, CHIPS
+   ========================================================================== */
+
+.ta-input,
+.ta-select {
+  background: rgba(0, 0, 0, 0.28);
+  border: 1px solid var(--ta-line-medium);
+  color: var(--ta-text);
+  border-radius: 12px;
+  padding: 10px 14px;
+  font-family: var(--ta-font-sans);
+  font-size: 14px;
+  line-height: 1.4;
+  transition:
+    border-color 0.25s var(--ta-ease),
+    box-shadow 0.25s var(--ta-ease),
+    background-color 0.25s var(--ta-ease);
+}
+
+.ta-input {
+  min-width: min(280px, 100%);
+  flex: 1;
+}
+
+.ta-input::placeholder {
+  color: var(--ta-text-3);
+}
+
+.ta-input:hover:not(:focus),
+.ta-select:hover:not(:focus) {
+  border-color: rgba(242, 234, 217, 0.2);
+}
+
+.ta-input:focus,
+.ta-select:focus {
+  outline: none;
+  border-color: var(--ta-brand-line);
+  box-shadow:
+    0 0 0 3px rgba(212, 169, 94, 0.12),
+    0 0 20px -4px rgba(212, 169, 94, 0.25);
+  background: rgba(0, 0, 0, 0.35);
+}
+
+.ta-input:focus-visible,
+.ta-select:focus-visible {
+  outline: none;
+}
+
+/* Custom select arrow — replaces the browser default */
+.ta-select {
+  appearance: none;
+  -webkit-appearance: none;
+  background-image: url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%23a8a4b0' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 14px center;
+  padding-right: 40px;
+  cursor: pointer;
+}
+
+.ta-select::-ms-expand {
+  display: none;
+}
+
+.ta-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: 16px;
+  align-items: center;
+}
+
+.ta-filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.ta-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  border: 1px solid var(--ta-line-medium);
+  background: transparent;
+  color: var(--ta-text-2);
+  border-radius: 999px;
+  padding: 7px 14px;
+  font-family: var(--ta-font-sans);
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 0.02em;
+  cursor: pointer;
+  transition:
+    background-color 0.25s var(--ta-ease),
+    border-color 0.25s var(--ta-ease),
+    color 0.25s var(--ta-ease);
+}
+
+.ta-chip:hover:not(.is-active) {
+  border-color: var(--ta-brand-line);
+  color: var(--ta-text);
+}
+
+.ta-chip.is-active {
+  background: var(--ta-brand-soft);
+  border-color: var(--ta-brand-line);
+  color: var(--ta-brand-pale);
+}
+
+.ta-chip:focus {
+  outline: none;
+}
+
+.ta-chip:focus-visible {
+  outline: 2px solid var(--ta-brand-line);
+  outline-offset: 2px;
+}
+
+/* ==========================================================================
+   CARDS — shared
+   ========================================================================== */
+
+.ta-card {
+  background: var(--ta-card);
+  border: 1px solid var(--ta-line);
+  border-radius: 16px;
+  padding: 22px;
+}
+
+.ta-card-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 18px;
+}
+
+.ta-card-head h2 {
+  margin: 0;
+  font-family: var(--ta-font-sans);
+  font-size: 15px;
+  font-weight: 600;
+  letter-spacing: -0.005em;
+  color: var(--ta-text);
+}
+
+.ta-card-sub {
+  margin: 4px 0 0;
+  font-family: var(--ta-font-sans);
+  font-size: 12px;
+  color: var(--ta-text-3);
+  line-height: 1.4;
+}
+
+.ta-card-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-family: var(--ta-font-sans);
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--ta-brand-pale);
+  text-decoration: none;
+  padding: 6px 2px;
+  transition: color 0.2s var(--ta-ease);
+}
+
+.ta-card-link span {
+  transition: transform 0.25s var(--ta-ease);
+}
+
+.ta-card-link:hover {
+  color: var(--ta-brand-bright);
+  text-decoration: none;
+}
+
+.ta-card-link:hover span {
+  transform: translateX(3px);
+}
+
+/* ==========================================================================
+   SETTINGS GRID — two-column detail layout
+   Used on the user detail page and the settings page.
+   ========================================================================== */
+
+.ta-settings-grid {
+  display: grid;
+  gap: 14px;
+}
+
+@media (min-width: 800px) {
+  .ta-settings-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+.ta-settings-card h3 {
+  margin: 0 0 10px;
+  font-family: var(--ta-font-sans);
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  color: var(--ta-text);
+}
+
+.ta-settings-card p {
+  margin: 0;
+  color: var(--ta-text-2);
+  font-size: 13px;
+  line-height: 1.6;
+}
+
+/* ==========================================================================
+   TABLES
+   ========================================================================== */
+
+.ta-table-wrap {
+  overflow-x: auto;
+}
+
+.ta-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-family: var(--ta-font-sans);
+  font-size: 13px;
+}
+
+.ta-table th {
+  text-align: left;
+  color: var(--ta-text-3);
+  font-weight: 500;
+  font-size: 10px;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  padding: 12px 14px;
+  border-bottom: 1px solid var(--ta-line);
+  white-space: nowrap;
+}
+
+.ta-table td {
+  padding: 16px 14px;
+  border-bottom: 1px solid var(--ta-line);
+  color: var(--ta-text-2);
+  vertical-align: middle;
+}
+
+.ta-table tr:last-child td {
+  border-bottom: 0;
+}
+
+.ta-table tbody tr {
+  transition: background-color 0.2s var(--ta-ease);
+}
+
+.ta-table tbody tr:hover {
+  background: rgba(242, 234, 217, 0.02);
+}
+
+.ta-table strong {
+  color: var(--ta-text);
+  font-weight: 500;
+}
+
+.ta-row-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  justify-content: flex-start;
+}
+
+/* ==========================================================================
+   PLAN PILLS — used on the user detail page
+   ========================================================================== */
+
+.ta-plan-pills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.ta-plan-pill {
+  padding: 12px 16px;
+  border-radius: 12px;
+  background: rgba(0, 0, 0, 0.22);
+  border: 1px solid var(--ta-line);
+  min-width: 96px;
+}
+
+.ta-plan-pill b {
+  display: block;
+  color: var(--ta-text);
+  font-size: 20px;
+  font-weight: 600;
+  font-feature-settings: "tnum";
+}
+
+.ta-plan-pill span {
+  color: var(--ta-text-2);
+  font-size: 12px;
+  text-transform: capitalize;
+}
+
+/* ==========================================================================
+   EMPTY / ERROR / OK — shared states
+   ========================================================================== */
+
+.ta-empty,
+.ta-error {
+  padding: 20px;
+  border-radius: 12px;
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+.ta-empty {
+  background: rgba(242, 234, 217, 0.04);
+  color: var(--ta-text-2);
+  text-align: center;
+}
+
+.ta-error {
+  background: var(--ta-danger-soft);
+  color: #f5bdbd;
+  border: 1px solid rgba(232, 160, 160, 0.22);
+  margin-bottom: 14px;
+}
+
+.ta-ok {
+  color: var(--ta-teal-bright);
+  font-size: 13px;
+  margin-bottom: 12px;
+}
+
+.ta-muted {
+  color: var(--ta-text-2);
+  font-size: 12px;
+}
+
+.ta-message {
+  white-space: pre-wrap;
+  line-height: 1.5;
+  max-width: 420px;
+}
+/* ==========================================================================
+   TABLE ROW ACTIONS — softer than the global buttons
+   ========================================================================== */
+
+.ta-btn-row {
+  padding: 7px 14px;
+  font-size: 12px;
+  letter-spacing: 0.02em;
+  border-radius: 8px;
+}
+
+.ta-btn-row.ta-btn-ghost {
+  background: transparent;
+  border-color: var(--ta-line-medium);
+}
+
+.ta-btn-row.ta-btn-ghost:hover:not(:disabled) {
+  background: rgba(242, 234, 217, 0.04);
+  border-color: var(--ta-line-strong);
+  color: var(--ta-text);
+  transform: none;
+}
+
+.ta-btn-row.ta-btn-danger {
+  background: transparent;
+  color: #a38a8a;
+  border-color: rgba(232, 160, 160, 0.2);
+}
+
+.ta-btn-row.ta-btn-danger:hover:not(:disabled) {
+  background: rgba(232, 160, 160, 0.08);
+  border-color: rgba(232, 160, 160, 0.4);
+  color: #f5bdbd;
+  transform: none;
+}
+
+.ta-btn-row.ta-btn-gold {
+  box-shadow:
+    0 1px 0 rgba(255, 255, 255, 0.18) inset,
+    0 4px 12px -8px rgba(212, 169, 94, 0.6);
+}
+
+.ta-btn-row.ta-btn-gold:hover:not(:disabled) {
+  transform: none;
+  filter: brightness(1.05);
+  box-shadow:
+    0 1px 0 rgba(255, 255, 255, 0.22) inset,
+    0 6px 16px -8px rgba(212, 169, 94, 0.8);
+}

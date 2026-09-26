@@ -1,0 +1,857 @@
+/* ==========================================================================
+   Tonaura Admin Console — Shell
+   The sidebar, topbar, gate, and loading screens.
+   Imported once by app/admin/layout.js.
+   All rules reference the tokens in admin-console.css.
+   ========================================================================== */
+
+/* ==========================================================================
+   SHELL WRAPPER
+   ========================================================================== */
+
+.ta-shell {
+  display: flex;
+  min-height: 100vh;
+  background: var(--ta-navy-950);
+}
+
+.ta-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 40;
+  border: 0;
+  margin: 0;
+  padding: 0;
+  background: rgba(0, 0, 0, 0.55);
+  cursor: pointer;
+}
+
+/* ==========================================================================
+   SIDEBAR
+   ========================================================================== */
+
+.ta-sidebar {
+  position: fixed;
+  inset: 0 auto 0 0;
+  z-index: 50;
+  width: 232px;
+  display: flex;
+  flex-direction: column;
+  background: var(--ta-navy-900);
+  border-right: 1px solid var(--ta-line);
+  transform: translateX(-100%);
+  transition: transform 0.25s var(--ta-ease);
+}
+
+.ta-sidebar.is-open {
+  transform: translateX(0);
+}
+
+@media (min-width: 900px) {
+  .ta-backdrop {
+    display: none !important;
+  }
+  .ta-sidebar {
+    position: sticky;
+    top: 0;
+    height: 100vh;
+    transform: none;
+    flex-shrink: 0;
+  }
+}
+
+.ta-brand {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 20px 16px 16px;
+}
+
+.ta-brand img {
+  width: 36px;
+  height: 36px;
+  object-fit: contain;
+  filter: saturate(1.15) contrast(1.05);
+}
+
+.ta-brand-name {
+  font-family: var(--ta-font-sans);
+  font-size: 15px;
+  font-weight: 600;
+  letter-spacing: -0.005em;
+  color: var(--ta-text);
+  line-height: 1.2;
+}
+
+.ta-brand-sub {
+  font-family: var(--ta-font-sans);
+  font-size: 10px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--ta-text-3);
+  padding-left: 0.22em;
+  margin-top: 3px;
+}
+
+.ta-side-close {
+  margin-left: auto;
+  background: none;
+  border: 0;
+  color: var(--ta-text-2);
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  cursor: pointer;
+  display: grid;
+  place-items: center;
+  transition: background-color 0.2s var(--ta-ease), color 0.2s var(--ta-ease);
+}
+
+.ta-side-close:hover {
+  background: var(--ta-navy-800);
+  color: var(--ta-text);
+}
+
+@media (min-width: 900px) {
+  .ta-side-close {
+    display: none;
+  }
+}
+
+/* ==========================================================================
+   SIDEBAR NAV
+   ========================================================================== */
+
+.ta-side-nav {
+  flex: 1;
+  overflow-y: auto;
+  padding: 12px 10px 20px;
+  scrollbar-width: thin;
+  scrollbar-color: transparent transparent;
+}
+
+.ta-side-nav:hover {
+  scrollbar-color: rgba(242, 234, 217, 0.14) transparent;
+}
+
+.ta-nav-section {
+  margin-bottom: 18px;
+}
+
+.ta-nav-label {
+  font-family: var(--ta-font-sans);
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  color: var(--ta-brand-pale);
+  opacity: 0.7;
+  padding: 0 10px 8px;
+}
+
+.ta-nav-link {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 9px 10px;
+  border-radius: 10px;
+  color: var(--ta-text-2);
+  text-decoration: none;
+  font-family: var(--ta-font-sans);
+  font-size: 14px;
+  font-weight: 500;
+  margin-bottom: 2px;
+  transition:
+    background-color 0.2s var(--ta-ease),
+    color 0.2s var(--ta-ease);
+}
+
+.ta-nav-link:hover {
+  background: var(--ta-navy-800);
+  color: var(--ta-text);
+  text-decoration: none;
+}
+
+.ta-nav-link.is-active {
+  background: linear-gradient(
+    180deg,
+    var(--ta-brand-bright) 0%,
+    var(--ta-brand) 55%,
+    var(--ta-brand-600) 100%
+  );
+  color: #1a1408;
+  font-weight: 600;
+  box-shadow:
+    0 1px 0 rgba(255, 255, 255, 0.18) inset,
+    0 4px 12px -6px rgba(212, 169, 94, 0.6);
+}
+
+.ta-nav-link svg {
+  flex-shrink: 0;
+  opacity: 0.9;
+}
+
+.ta-nav-link.is-active svg {
+  opacity: 1;
+}
+
+.ta-nav-link:focus,
+.ta-menu-btn:focus {
+  outline: none;
+}
+
+.ta-nav-link:focus-visible,
+.ta-menu-btn:focus-visible {
+  outline: 2px solid var(--ta-brand-line);
+  outline-offset: 2px;
+}
+
+/* ==========================================================================
+   MAIN COLUMN
+   ========================================================================== */
+.ta-main {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  height: auto;
+}
+
+/* ==========================================================================
+   TOP BAR
+   ========================================================================== */
+
+.ta-topbar {
+  position: sticky;
+  top: 0;
+  z-index: 30;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 16px 24px;
+  background: rgba(6, 6, 11, 0.9);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border-bottom: 1px solid var(--ta-line);
+}
+
+@media (min-width: 900px) {
+  .ta-topbar {
+    padding: 20px 32px;
+  }
+}
+
+.ta-menu-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 10px;
+  border: 1px solid var(--ta-line);
+  background: var(--ta-navy-800);
+  color: var(--ta-text);
+  cursor: pointer;
+}
+
+@media (min-width: 900px) {
+  .ta-menu-btn {
+    display: none;
+  }
+}
+
+.ta-top-titles {
+  flex: 1;
+  min-width: 0;
+}
+
+.ta-top-titles h1 {
+  margin: 0;
+  font-family: var(--ta-font-display);
+  font-weight: 400;
+  font-size: 26px;
+  line-height: 1.15;
+  letter-spacing: -0.012em;
+  color: var(--ta-text);
+}
+
+.ta-top-section {
+  margin: 4px 0 0;
+  font-family: var(--ta-font-sans);
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  color: var(--ta-brand-pale);
+  opacity: 0.75;
+  padding-left: 0.24em;
+}
+
+/* ==========================================================================
+   USER CHIP + DROPDOWN
+   ========================================================================== */
+
+.ta-top-end {
+  position: relative;
+  flex-shrink: 0;
+}
+
+.ta-user-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 6px 12px 6px 6px;
+  border-radius: 999px;
+  background: var(--ta-navy-800);
+  border: 1px solid var(--ta-line);
+  cursor: pointer;
+  color: var(--ta-text);
+  font-family: var(--ta-font-sans);
+  font-size: 12.5px;
+  font-weight: 500;
+  letter-spacing: 0.02em;
+  transition:
+    border-color 0.2s var(--ta-ease),
+    background-color 0.2s var(--ta-ease);
+}
+
+.ta-user-chip:hover,
+.ta-user-chip.is-open {
+  border-color: var(--ta-line-medium);
+  background: var(--ta-navy-700);
+}
+
+.ta-user-chip:focus {
+  outline: none;
+}
+
+.ta-user-chip:focus-visible {
+  outline: 2px solid var(--ta-brand-line);
+  outline-offset: 2px;
+}
+
+.ta-user-chip .ta-avatar {
+  width: 26px;
+  height: 26px;
+  font-size: 11px;
+}
+
+.ta-user-role {
+  text-transform: capitalize;
+  color: var(--ta-text-2);
+}
+
+.ta-user-chev {
+  font-size: 10px;
+  color: var(--ta-text-3);
+  line-height: 1;
+  transition: transform 0.2s var(--ta-ease);
+}
+
+.ta-user-chip.is-open .ta-user-chev {
+  transform: rotate(180deg);
+}
+
+.ta-user-menu {
+  position: absolute;
+  top: calc(100% + 10px);
+  right: 0;
+  min-width: 240px;
+  padding: 6px;
+  border-radius: 14px;
+  border: 1px solid var(--ta-line-medium);
+  background:
+    radial-gradient(
+      ellipse 80% 40% at 50% 0%,
+      rgba(212, 169, 94, 0.06) 0%,
+      transparent 60%
+    ),
+    linear-gradient(
+      180deg,
+      rgba(20, 20, 28, 0.96) 0%,
+      rgba(12, 12, 18, 0.94) 100%
+    );
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  box-shadow:
+    0 1px 0 rgba(255, 255, 255, 0.04) inset,
+    0 20px 40px -20px rgba(0, 0, 0, 0.8),
+    0 0 0 1px rgba(0, 0, 0, 0.4);
+  z-index: 60;
+  animation: taUserMenuIn 0.18s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes taUserMenuIn {
+  from {
+    opacity: 0;
+    transform: translateY(-4px) scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.ta-user-menu::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 20%;
+  right: 20%;
+  height: 1px;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(212, 169, 94, 0.4) 50%,
+    transparent 100%
+  );
+  pointer-events: none;
+  border-top-left-radius: 14px;
+  border-top-right-radius: 14px;
+}
+
+.ta-user-menu-head {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 10px 12px 12px;
+  border-bottom: 1px solid var(--ta-line);
+  margin-bottom: 4px;
+}
+
+.ta-user-menu-email {
+  font-family: var(--ta-font-sans);
+  font-size: 12.5px;
+  color: var(--ta-text);
+  font-weight: 500;
+  word-break: break-all;
+  line-height: 1.35;
+}
+
+.ta-user-menu-role {
+  font-family: var(--ta-font-sans);
+  font-size: 10.5px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--ta-brand-pale);
+  opacity: 0.75;
+  padding-left: 0.18em;
+}
+
+.ta-user-menu-item {
+  display: block;
+  width: 100%;
+  padding: 10px 12px;
+  border: 0;
+  background: transparent;
+  border-radius: 8px;
+  color: var(--ta-text-2);
+  font-family: var(--ta-font-sans);
+  font-size: 13.5px;
+  font-weight: 500;
+  text-align: left;
+  cursor: pointer;
+  text-decoration: none;
+  transition:
+    color 0.2s var(--ta-ease),
+    background-color 0.2s var(--ta-ease);
+}
+
+.ta-user-menu-item:hover {
+  color: var(--ta-text);
+  background: rgba(242, 234, 217, 0.05);
+  text-decoration: none;
+}
+
+.ta-user-menu-item--quiet {
+  color: var(--ta-text-3);
+}
+
+.ta-user-menu-item--quiet:hover {
+  color: var(--ta-brand-pale);
+}
+
+/* ==========================================================================
+   CONTENT
+   ========================================================================== */
+
+.ta-content {
+  flex: 1;
+  padding: 20px 20px 40px;
+  min-height: 0;
+}
+
+@media (min-width: 900px) {
+  .ta-content {
+    padding: 28px 32px 56px;
+  }
+}
+
+/* ==========================================================================
+   GATE — access denied / signed-out
+   ========================================================================== */
+
+.ta-gate,
+.ta-loading {
+  min-height: 100vh;
+  display: grid;
+  place-items: center;
+  background: var(--ta-navy-950);
+  color: var(--ta-text-2);
+  padding: 24px;
+  text-align: center;
+}
+
+.ta-gate {
+  background:
+    radial-gradient(
+      ellipse 70% 50% at 50% 40%,
+      rgba(212, 169, 94, 0.04) 0%,
+      transparent 65%
+    ),
+    var(--ta-navy-950);
+}
+
+.ta-gate-card {
+  position: relative;
+  width: min(440px, 100%);
+  padding: 40px 36px 32px;
+  border-radius: 22px;
+  border: 1px solid var(--ta-line-medium);
+  background:
+    radial-gradient(
+      ellipse 90% 60% at 20% 0%,
+      rgba(212, 169, 94, 0.06) 0%,
+      transparent 65%
+    ),
+    linear-gradient(
+      180deg,
+      rgba(20, 20, 28, 0.6) 0%,
+      rgba(12, 12, 18, 0.45) 100%
+    );
+  overflow: hidden;
+  isolation: isolate;
+  text-align: left;
+}
+
+.ta-gate-card::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 20%;
+  right: 20%;
+  height: 1px;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(212, 169, 94, 0.5) 50%,
+    transparent 100%
+  );
+  pointer-events: none;
+}
+
+.ta-gate-diamond {
+  display: block;
+  width: 7px;
+  height: 7px;
+  background: var(--ta-brand);
+  transform: rotate(45deg);
+  box-shadow:
+    0 0 10px rgba(212, 169, 94, 0.55),
+    0 0 20px rgba(212, 169, 94, 0.25);
+  margin: 0 0 28px 2px;
+  animation: taGateDiamondPulse 5s ease-in-out infinite;
+}
+
+@keyframes taGateDiamondPulse {
+  0%, 100% {
+    transform: rotate(45deg) scale(1);
+    box-shadow:
+      0 0 10px rgba(212, 169, 94, 0.55),
+      0 0 20px rgba(212, 169, 94, 0.25);
+  }
+  50% {
+    transform: rotate(45deg) scale(1.15);
+    box-shadow:
+      0 0 16px rgba(212, 169, 94, 0.75),
+      0 0 32px rgba(212, 169, 94, 0.35);
+  }
+}
+
+.ta-gate-brand {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 32px;
+  padding-bottom: 24px;
+  border-bottom: 1px solid var(--ta-line);
+}
+
+.ta-gate-brand img {
+  width: 36px;
+  height: 36px;
+  object-fit: contain;
+  filter: saturate(1.15) contrast(1.05);
+  flex-shrink: 0;
+}
+
+.ta-gate-brand-name {
+  font-family: var(--ta-font-sans);
+  font-size: 15px;
+  font-weight: 600;
+  letter-spacing: -0.005em;
+  color: var(--ta-text);
+  line-height: 1.2;
+}
+
+.ta-gate-brand-sub {
+  font-family: var(--ta-font-sans);
+  font-size: 10px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--ta-text-3);
+  padding-left: 0.22em;
+  margin-top: 3px;
+}
+
+.ta-gate-title {
+  margin: 0 0 12px;
+  font-family: var(--ta-font-display);
+  font-weight: 400;
+  font-size: 30px;
+  line-height: 1.15;
+  letter-spacing: -0.008em;
+  color: var(--ta-text);
+}
+
+.ta-gate-body {
+  margin: 0 0 28px;
+  font-family: var(--ta-font-sans);
+  font-size: 14.5px;
+  line-height: 1.6;
+  color: var(--ta-text-2);
+  max-width: 44ch;
+}
+
+.ta-gate-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.ta-gate-actions .ta-btn {
+  padding: 10px 22px;
+  font-size: 13.5px;
+}
+
+/* ==========================================================================
+   RESPONSIVE
+   ========================================================================== */
+
+@media (max-width: 700px) {
+  .ta-top-titles h1 {
+    font-size: 20px;
+  }
+
+  .ta-top-section {
+    font-size: 10px;
+    letter-spacing: 0.2em;
+  }
+
+  .ta-user-role {
+    display: none;
+  }
+
+  .ta-user-chip {
+    padding: 5px 8px 5px 5px;
+  }
+}
+
+@media (max-width: 480px) {
+  .ta-gate-card {
+    padding: 32px 24px 26px;
+    border-radius: 20px;
+  }
+
+  .ta-gate-title {
+    font-size: 26px;
+  }
+
+  .ta-gate-actions {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .ta-gate-actions .ta-btn {
+    width: 100%;
+    justify-content: center;
+  }
+}
+
+/* ==========================================================================
+   REDUCED MOTION
+   ========================================================================== */
+
+@media (prefers-reduced-motion: reduce) {
+  .ta-gate-diamond {
+    animation: none;
+  }
+  .ta-sidebar {
+    transition: none;
+  }
+  .ta-user-chev {
+    transition: none;
+  }
+}
+/* ==========================================================================
+   USER CHIP — refined
+   ========================================================================== */
+
+.ta-user-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 5px 12px 5px 5px;
+  border-radius: 999px;
+  background: var(--ta-navy-800);
+  border: 1px solid var(--ta-line);
+  cursor: pointer;
+  color: var(--ta-text);
+  font-family: var(--ta-font-sans);
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 0.02em;
+  transition:
+    border-color 0.2s var(--ta-ease),
+    background-color 0.2s var(--ta-ease);
+}
+
+.ta-user-chip:hover,
+.ta-user-chip.is-open {
+  border-color: var(--ta-brand-line);
+  background: var(--ta-navy-700);
+}
+
+.ta-user-chip:focus {
+  outline: none;
+}
+
+.ta-user-chip:focus-visible {
+  outline: 2px solid var(--ta-brand-line);
+  outline-offset: 2px;
+}
+
+/* --- The avatar — gold ring, warm fill, serif initial --- */
+
+.ta-user-chip .ta-avatar {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  border: 1px solid var(--ta-brand-line);
+  background:
+    radial-gradient(
+      circle at 30% 30%,
+      rgba(240, 200, 120, 0.24) 0%,
+      rgba(12, 12, 18, 0.92) 75%
+    );
+  color: var(--ta-brand-bright);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--ta-font-display);
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 1;
+  flex-shrink: 0;
+  box-shadow:
+    0 0 0 1px rgba(212, 169, 94, 0.1) inset,
+    0 2px 8px -4px rgba(212, 169, 94, 0.5);
+}
+
+/* Optical centering for the serif cap */
+.ta-user-chip .ta-avatar::first-letter {
+  transform: translateY(1px);
+}
+
+/* --- The role label — uppercase, tracked, muted --- */
+
+.ta-user-role {
+  font-family: var(--ta-font-sans);
+  font-size: 10.5px;
+  font-weight: 500;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--ta-text-2);
+  padding-left: 0.18em;
+  line-height: 1;
+}
+
+/* --- The chevron — SVG, not a text character --- */
+
+.ta-user-chev {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 14px;
+  height: 14px;
+  color: var(--ta-text-3);
+  transition:
+    transform 0.2s var(--ta-ease),
+    color 0.2s var(--ta-ease);
+}
+
+.ta-user-chip:hover .ta-user-chev {
+  color: var(--ta-text-2);
+}
+
+.ta-user-chip.is-open .ta-user-chev {
+  transform: rotate(180deg);
+  color: var(--ta-brand-pale);
+}
+
+/* ==========================================================================
+   RESPONSIVE — mobile chip
+   ========================================================================== */
+
+@media (max-width: 700px) {
+  .ta-user-role {
+    display: none;
+  }
+
+  .ta-user-chip {
+    padding: 4px 10px 4px 4px;
+    gap: 8px;
+  }
+
+  .ta-user-chip .ta-avatar {
+    width: 26px;
+    height: 26px;
+    font-size: 12px;
+  }
+}
+/* ==========================================================================
+   ROLE LABEL — distinguish support / admin / super_admin
+   ========================================================================== */
+
+.ta-user-role {
+  text-transform: none;
+  font-family: var(--ta-font-sans);
+  font-size: 10.5px;
+  font-weight: 500;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--ta-text-2);
+  padding-left: 0.14em;
+  line-height: 1;
+}
+
+/* Subtle differentiation — super_admin reads slightly warmer,
+   support reads slightly cooler. Subtle enough not to be noisy. */
+.ta-user-chip[data-role="super_admin"] .ta-user-role {
+  color: var(--ta-brand-pale);
+}
+
+.ta-user-chip[data-role="support"] .ta-user-role {
+  color: var(--ta-teal-bright);
+}
