@@ -9,10 +9,15 @@ import "./account.css";
 
 const PLANS = [
   { key: "monthly", label: "Monthly", price: "£3.99", cadence: "/ month" },
-  { key: "yearly", label: "Yearly", price: "£24.99", cadence: "/ year" },
+  {
+    key: "yearly",
+    label: "Yearly",
+    price: "£24.99",
+    cadence: "/ year",
+    badge: "6 months free",
+  },
   { key: "lifetime", label: "Lifetime", price: "£39.99", cadence: "once" },
 ];
-
 export default function AccountPage() {
   const [user, setUser] = useState(undefined);
   const [entitlement, setEntitlement] = useState(null);
@@ -243,15 +248,20 @@ if (user === undefined) {
               <ul className="account-plan-list">
                 {PLANS.map((p) => (
                   <li className="account-plan-row" key={p.key}>
-                    <div className="account-plan-row-copy">
-                      <span className="account-plan-row-name">{p.label}</span>
-                      <span className="account-plan-row-price">
-                        {p.price}{" "}
-                        <span className="account-plan-row-cadence">
-                          {p.cadence}
-                        </span>
-                      </span>
-                    </div>
+                 <div className="account-plan-row-copy">
+  <div className="account-plan-row-title">
+    <span className="account-plan-row-name">{p.label}</span>
+    {p.badge ? (
+      <span className="account-plan-row-badge">{p.badge}</span>
+    ) : null}
+  </div>
+  <span className="account-plan-row-price">
+    {p.price}{" "}
+    <span className="account-plan-row-cadence">
+      {p.cadence}
+    </span>
+  </span>
+</div>
                     <button
                       type="button"
                       className="account-plan-row-cta"

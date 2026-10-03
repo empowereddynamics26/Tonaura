@@ -359,6 +359,7 @@
   }
 }
 
+
 /* ==========================================================================
    PLAN — Free state (three separate cards)
    ========================================================================== */
@@ -751,5 +752,39 @@
   }
   .account-link-row:hover .account-link-arrow {
     transform: none;
+  }
+}
+/* --- Plan row: title + optional badge --- */
+.account-plan-row-title {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.account-plan-row-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 3px 10px;
+  border-radius: 999px;
+  border: 1px solid rgba(212, 169, 94, 0.32);
+  background: rgba(212, 169, 94, 0.1);
+  color: var(--gold-pale);
+  font-family: var(--font-sans);
+  font-size: 10.5px;
+  font-weight: 500;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  padding-left: 10px;
+  padding-right: 10px;
+  white-space: nowrap;
+  line-height: 1.4;
+}
+
+@media (max-width: 640px) {
+  .account-plan-row-badge {
+    font-size: 10px;
+    padding: 2px 8px;
+    letter-spacing: 0.12em;
   }
 }
