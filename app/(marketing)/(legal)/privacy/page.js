@@ -16,7 +16,7 @@ const SECTIONS = [
   { id: "introduction",                number: "1.",  label: "Introduction" },
   { id: "information-we-collect",      number: "2.",  label: "Information we collect" },
   { id: "information-we-do-not-collect", number: "3.", label: "Information we do not collect" },
-  { id: "adaptive-mode-privacy",       number: "4.",  label: "Adaptive Mode and heart-rate data" },
+  { id: "adaptive-mode-privacy",       number: "4.",  label: "Suggestions" },
   { id: "how-we-use",                  number: "5.",  label: "How we use your information" },
   { id: "encryption-security-privacy", number: "6.",  label: "Encryption and security" },
   { id: "cookies-privacy",             number: "7.",  label: "Cookies" },
@@ -38,7 +38,7 @@ export default function PrivacyPage() {
       lead="How Tonaura collects, uses, protects and shares your information and the rights you have over it."
       meta={
         <>
-          <span>Effective date: 16 August 2026</span>
+          <span>Effective date: [PUBLICATION DATE — set when this goes live]</span>
           <span>
             <a
               className="inline-link"
@@ -100,17 +100,17 @@ export default function PrivacyPage() {
           <li>Microphone or camera data</li>
           <li>Precise GPS location</li>
           <li>Advertising identifiers we don't show ads, on either the free or paid tier</li>
-          <li>Health data beyond what you explicitly enable for Adaptive Mode (see below)</li>
+          <li>Health or heart-rate data</li>
         </ul>
       </section>
 
       <section id="adaptive-mode-privacy">
-        <h2><span className="legal-num">4.</span> Adaptive Mode and heart-rate data</h2>
+        <h2><span className="legal-num">4.</span> Suggestions</h2>
         <p>
-          Adaptive Mode is an optional Premium feature that can use heart-rate data from a connected
-          wearable to suggest a blend. This data, when the feature is fully implemented with a real
-          wearable connection, is processed on-device to generate suggestions and is not sent to our
-          servers. You can turn Adaptive Mode off at any time in Account settings.
+          Suggestions is an optional Premium feature that proposes a blend based on the time of day
+          and your recent listening on this device. It works entirely on your device, does not use
+          health or heart-rate data, and sends nothing to our servers. You can turn it off at any
+          time in Account settings.
         </p>
       </section>
 
@@ -146,17 +146,24 @@ export default function PrivacyPage() {
       <section id="payments-privacy">
         <h2><span className="legal-num">8.</span> Payments</h2>
         <p>
-          Subscriptions are processed by Stripe on tonaura.com. Tonaura does not see or store your full
-          payment card details these are handled entirely by Stripe under their own privacy policy.
+          Premium can be bought on tonaura.com, where payment is processed by Stripe, or in the
+          Tonaura Android app, where payment is processed by Google Play. Tonaura never sees or
+          stores your full payment card details; these are handled by Stripe or Google under their
+          own privacy policies. For in-app purchases, we receive a purchase record (product, purchase
+          and expiry dates, and an order identifier) so we can unlock and restore Premium for your
+          account.
         </p>
       </section>
 
       <section id="third-party-privacy">
         <h2><span className="legal-num">9.</span> Third-party services</h2>
         <p>
-          Tonaura relies on: <strong>Supabase</strong> for optional sign-in and account data, and{" "}
-          <strong>Stripe</strong> for web purchases and Premium status. Each processes information
-          only as necessary to provide their service, under their own privacy policies.
+          Tonaura relies on: <strong>Supabase</strong> for optional sign-in and account data;{" "}
+          <strong>Stripe</strong> for web purchases; <strong>Google Play</strong> for in-app purchases
+          on Android; and <strong>RevenueCat</strong>, which verifies Google Play purchases and keeps
+          Premium status in sync. RevenueCat receives your Tonaura account ID and your Google Play
+          purchase records, but not your name, email address or card details. Each provider processes
+          information only as necessary to provide its service, under its own privacy policy.
         </p>
       </section>
 
