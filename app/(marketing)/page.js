@@ -138,7 +138,7 @@ export default function HomePage() {
     </div>
           <p className="hero-eyebrow">Solfeggio Tone Therapy</p>
           <h1 className="hero-headline">
-            Nine tones.
+            Nine solfeggio tones.
             <br />
             One place to be still.
           </h1>

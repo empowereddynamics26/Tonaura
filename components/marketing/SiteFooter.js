@@ -22,7 +22,7 @@ export function SiteFooter() {
       <div className="footer-signoff">
         <span className="footer-diamond" aria-hidden="true" />
         <p className="footer-signoff-line">
-          Nine tones.
+          Nine solfeggio tones.
           <br />
           One place to be still.
         </p>
