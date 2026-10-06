@@ -73,7 +73,7 @@ Apple is **disabled** in Supabase and the production “Continue with Apple” C
    Copy the signing secret to `STRIPE_WEBHOOK_SECRET`.
 6. Keys: `STRIPE_SECRET_KEY` (server) and `NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY`.
 7. Stripe Tax / VAT: turn on if you charge VAT. Confirm the 14-day digital-content wording on Checkout matches what you want legally.
-8. If you want a 7-day trial, set it on the Stripe prices (not in the app). The app no longer starts a fake local trial.
+8. No free trial at launch (decided Oct 2026). Do not add a trial on Stripe prices or Google Play base plans without updating the billing policy.
 
 Test with Stripe test keys first, then switch to live keys.
 

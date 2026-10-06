@@ -21,6 +21,9 @@ const PLANS = [
 export default function AccountPage() {
   const [user, setUser] = useState(undefined);
   const [entitlement, setEntitlement] = useState(null);
+  // Google Play Premium (written by the RevenueCat webhook). Separate from the
+  // Stripe-owned entitlement_cache; Premium is on if either is active.
+  const [storeEntitlements, setStoreEntitlements] = useState([]);
   const [profile, setProfile] = useState(null);
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(null);
@@ -41,9 +44,11 @@ async function load() {
   setUser(data.user || null);
   if (!data.user) return;
 
-const [{ data: ent, error: entErr }, { data: prof, error: profErr }] = await Promise.all([
+const [{ data: ent, error: entErr }, { data: prof, error: profErr }, { data: storeRows }] = await Promise.all([
   supabase.from("entitlement_cache").select("*").eq("user_id", data.user.id).maybeSingle(),
   supabase.from("profiles").select("role, display_name").eq("id", data.user.id).maybeSingle(),
+  // Missing table / no rows is fine — treated as no store purchases.
+  supabase.from("store_entitlements").select("*").eq("user_id", data.user.id),
 ]);
 
 if (entErr || profErr) {
@@ -53,6 +58,7 @@ if (entErr || profErr) {
 }
 
 setEntitlement(ent || null);
+setStoreEntitlements(Array.isArray(storeRows) ? storeRows : []);
 setProfile(prof || null);
 }
 
@@ -107,7 +113,7 @@ setProfile(prof || null);
   async function deleteAccount() {
     if (
       !window.confirm(
-        "Delete this Tonaura account? Cancel an active subscription first if you don't want it to renew."
+        "Delete this Tonaura account? Cancel any active subscription first if you don't want it to renew. Website subscriptions are cancelled here; Google Play subscriptions must be cancelled in the Google Play Store."
       )
     )
       return;
@@ -155,10 +161,14 @@ if (user === undefined) {
   }
 
   /* ---------- Signed in ---------- */
-  const active = !!(entitlement && entitlement.is_active);
-  const expired =
-    entitlement?.expires_at && Date.parse(entitlement.expires_at) < Date.now();
-  const premium = active && !expired;
+  const isLive = (row) =>
+    !!(row && row.is_active) &&
+    !(row.expires_at && Date.parse(row.expires_at) < Date.now());
+  const webPremium = isLive(entitlement);
+  const playRow = storeEntitlements.find((r) => r.store === "PLAY_STORE" && isLive(r)) || null;
+  const premium = webPremium || !!playRow;
+  // Which record to describe in the header: Stripe first, else Google Play.
+  const shown = webPremium ? entitlement : playRow;
 
   const initial =
     user.email?.[0]?.toUpperCase() ||
@@ -168,11 +178,14 @@ if (user === undefined) {
   const displayName = profile?.display_name || null;
 
   const planLabel = premium
-    ? entitlement?.plan_key
-      ? entitlement.plan_key.charAt(0).toUpperCase() +
-        entitlement.plan_key.slice(1)
+    ? shown?.plan_key
+      ? shown.plan_key.charAt(0).toUpperCase() + shown.plan_key.slice(1)
       : "Premium"
     : "Free plan";
+  const renewsOrEnds =
+    shown?.expires_at && !webPremium && playRow && playRow.will_renew === false
+      ? "Ends"
+      : "Renews";
 
   return (
     <>
@@ -204,10 +217,10 @@ if (user === undefined) {
               <span className="account-status-dot" aria-hidden="true" />
               {planLabel}
             </span>
-            {premium && entitlement?.expires_at ? (
+            {premium && shown?.expires_at ? (
               <span className="account-status-meta">
-                Renews{" "}
-                {new Date(entitlement.expires_at).toLocaleDateString("en-GB", {
+                {renewsOrEnds}{" "}
+                {new Date(shown.expires_at).toLocaleDateString("en-GB", {
                   day: "numeric",
                   month: "short",
                   year: "numeric",
@@ -226,10 +239,15 @@ if (user === undefined) {
               <div className="account-plan-state-copy">
                 <p className="account-plan-state-title">Premium is on</p>
                 <p className="account-plan-state-body">
-                  The app unlocks for this email after you sign in and tap
-                  Refresh Premium.
+                  {webPremium
+                    ? "Billed on this website through Stripe. The app unlocks for this account when you sign in."
+                    : "Bought through Google Play in the Tonaura Android app. Manage or cancel it in the Google Play Store."}
+                  {webPremium && playRow
+                    ? " You also have a Google Play purchase on this account; manage that in the Google Play Store."
+                    : ""}
                 </p>
               </div>
+              {webPremium ? (
            <button
   type="button"
   className="btn btn--primary"
@@ -238,6 +256,16 @@ if (user === undefined) {
 >
   {loading === "portal" ? "Opening…" : "Manage billing"}
 </button>
+              ) : playRow?.expires_at ? (
+                <a
+                  className="btn btn--primary"
+                  href="https://play.google.com/store/account/subscriptions?package=io.tonaura.app"
+                  target="_blank"
+                  rel="noopener"
+                >
+                  Manage in Google Play
+                </a>
+              ) : null}
             </div>
           ) : (
             <>

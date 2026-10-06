@@ -109,7 +109,7 @@ export default function TermsPage() {
         <h2><span className="legal-num">5.</span> Subscription plans</h2>
         <p>
           Tonaura offers a free tier and a paid Premium tier (monthly, yearly, or lifetime). Premium
-          unlocks all tones, the entrainment layer, adaptive suggestions, every look and Theme Pack,
+          unlocks all tones, the entrainment layer, every look and Theme Pack,
           unlimited saved presets, and the full-length sleep timer. Current pricing is shown in the
           app and on our <Link className="inline-link" href="/#pricing">pricing page</Link>.
         </p>
@@ -118,17 +118,18 @@ export default function TermsPage() {
       <section id="payments-terms">
         <h2><span className="legal-num">6.</span> Payments</h2>
         <p>
-          Premium is billed on tonaura.com via Stripe and is subject to our{" "}
+          Premium can be bought on tonaura.com, billed through Stripe, or in the Tonaura Android app,
+          billed through Google Play. Both are linked to your Tonaura account and are subject to our{" "}
           <Link className="inline-link" href="/billing">Subscription &amp; Billing Policy</Link>.
-          The Tonaura app uses the same account and does not sell Premium through the App Store or
-          Google Play.
+          Google Play purchases are also subject to Google Play&rsquo;s terms.
         </p>
       </section>
 
       <section id="cancellation-terms">
         <h2><span className="legal-num">7.</span> Cancellation</h2>
         <p>
-          You can cancel a subscription at any time from your Tonaura account page. Cancelling stops
+          You can cancel a subscription at any time: website subscriptions from your Tonaura account
+          page, and Google Play subscriptions in the Google Play Store. Cancelling stops
           future renewals; it doesn't retroactively refund the current billing period except where
           required by law.
         </p>
