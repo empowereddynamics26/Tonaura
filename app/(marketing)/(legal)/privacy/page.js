@@ -38,7 +38,7 @@ export default function PrivacyPage() {
       lead="How Tonaura collects, uses, protects and shares your information and the rights you have over it."
       meta={
         <>
-          <span>Effective date: [PUBLICATION DATE — set when this goes live]</span>
+          <span>Effective date: 7 October 2026</span>
           <span>
             <a
               className="inline-link"

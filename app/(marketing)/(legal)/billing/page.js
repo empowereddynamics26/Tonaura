@@ -33,7 +33,7 @@ export default function BillingPage() {
       lead="How paid subscriptions, billing, renewals, cancellations, upgrades and refunds work for Tonaura."
       meta={
         <>
-          <span>Effective date: [PUBLICATION DATE — set when this goes live]</span>
+          <span>Effective date: 7 October 2026</span>
           <span>
             <a
               className="inline-link"

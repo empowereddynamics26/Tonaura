@@ -44,7 +44,7 @@ export default function TermsPage() {
       lead="The terms that govern your access to and use of the Tonaura website, mobile applications and related services."
       meta={
         <>
-          <span>Effective date: 16 August 2026</span>
+          <span>Effective date: 7 October 2026</span>
           <span>
             <a
               className="inline-link"
