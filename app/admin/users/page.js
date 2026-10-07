@@ -104,7 +104,10 @@ export default function AdminUsersPage() {
                     </td>
                     <td>
                       {u.premium_active ? (
-                        <Badge tone="gold">{u.plan_key || "active"}</Badge>
+                        <Badge tone="gold">
+                          {u.plan_key || "active"}
+                          {u.premium_source === "PLAY_STORE" ? " · Play" : ""}
+                        </Badge>
                       ) : (
                         <Badge>free</Badge>
                       )}
@@ -115,16 +118,16 @@ export default function AdminUsersPage() {
                         <Link className="ta-btn ta-btn-ghost ta-btn-sm" href={`/admin/users/${u.id}`}>
                           Open
                         </Link>
-                        {u.premium_active ? (
+                        {u.stripe_active ? (
                           <button
                             type="button"
                             className="ta-btn ta-btn-danger ta-btn-sm"
                             disabled={!!busy}
                             onClick={() => setPremium(u.id, "revoke")}
                           >
-                            {busy === u.id + "revoke" ? "…" : "Revoke"}
+                            {busy === u.id + "revoke" ? "…" : "Revoke Stripe"}
                           </button>
-                        ) : (
+                        ) : u.premium_active ? null : (
                           <button
                             type="button"
                             className="ta-btn ta-btn-gold ta-btn-sm"

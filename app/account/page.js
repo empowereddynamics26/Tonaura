@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { createClient } from "@/lib/supabase/client";
 import { SiteNav } from "@/components/SiteNav";
+import { premiumFromSources } from "@/lib/premiumAccess";
 
 const PLANS = [
   { key: "monthly", label: "Monthly", price: "£3.99/mo" },
@@ -13,6 +14,7 @@ const PLANS = [
 export default function AccountPage() {
   const [user, setUser] = useState(undefined);
   const [entitlement, setEntitlement] = useState(null);
+  const [storeEntitlements, setStoreEntitlements] = useState([]);
   const [profile, setProfile] = useState(null);
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(null);
@@ -22,12 +24,17 @@ export default function AccountPage() {
     const { data } = await supabase.auth.getUser();
     setUser(data.user || null);
     if (!data.user) return;
-    const [{ data: ent }, { data: prof }] = await Promise.all([
+    const [entRes, storeRes, profRes] = await Promise.all([
       supabase.from("entitlement_cache").select("*").eq("user_id", data.user.id).maybeSingle(),
+      supabase
+        .from("store_entitlements")
+        .select("is_active,plan_key,expires_at,store")
+        .eq("user_id", data.user.id),
       supabase.from("profiles").select("role,display_name").eq("id", data.user.id).maybeSingle(),
     ]);
-    setEntitlement(ent);
-    setProfile(prof);
+    setEntitlement(entRes.data);
+    setStoreEntitlements(storeRes.error ? [] : storeRes.data || []);
+    setProfile(profRes.data);
   }
 
   useEffect(() => {
@@ -116,9 +123,9 @@ export default function AccountPage() {
     );
   }
 
-  const active = !!(entitlement && entitlement.is_active);
-  const expired = entitlement?.expires_at && Date.parse(entitlement.expires_at) < Date.now();
-  const premium = active && !expired;
+  const access = premiumFromSources(entitlement, storeEntitlements);
+  const premium = access.active;
+  const sourceLabel = access.source === "PLAY_STORE" ? "Google Play" : access.source;
 
   return (
     <>
@@ -134,12 +141,15 @@ export default function AccountPage() {
           {premium ? (
             <>
               <p className="ok">
-                Premium is on{entitlement.plan_key ? ` · ${entitlement.plan_key}` : ""}
-                {entitlement.expires_at ? ` · renews/ends ${new Date(entitlement.expires_at).toLocaleDateString()}` : ""}
+                Premium is on{access.planKey ? ` · ${access.planKey}` : ""}
+                {sourceLabel ? ` · ${sourceLabel}` : ""}
+                {access.expiresAt ? ` · renews/ends ${new Date(access.expiresAt).toLocaleDateString()}` : ""}
               </p>
-              <button className="secondary" type="button" onClick={portal} disabled={loading === "portal"}>
-                Manage billing
-              </button>
+              {access.kind === "stripe" ? (
+                <button className="secondary" type="button" onClick={portal} disabled={loading === "portal"}>
+                  Manage billing
+                </button>
+              ) : null}
             </>
           ) : (
             <>

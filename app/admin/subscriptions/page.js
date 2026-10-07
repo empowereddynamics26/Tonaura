@@ -99,14 +99,16 @@ export default function AdminSubscriptionsPage() {
                     <td>{row.expires_at ? formatWhen(row.expires_at) : "—"}</td>
                     <td>{formatWhen(row.updated_at)}</td>
                     <td>
-                      <button
-                        type="button"
-                        className="ta-btn ta-btn-danger ta-btn-sm"
-                        disabled={busy === row.user_id}
-                        onClick={() => revoke(row.user_id)}
-                      >
-                        Revoke
-                      </button>
+                      {row.stripe_active ? (
+                        <button
+                          type="button"
+                          className="ta-btn ta-btn-danger ta-btn-sm"
+                          disabled={busy === row.user_id}
+                          onClick={() => revoke(row.user_id)}
+                        >
+                          Revoke Stripe
+                        </button>
+                      ) : null}
                     </td>
                   </tr>
                 ))}

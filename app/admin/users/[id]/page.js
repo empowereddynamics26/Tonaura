@@ -45,7 +45,7 @@ export default function AdminUserDetailPage() {
       });
       const json = await res.json();
       if (!res.ok) throw new Error(json.error || "Failed");
-      setNotice(action === "grant" ? "Premium granted." : "Premium revoked.");
+      setNotice(action === "grant" ? "Premium granted." : "Stripe Premium revoked.");
       await load();
     } catch (e) {
       setError(e.message || "Could not update Premium.");
@@ -120,16 +120,16 @@ export default function AdminUserDetailPage() {
               {user.premium_expires_at ? ` · Expires ${formatWhen(user.premium_expires_at)}` : ""}
             </p>
             <div className="ta-row-actions" style={{ marginTop: 12 }}>
-              {user.premium_active ? (
+              {user.stripe_active ? (
                 <button
                   type="button"
                   className="ta-btn ta-btn-danger ta-btn-sm"
                   disabled={!!busy}
                   onClick={() => setPremium("revoke")}
                 >
-                  {busy === "revoke" ? "…" : "Revoke"}
+                  {busy === "revoke" ? "…" : "Revoke Stripe"}
                 </button>
-              ) : (
+              ) : user.premium_active ? null : (
                 <>
                   <button
                     type="button"

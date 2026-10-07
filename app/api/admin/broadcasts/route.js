@@ -3,6 +3,7 @@ import { requireAdmin } from "@/lib/auth";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { listAuthEmails, writeAuditLog } from "@/lib/admin";
 import { sendBroadcastEmail } from "@/lib/mail";
+import { premiumFromSources } from "@/lib/premiumAccess";
 
 const SEGMENTS = new Set(["all", "free", "premium", "inactive"]);
 
@@ -24,11 +25,17 @@ async function resolveRecipients(admin, segment) {
   const ids = (profiles || []).map((p) => p.id);
   if (!ids.length) return [];
 
-  const { data: ents } = await admin
-    .from("entitlement_cache")
-    .select("user_id,is_active,expires_at")
-    .in("user_id", ids);
+  const [{ data: ents }, { data: storeRows }] = await Promise.all([
+    admin.from("entitlement_cache").select("user_id,is_active,expires_at").in("user_id", ids),
+    admin.from("store_entitlements").select("user_id,is_active,expires_at,store").in("user_id", ids),
+  ]);
   const entByUser = new Map((ents || []).map((e) => [e.user_id, e]));
+  const storesByUser = new Map();
+  for (const row of storeRows || []) {
+    const list = storesByUser.get(row.user_id) || [];
+    list.push(row);
+    storesByUser.set(row.user_id, list);
+  }
   const emailById = await listAuthEmails(admin, { maxPages: 20 });
 
   const now = Date.now();
@@ -37,10 +44,12 @@ async function resolveRecipients(admin, segment) {
     const email = emailById.get(id);
     if (!email) continue;
     const ent = entByUser.get(id);
-    const active = !!(ent && ent.is_active && (!ent.expires_at || Date.parse(ent.expires_at) >= now));
+    const stores = storesByUser.get(id) || [];
+    const active = premiumFromSources(ent, stores, now).active;
+    const hasRecord = Boolean(ent) || stores.length > 0;
     if (segment === "premium" && !active) continue;
-    if (segment === "free" && ent) continue;
-    if (segment === "inactive" && (!ent || active)) continue;
+    if (segment === "free" && hasRecord) continue;
+    if (segment === "inactive" && (!hasRecord || active)) continue;
     out.push({ id, email });
   }
   return out;

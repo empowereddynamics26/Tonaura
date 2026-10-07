@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { requireAdmin } from "@/lib/auth";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { listAuthEmails, writeAuditLog } from "@/lib/admin";
+import { isAccessActive, premiumFromSources } from "@/lib/premiumAccess";
 
 const STAFF = new Set(["user", "support", "admin", "super_admin"]);
 
@@ -16,8 +17,9 @@ export async function GET(request, { params }) {
   const { data: profile, error } = await admin.from("profiles").select("*").eq("id", id).maybeSingle();
   if (error || !profile) return NextResponse.json({ error: "User not found." }, { status: 404 });
 
-  const [{ data: entitlement }, { data: billing }, emailById] = await Promise.all([
+  const [{ data: entitlement }, { data: storeEntitlements }, { data: billing }, emailById] = await Promise.all([
     admin.from("entitlement_cache").select("*").eq("user_id", id).maybeSingle(),
+    admin.from("store_entitlements").select("is_active,plan_key,expires_at,store").eq("user_id", id),
     admin
       .from("billing_events")
       .select("event_id,event_type,processed_at,payload")
@@ -45,8 +47,8 @@ export async function GET(request, { params }) {
   }
 
   const ent = entitlement;
-  const expired = ent?.expires_at && Date.parse(ent.expires_at) < Date.now();
-  const premiumActive = !!(ent && ent.is_active && !expired);
+  const access = premiumFromSources(ent, storeEntitlements || []);
+  const premiumActive = access.active;
 
   return NextResponse.json({
     user: {
@@ -58,9 +60,10 @@ export async function GET(request, { params }) {
       stripe_customer_id: profile.stripe_customer_id,
       email: email || authUser?.email || null,
       premium_active: premiumActive,
-      plan_key: ent?.plan_key || null,
-      premium_source: ent?.source || null,
-      premium_expires_at: ent?.expires_at || null,
+      plan_key: access.planKey,
+      premium_source: access.source,
+      premium_expires_at: access.expiresAt,
+      stripe_active: isAccessActive(ent),
       entitlement: ent || null,
       auth: authUser,
       billing: billing || [],
