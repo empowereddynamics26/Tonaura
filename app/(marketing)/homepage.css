@@ -155,9 +155,32 @@
     z-index: 2;
     }
 
-    .waveform-strip-line {
-    width: 100%;
-    height: 2px;
+    /*
+     * Performance: the drift used to animate background-position on the
+     * line and on a blurred 40px glow band, which re-painted and re-blurred
+     * a full-width strip on the main thread every frame, forever.
+     *
+     * Now the gradient is painted once onto a track three viewports wide
+     * (left: -200%, width: 300%) and the track slides with transform, which
+     * the compositor does for free. The repeating tile is still 2× the strip
+     * width (300% / 3 × 2 = 66.667% of the track) and the track moves by
+     * exactly one tile per 12s cycle, so the motion is identical and seamless.
+     */
+    .waveform-strip-track {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: -200%;
+    width: 300%;
+    display: flex;
+    align-items: center;
+    animation: waveformDrift 12s linear infinite;
+    will-change: transform;
+    pointer-events: none;
+    }
+
+    .waveform-strip-line,
+    .waveform-strip-glow {
     background: linear-gradient(
         90deg,
         transparent 0%,
@@ -169,16 +192,21 @@
         transparent 85%,
         transparent 100%
     );
-    background-size: 200% 100%;
-    animation: waveformDrift 12s linear infinite;
+    background-size: calc(200% / 3) 100%;
+    }
+
+    .waveform-strip-line {
+    position: relative;
+    width: 100%;
+    height: 2px;
     border-radius: 2px;
     }
 
-    .waveform-strip-line::after {
-    content: "";
+    /* The soft glow band (was .waveform-strip-line::after) — blurred once,
+       then only moved. */
+    .waveform-strip-glow {
     position: absolute;
     inset: 0;
-    background: inherit;
     filter: blur(6px);
     opacity: 0.5;
     pointer-events: none;
@@ -192,10 +220,10 @@
 
     @keyframes waveformDrift {
     0% {
-        background-position: 0% 0;
+        transform: translate3d(0, 0, 0);
     }
     100% {
-        background-position: -200% 0;
+        transform: translate3d(calc(200% / 3), 0, 0);
     }
     }
 
@@ -291,7 +319,7 @@
         background: none;
     }
 
-    .waveform-strip-line {
+    .waveform-strip-track {
         animation: none !important;
     }
     }
@@ -1454,32 +1482,60 @@
     min-height: 60px;
     }
 
+    /* The two glow strengths live on ::before / ::after and cross-fade with
+       opacity, so the pulse runs on the compositor instead of repainting an
+       animated box-shadow every frame. */
     .honest-diamond {
+    position: relative;
     display: block;
     width: 12px;
     height: 12px;
     background: var(--gold);
     transform: rotate(45deg);
-    box-shadow:
-        0 0 12px rgba(212, 169, 94, 0.45),
-        0 0 24px rgba(212, 169, 94, 0.2);
     flex-shrink: 0;
     animation: honestDiamondPulse 4s ease-in-out infinite;
     }
 
-    @keyframes honestDiamondPulse {
-    0%, 100% {
-        box-shadow:
+    .honest-diamond::before,
+    .honest-diamond::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    }
+
+    .honest-diamond::before {
+    box-shadow:
         0 0 12px rgba(212, 169, 94, 0.45),
         0 0 24px rgba(212, 169, 94, 0.2);
+    animation: honestDiamondGlowRest 4s ease-in-out infinite;
+    }
+
+    .honest-diamond::after {
+    box-shadow:
+        0 0 20px rgba(212, 169, 94, 0.65),
+        0 0 40px rgba(212, 169, 94, 0.3);
+    opacity: 0;
+    animation: honestDiamondGlowPeak 4s ease-in-out infinite;
+    }
+
+    @keyframes honestDiamondPulse {
+    0%, 100% {
         transform: rotate(45deg) scale(1);
     }
     50% {
-        box-shadow:
-        0 0 20px rgba(212, 169, 94, 0.65),
-        0 0 40px rgba(212, 169, 94, 0.3);
         transform: rotate(45deg) scale(1.15);
     }
+    }
+
+    @keyframes honestDiamondGlowRest {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0; }
+    }
+
+    @keyframes honestDiamondGlowPeak {
+    0%, 100% { opacity: 0; }
+    50% { opacity: 1; }
     }
 
     /* --- Responsive: tablet --- */
@@ -1560,7 +1616,9 @@
         opacity: 1 !important;
         transition: none !important;
     }
-    .honest-diamond {
+    .honest-diamond,
+    .honest-diamond::before,
+    .honest-diamond::after {
         animation: none;
     }
     .honest-dot {

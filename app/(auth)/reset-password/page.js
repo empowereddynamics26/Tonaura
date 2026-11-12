@@ -62,7 +62,7 @@ export default function ResetPasswordPage() {
       <div className="auth-card-head">
         <img
           className="auth-card-mark"
-          src="/images/brand/mark.png"
+          src="/images/brand/mark-192.webp"
           alt=""
           width="56"
           height="56"

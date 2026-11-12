@@ -272,9 +272,24 @@ p { margin: 0; }
   border-radius: 3px;
   background: var(--teal);
 }
-/* Dot pulse — slow ambient heartbeat, staggered */
+/* Dot pulse — slow ambient heartbeat, staggered.
+   The glow lives on ::after and fades with opacity, so the whole pulse is
+   transform/opacity only (compositor) instead of repainting a box-shadow
+   every frame. */
 .trust-dot {
+  position: relative;
   animation: trustDotPulse 6s ease-in-out infinite;
+}
+.trust-dot::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  box-shadow: 0 0 8px rgba(79, 179, 169, 0.6);
+  opacity: 0;
+  pointer-events: none;
+  animation: trustDotGlow 6s ease-in-out infinite;
+  animation-delay: inherit;
 }
 .trust-item:nth-child(2) .trust-dot {
   animation-delay: 2s;
@@ -287,17 +302,21 @@ p { margin: 0; }
   0%, 100% {
     opacity: 0.85;
     transform: scale(1);
-    box-shadow: 0 0 0 rgba(79, 179, 169, 0);
   }
   50% {
     opacity: 1;
     transform: scale(1.25);
-    box-shadow: 0 0 8px rgba(79, 179, 169, 0.6);
   }
 }
 
+@keyframes trustDotGlow {
+  0%, 100% { opacity: 0; }
+  50% { opacity: 1; }
+}
+
 @media (prefers-reduced-motion: reduce) {
-  .trust-dot {
+  .trust-dot,
+  .trust-dot::after {
     animation: none;
   }
 }
@@ -652,7 +671,9 @@ p { margin: 0; }
   transition:
     opacity 1.05s cubic-bezier(.22,1,.36,1),
     transform 1.05s cubic-bezier(.22,1,.36,1);
-  will-change: opacity, transform;
+  /* No permanent will-change: the browser promotes the element only while
+     its transition runs. The old hint kept ~30 hidden blocks on the home
+     page as separate GPU layers until each was scrolled into view. */
 }
 .reveal.is-in { opacity: 1; transform: none; will-change: auto; }
 .reveal.delay-1 { transition-delay: .1s; }
@@ -666,7 +687,6 @@ p { margin: 0; }
   transition:
     opacity 1.05s cubic-bezier(.22,1,.36,1),
     transform 1.05s cubic-bezier(.22,1,.36,1);
-  will-change: opacity, transform;
 }
 .reveal-init.reveal-in {
   opacity: 1;
@@ -682,6 +702,34 @@ p { margin: 0; }
     transition: none;
     will-change: auto;
   }
+}
+
+/* --------------------------------------------------------------------------
+   OFF-SCREEN PAUSE — components/marketing/OffscreenPause.js marks page
+   sections that are scrolled out of view with [data-offscreen]. Their
+   looping decorations (rings, shimmer, pulses, glows) freeze in place
+   until the section comes back, so nothing animates where nobody can see
+   it. Transitions (scroll reveals) are unaffected.
+   -------------------------------------------------------------------------- */
+[data-offscreen],
+[data-offscreen]::before,
+[data-offscreen]::after,
+[data-offscreen] *,
+[data-offscreen] *::before,
+[data-offscreen] *::after {
+  animation-play-state: paused !important;
+}
+
+/* Same idea while the cookie dialog covers the page (set by CookieModal.js
+   after the intro has played): everything except the dialog holds still,
+   so its blurred backdrop is not re-rendered every frame. */
+html[data-cookie-open] body > :not(.cookie-backdrop),
+html[data-cookie-open] body > :not(.cookie-backdrop)::before,
+html[data-cookie-open] body > :not(.cookie-backdrop)::after,
+html[data-cookie-open] body > :not(.cookie-backdrop) *,
+html[data-cookie-open] body > :not(.cookie-backdrop) *::before,
+html[data-cookie-open] body > :not(.cookie-backdrop) *::after {
+  animation-play-state: paused !important;
 }
 
 /* --------------------------------------------------------------------------
@@ -1356,8 +1404,9 @@ p { margin: 0; }
 
     /* Visual shell */
     background: rgba(5, 5, 7, 0.98);
-    backdrop-filter: blur(20px) saturate(140%);
-    -webkit-backdrop-filter: blur(20px) saturate(140%);
+    /* backdrop-filter removed: at 98% opacity the blur was invisible, but a
+       20px full-width backdrop blur is one of the costliest things a phone
+       GPU can be asked to do while the panel animates open. */
     border-top: 1px solid rgba(212, 169, 94, 0.15);
     border-bottom: 1px solid rgba(212, 169, 94, 0.15);
 

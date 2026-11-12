@@ -10,6 +10,8 @@ import { useEffect, useRef } from "react";
  *
  * Performance:
  *   · Uses requestAnimationFrame + lerp for smooth motion
+ *   · The rAF loop sleeps once the glow has caught up with the cursor and
+ *     wakes on the next mousemove (it used to run every frame forever)
  *   · Only updates style.transform (GPU-accelerated)
  *   · Disabled on touch devices
  *   · Disabled for prefers-reduced-motion
@@ -36,6 +38,10 @@ export function MouseGlow() {
     let raf = 0;
     let active = false;
 
+    function place() {
+      el.style.transform = `translate3d(${currentX}px, ${currentY}px, 0) translate(-50%, -50%)`;
+    }
+
     function onMove(e) {
       targetX = e.clientX;
       targetY = e.clientY;
@@ -44,6 +50,8 @@ export function MouseGlow() {
         active = true;
         el.style.opacity = "1";
       }
+      // Wake the loop only when there is somewhere to go.
+      if (!raf) raf = requestAnimationFrame(frame);
     }
 
     function onLeave() {
@@ -52,18 +60,26 @@ export function MouseGlow() {
     }
 
     function frame() {
+      const dx = targetX - currentX;
+      const dy = targetY - currentY;
+
       // Lerp toward target — 0.08 gives a soft trailing motion
-      currentX += (targetX - currentX) * 0.08;
-      currentY += (targetY - currentY) * 0.08;
+      currentX += dx * 0.08;
+      currentY += dy * 0.08;
+      place();
 
-      el.style.transform = `translate3d(${currentX}px, ${currentY}px, 0) translate(-50%, -50%)`;
-
+      // Settled (under a tenth of a pixel away): stop instead of
+      // re-writing the same transform 60 times a second forever.
+      if (Math.abs(dx) < 0.1 && Math.abs(dy) < 0.1) {
+        raf = 0;
+        return;
+      }
       raf = requestAnimationFrame(frame);
     }
 
+    place();
     window.addEventListener("mousemove", onMove, { passive: true });
     document.addEventListener("mouseleave", onLeave);
-    raf = requestAnimationFrame(frame);
 
     return () => {
       window.removeEventListener("mousemove", onMove);

@@ -61,7 +61,7 @@ export function WelcomeTransition({ ready, user }) {
       <div className="welcome-inner">
         <div className="welcome-mark-wrap">
           <img
-            src="/images/brand/mark.png"
+            src="/images/brand/mark-192.webp"
             alt=""
             className="welcome-mark"
             width="64"

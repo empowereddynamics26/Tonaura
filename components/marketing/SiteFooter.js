@@ -32,10 +32,15 @@ export function SiteFooter() {
       {/* Tier 2 — Content */}
       <div className="footer-inner">
         <div className="footer-brand-col">
+          {/* Below the fold: lazy, so React no longer preloads it in <head>. */}
           <img
             className="footer-lockup"
-            src="/images/brand/lockup.png"
+            src="/images/brand/lockup.webp"
             alt="Tonaura — Solfeggio Tone Therapy"
+            width="441"
+            height="112"
+            loading="lazy"
+            decoding="async"
           />
           <p className="footer-tagline">
             A calm solfeggio mixer for practice, presets, and living Theme Packs.

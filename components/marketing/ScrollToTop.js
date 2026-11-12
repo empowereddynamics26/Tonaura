@@ -20,14 +20,22 @@ export function ScrollToTop() {
     if (typeof window === "undefined") return;
 
     let ticking = false;
+    let last = null;
+
+    // rAF-throttled; React state only changes when the 800px line is crossed.
+    function update() {
+      ticking = false;
+      const next = window.scrollY > 800;
+      if (next !== last) {
+        last = next;
+        setVisible(next);
+      }
+    }
 
     function onScroll() {
       if (!ticking) {
-        window.requestAnimationFrame(() => {
-          setVisible(window.scrollY > 800);
-          ticking = false;
-        });
         ticking = true;
+        window.requestAnimationFrame(update);
       }
     }
 

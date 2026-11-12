@@ -15,7 +15,7 @@ export function AuthShell({ children }) {
       <nav className="auth-nav">
         <Link href="/" className="auth-nav-brand" aria-label="Tonaura home">
           <img
-            src="/images/brand/lockup.png"
+            src="/images/brand/lockup.webp"
             width="160"
             height="52"
             alt="Tonaura"

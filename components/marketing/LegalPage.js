@@ -15,7 +15,7 @@ export function LegalPage({
       <section className="legal-hero">
         <img
           className="legal-hero-mark"
-          src="/images/brand/mark.png"
+          src="/images/brand/mark-192.webp"
           alt=""
           width="64"
           height="64"

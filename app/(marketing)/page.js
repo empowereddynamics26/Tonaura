@@ -177,10 +177,13 @@ export default function HomePage() {
           <div className="field-mark" aria-hidden="true">
             <div className="field-mark-inner">
               <img
-                src="/images/brand/mark.png"
+                src="/images/brand/mark.webp"
                 alt=""
                 className="field-mark-img"
+                width="420"
+                height="420"
                 loading="lazy"
+                decoding="async"
               />
             </div>
           </div>

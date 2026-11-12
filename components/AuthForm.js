@@ -200,7 +200,7 @@ export function AuthForm({ mode }) {
         <span className="auth-card-diamond" aria-hidden="true" />
         <img
           className="auth-card-mark"
-          src="/images/brand/mark.png"
+          src="/images/brand/mark-192.webp"
           alt=""
           width="64"
           height="64"

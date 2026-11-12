@@ -4,6 +4,7 @@ import { SiteFooter } from "@/components/marketing/SiteFooter";
 import { CookieModal } from "@/components/marketing/CookieModal";
 import { ScrollToTop } from "@/components/marketing/ScrollToTop";
 import { AmbientRipple } from "@/components/marketing/AmbientRipple";
+import { OffscreenPause } from "@/components/marketing/OffscreenPause";
 
 export default function MarketingLayout({ children }) {
   return (
@@ -16,6 +17,7 @@ export default function MarketingLayout({ children }) {
       <SiteFooter />
       <CookieModal />
       <ScrollToTop />
+      <OffscreenPause />
     </>
   );
 }

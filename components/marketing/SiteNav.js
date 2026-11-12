@@ -1,9 +1,29 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { createClient } from "@/lib/supabase/client";
+
+// The Supabase client (~75 KB gzipped) is loaded on demand, only when the
+// visitor might be signed in. Signed-out visitors (most traffic) never
+// download it on marketing pages and make no auth/profile requests.
+const loadSupabase = () =>
+  import("@/lib/supabase/client").then((m) => m.createClient());
+
+// @supabase/ssr keeps the session in `sb-<project>-auth-token` cookies
+// (chunked as `.0`, `.1`, … when large). Not httpOnly, so readable here.
+const AUTH_COOKIE_RE = /(?:^|;\s*)sb-[^=;]+-auth-token(?:\.\d+)?=/;
+
+function mightHaveSession() {
+  if (AUTH_COOKIE_RE.test(document.cookie)) return true;
+  // Implicit-flow links land with tokens in the hash; let the client
+  // (detectSessionInUrl) pick them up as before.
+  return /(?:access_token|refresh_token)=/.test(window.location.hash);
+}
+
+// Admin flag cached per tab so the nav does not query `profiles` on every
+// full page load. Only cosmetic — /admin is enforced by middleware.
+const ADMIN_FLAG_KEY = "tonaura_nav_admin";
 
 /**
  * SiteNav — the single navigation for every public page.
@@ -36,37 +56,55 @@ export function SiteNav({ extra }) {
   /* ---- Session + admin flag ---- */
   useEffect(() => {
     let alive = true;
+
+    // No auth cookie → definitely signed out. Skip the client entirely.
+    if (!mightHaveSession()) {
+      setUser(null);
+      setUserLoaded(true);
+      return;
+    }
+
     (async () => {
       try {
-        const supabase = createClient();
+        const supabase = await loadSupabase();
+        // getSession() reads the cookie locally (it only hits the network to
+        // refresh an expired token). The nav just needs the email/initial,
+        // so the extra /auth/v1/user round trip from getUser() is skipped;
+        // protected pages still verify the user server-side.
         const { data: { session } } = await supabase.auth.getSession();
-
-        if (!session) {
-          if (alive) {
-            setUser(null);
-            setUserLoaded(true);
-          }
-          return;
-        }
-
-        const { data } = await supabase.auth.getUser();
+        const sessionUser = session?.user || null;
         if (!alive) return;
 
-        if (!data.user) {
-          setUser(null);
-          setUserLoaded(true);
+        setUser(sessionUser);
+        setUserLoaded(true);
+        if (!sessionUser) return;
+
+        let cached = null;
+        try {
+          cached = JSON.parse(sessionStorage.getItem(ADMIN_FLAG_KEY) || "null");
+        } catch {
+          // ignore unreadable storage
+        }
+        if (cached && cached.id === sessionUser.id) {
+          setIsAdmin(!!cached.admin);
           return;
         }
-
-        setUser(data.user);
-        setUserLoaded(true);
 
         const { data: profile } = await supabase
           .from("profiles")
           .select("role")
-          .eq("id", data.user.id)
+          .eq("id", sessionUser.id)
           .maybeSingle();
-        if (alive) setIsAdmin(profile?.role === "admin");
+        const admin = profile?.role === "admin";
+        try {
+          sessionStorage.setItem(
+            ADMIN_FLAG_KEY,
+            JSON.stringify({ id: sessionUser.id, admin })
+          );
+        } catch {
+          // ignore storage errors (private mode etc.)
+        }
+        if (alive) setIsAdmin(admin);
       } catch {
         if (alive) {
           setUser(null);
@@ -84,15 +122,23 @@ export function SiteNav({ extra }) {
   }, [pathname]);
 
   /* ---- Solid nav on scroll ---- */
+  // rAF-throttled, and React state only changes when the threshold is
+  // actually crossed (not on every scroll frame).
+  const scrolledRef = useRef(false);
   useEffect(() => {
     let ticking = false;
+    function update() {
+      ticking = false;
+      const next = window.scrollY > 40;
+      if (next !== scrolledRef.current) {
+        scrolledRef.current = next;
+        setScrolled(next);
+      }
+    }
     function onScroll() {
       if (!ticking) {
-        window.requestAnimationFrame(() => {
-          setScrolled(window.scrollY > 40);
-          ticking = false;
-        });
         ticking = true;
+        window.requestAnimationFrame(update);
       }
     }
     onScroll();
@@ -131,9 +177,10 @@ export function SiteNav({ extra }) {
   // Clear the welcome flag so the transition greets the next sign-in.
   if (typeof window !== "undefined") {
     sessionStorage.removeItem("tonaura_welcomed");
+    sessionStorage.removeItem(ADMIN_FLAG_KEY);
   }
   try {
-    const supabase = createClient();
+    const supabase = await loadSupabase();
     await supabase.auth.signOut();
   } catch {
     // ignore — we still navigate
@@ -162,7 +209,7 @@ export function SiteNav({ extra }) {
         <div className="site-nav-inner">
           <Link className="site-brand" href="/" aria-label="Tonaura home">
             <img
-              src="/images/brand/lockup.png"
+              src="/images/brand/lockup.webp"
               width="180"
               height="58"
               alt="Tonaura"

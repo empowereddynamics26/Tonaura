@@ -1,5 +1,4 @@
-"use client";
-
+// Server component: no hooks or handlers, so it ships no client JS.
 export function BrandMark({ size = 300, className = "" }) {
   return (
     <div
@@ -65,8 +64,12 @@ export function BrandMark({ size = 300, className = "" }) {
 />
 </svg>
 
+      {/* Near-lossless WebP (77 KB, was a 136 KB PNG); 1x screens get the
+          192px version (25 KB). Above the fold, so it stays eager. */}
       <img
-        src="/images/brand/mark.png"
+        src="/images/brand/mark.webp"
+        srcSet="/images/brand/mark-192.webp 192w, /images/brand/mark.webp 420w"
+        sizes={`${size}px`}
         alt=""
         className="brand-mark-img"
         width={size}

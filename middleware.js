@@ -10,11 +10,30 @@ function adminEmailSet() {
   );
 }
 
+// Supabase session cookie: `sb-<project>-auth-token`, chunked as `.0`, `.1`…
+// (the PKCE `-auth-token-code-verifier` cookie is not a session).
+const AUTH_COOKIE_RE = /^sb-.+-auth-token(?:\.\d+)?$/;
+
 export async function middleware(request) {
   let supabaseResponse = NextResponse.next({ request });
   const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
   const key = process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY;
   if (!url || !key) return supabaseResponse;
+
+  // Fast path: no session cookie means nobody is signed in, so there is
+  // nothing to refresh or verify. Skip building a Supabase client and the
+  // auth check entirely (same outcome as getUser() returning no user).
+  const hasSessionCookie = request.cookies
+    .getAll()
+    .some(({ name }) => AUTH_COOKIE_RE.test(name));
+  if (!hasSessionCookie) {
+    if (request.nextUrl.pathname.startsWith("/admin")) {
+      const login = new URL("/login", request.url);
+      login.searchParams.set("next", "/admin");
+      return NextResponse.redirect(login);
+    }
+    return supabaseResponse;
+  }
 
   const supabase = createServerClient(url, key, {
     cookies: {
@@ -80,6 +99,9 @@ export async function middleware(request) {
   return supabaseResponse;
 }
 
+// Only routes that need the session. Marketing pages, static assets, images
+// and _next files never run middleware (keep it that way: every match costs
+// an edge invocation, and a network round trip when a session exists).
 export const config = {
   matcher: [
     "/account/:path*",

@@ -23,6 +23,23 @@ export function CookieModal() {
     setOpen(true);
   }, []);
 
+  // While the dialog is up, its full-screen backdrop blur has to be redone
+  // every frame that anything underneath moves. Once the hero intro has
+  // played (~3.5s), mark the page so marketing.css freezes the looping
+  // decorations behind the overlay; they resume the moment it closes.
+  useEffect(() => {
+    if (!open) return;
+    const root = document.documentElement;
+    const timer = setTimeout(
+      () => root.setAttribute("data-cookie-open", ""),
+      3500
+    );
+    return () => {
+      clearTimeout(timer);
+      root.removeAttribute("data-cookie-open");
+    };
+  }, [open]);
+
   useEffect(() => {
     function onOpen() {
       try {
