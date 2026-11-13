@@ -167,7 +167,7 @@ export function ToneStory() {
     const canvas = canvasRef.current;
     const g = canvas.getContext("2d");
     const small = window.matchMedia("(max-width: 720px)").matches;
-    const COUNT = small ? 2400 : 4200;
+    const COUNT = small ? 3600 : 7000;
 
     const figures = [
       scatter(COUNT, 7),
@@ -177,6 +177,9 @@ export function ToneStory() {
 
     let size = 0;
     let dpr = 1;
+    const haloSprite = document.createElement("canvas");
+    haloSprite.width = haloSprite.height = 32;
+    let haloKey = "";
     function resize() {
       dpr = Math.min(2, window.devicePixelRatio || 1);
       const rect = canvas.getBoundingClientRect();
@@ -281,9 +284,29 @@ export function ToneStory() {
       const lift = Math.sin(Math.PI * e); // grains jump off the plate mid-change
       const cosT = Math.cos(turn);
       const sinT = Math.sin(turn);
-      const grain = Math.max(1, dpr * (small ? 1.1 : 1.25));
+      const grain = Math.max(1, dpr * (small ? 0.95 : 1.05));
       const ax = a[0], ay = a[1], bx = b[0], by = b[1];
       const bright = `rgba(${Math.min(255, rgb[0] + 50)}, ${Math.min(255, rgb[1] + 45)}, ${Math.min(255, rgb[2] + 40)}, 0.75)`;
+      // soft halo under the sand so the figure glows
+      const halo = grain * 9;
+      const spriteKey = rgb.join(",");
+      if (spriteKey !== haloKey) {
+        haloKey = spriteKey;
+        const sg = haloSprite.getContext("2d");
+        sg.clearRect(0, 0, 32, 32);
+        const grd = sg.createRadialGradient(16, 16, 0, 16, 16, 16);
+        grd.addColorStop(0, `rgba(${spriteKey}, 0.16)`);
+        grd.addColorStop(1, `rgba(${spriteKey}, 0)`);
+        sg.fillStyle = grd;
+        sg.fillRect(0, 0, 32, 32);
+      }
+      for (let p = 0; p < COUNT; p += 6) {
+        const px = ax[p] + (bx[p] - ax[p]) * e;
+        const py = ay[p] + (by[p] - ay[p]) * e;
+        const rx = px * cosT - py * sinT;
+        const ry = px * sinT + py * cosT;
+        g.drawImage(haloSprite, cx + rx * R - halo / 2, cy + ry * R - halo / 2, halo, halo);
+      }
       g.fillStyle = `rgba(${rgb[0]}, ${rgb[1]}, ${rgb[2]}, 0.55)`;
       for (let p = 0; p < COUNT; p++) {
         let px = ax[p] + (bx[p] - ax[p]) * e;

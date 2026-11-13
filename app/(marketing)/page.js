@@ -7,6 +7,9 @@ import { ToneStory } from "@/components/marketing/story/ToneStory";
 import { ToneMixer } from "@/components/marketing/story/ToneMixer";
 import { ThemeStory } from "@/components/marketing/story/ThemeStory";
 import { AppFan } from "@/components/marketing/story/AppFan";
+import { HowSteps } from "@/components/marketing/story/HowSteps";
+import { QuoteReveal } from "@/components/marketing/story/QuoteReveal";
+import { CardTilt } from "@/components/marketing/story/CardTilt";
 import { StoryChrome } from "@/components/marketing/story/StoryChrome";
 import { HeroListenButton, HeroTilt } from "@/components/marketing/story/HeroBits";
 import "./story.css";
@@ -85,8 +88,10 @@ export default function HomePage() {
         </div>
       </header>
 
+      <HowSteps />
       <ToneStory />
       <ToneMixer />
+      <QuoteReveal />
       <ThemeStory />
       <AppFan />
       <TrustStrip />
@@ -137,7 +142,7 @@ export default function HomePage() {
     </h2>
   </div>
 
-  <div className="pricing-grid reveal">
+  <CardTilt className="pricing-grid reveal">
     {/* Free */}
     <div className="price-card price-card--free">
       <header className="price-card-head">
@@ -251,7 +256,7 @@ export default function HomePage() {
         <span className="price-card-cta-arrow" aria-hidden="true">→</span>
       </Link>
     </div>
-  </div>
+  </CardTilt>
 </section>
 
       {/* Get started */}

@@ -46,7 +46,7 @@ html.lenis, html.lenis body { height: auto; }
    ------------------------------------------------------------------------ */
 .tstory {
   position: relative;
-  height: 1500vh;
+  height: 1200vh;
   background: var(--bg);
 }
 .tstory-stage {
@@ -110,7 +110,7 @@ html.lenis, html.lenis body { height: auto; }
   color: rgb(var(--tone));
   margin: 0 0 18px;
 }
-.tstory-title { font-size: clamp(40px, 4.6vw, 72px); margin: 0 0 22px; }
+.tstory-title { font-size: clamp(36px, 4vw, 64px); margin: 0 0 22px; }
 .tstory-note {
   color: var(--text-2);
   font-size: 15px;
@@ -509,7 +509,7 @@ html.lenis, html.lenis body { height: auto; }
   padding-left: max(24px, 7vw);
   max-width: 520px;
 }
-.tpacks-title { font-size: clamp(42px, 5vw, 76px); margin: 0 0 40px; }
+.tpacks-title { font-size: clamp(38px, 4.4vw, 66px); margin: 0 0 40px; }
 .tpacks-names {
   position: relative;
   height: 128px;
@@ -738,7 +738,7 @@ html.lenis, html.lenis body { height: auto; }
 }
 
 @media (max-width: 720px) {
-  .tstory { height: 1300vh; }
+  .tstory { height: 1100vh; }
   .tstory-plate {
     left: 50%;
     top: 61%;
@@ -798,3 +798,188 @@ html.lenis, html.lenis body { height: auto; }
 
 .tstory-outro .btn { width: auto; margin-top: 0; padding: 16px 40px; }
 @media (max-width: 720px) { .tstory-outro .btn { width: 100%; } }
+
+/* ------------------------------------------------------------------------
+   TITLES IN CAPITALS
+   ------------------------------------------------------------------------ */
+.hero-headline,
+.pricing-headline,
+.early-headline,
+.honest-heading,
+.tstory-title,
+.tstory-word,
+.mixer-title,
+.tpacks-title,
+.tpacks-name-word,
+.appfan-title,
+.appfan-phone figcaption strong,
+.how-title,
+.how-step h3,
+.quote-text p {
+  text-transform: uppercase;
+  letter-spacing: 0.012em;
+}
+.hero-headline { font-size: clamp(34px, 4.4vw, 64px); }
+.hero-sub {
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  font-size: 12px;
+  line-height: 1.9;
+}
+.pricing-headline,
+.early-headline { font-size: clamp(32px, 4vw, 56px); }
+.honest-heading { font-size: clamp(24px, 2.3vw, 34px); }
+
+/* ------------------------------------------------------------------------
+   HOW IT WORKS
+   ------------------------------------------------------------------------ */
+.how {
+  position: relative;
+  padding: clamp(90px, 14vh, 150px) max(24px, 7vw) clamp(80px, 12vh, 130px);
+  background: linear-gradient(180deg, var(--bg), #07070b 50%, var(--bg));
+}
+.how-head { text-align: center; margin-bottom: 64px; }
+.how-title { font-size: clamp(36px, 4.4vw, 64px); margin: 0; }
+.how-rail {
+  position: relative;
+  max-width: 1080px;
+  height: 1px;
+  margin: 0 auto;
+  background: rgba(255, 255, 255, 0.08);
+}
+.how-rail span {
+  position: absolute;
+  inset: 0;
+  transform-origin: left;
+  transform: scaleX(0);
+  background: linear-gradient(90deg, var(--gold), var(--bronze), var(--teal));
+  box-shadow: 0 0 14px rgba(212, 169, 94, 0.6);
+}
+.how-steps {
+  list-style: none;
+  max-width: 1080px;
+  margin: 0 auto;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 40px;
+}
+.how-step {
+  --on: 0;
+  position: relative;
+  padding-top: 44px;
+  opacity: calc(0.25 + var(--on) * 0.75);
+  transform: translateY(calc((1 - var(--on)) * 24px));
+}
+.how-dot {
+  position: absolute;
+  top: -6px;
+  left: 0;
+  width: 11px;
+  height: 11px;
+  border-radius: 50%;
+  background: #1a1a20;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+.how-dot::after {
+  content: "";
+  position: absolute;
+  inset: -1px;
+  border-radius: 50%;
+  background: var(--gold-bright);
+  box-shadow: 0 0 16px var(--gold);
+  opacity: var(--on);
+  transform: scale(calc(0.4 + var(--on) * 0.6));
+}
+.how-num {
+  display: block;
+  font-family: var(--font-display);
+  font-size: clamp(64px, 7vw, 104px);
+  line-height: 0.9;
+  color: transparent;
+  -webkit-text-stroke: 1px rgba(212, 169, 94, calc(0.25 + var(--on) * 0.6));
+  margin-bottom: 18px;
+}
+.how-step h3 {
+  font-family: var(--font-display);
+  font-weight: 400;
+  font-size: 28px;
+  margin: 0 0 10px;
+  color: var(--text, #f3efe6);
+}
+.how-step p { margin: 0; color: var(--text-2); font-size: 15px; line-height: 1.6; max-width: 300px; }
+
+/* ------------------------------------------------------------------------
+   QUOTE
+   ------------------------------------------------------------------------ */
+.quote { position: relative; height: 220vh; background: var(--bg); }
+.quote-stage {
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  height: 100svh;
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+}
+.quote-ring {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: min(90vh, 90vw);
+  aspect-ratio: 1;
+  border-radius: 50%;
+  border: 1px solid rgba(212, 169, 94, 0.35);
+  box-shadow: 0 0 80px rgba(212, 169, 94, 0.12), inset 0 0 80px rgba(79, 179, 169, 0.08);
+  transform: translate(-50%, -50%) scale(0.35);
+  will-change: transform, opacity;
+}
+.quote-text { position: relative; margin: 0; padding: 0 24px; text-align: center; max-width: 1100px; }
+.quote-text p {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: clamp(40px, 6.4vw, 104px);
+  line-height: 1.02;
+}
+.quote-word {
+  --on: 0;
+  color: rgba(243, 239, 230, calc(0.12 + var(--on) * 0.88));
+  text-shadow: 0 0 calc(var(--on) * 40px) rgba(212, 169, 94, calc(var(--on) * 0.35));
+}
+.quote-by {
+  margin-top: 28px;
+  font-size: 11px;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: var(--teal);
+  opacity: 0;
+}
+
+/* ------------------------------------------------------------------------
+   PRICING CARDS FOLLOW THE POINTER
+   ------------------------------------------------------------------------ */
+.price-card { --mx: 50%; --my: 50%; transform-style: preserve-3d; }
+.price-card.is-tilting { transition: transform 0.12s linear, border-color 0.4s, box-shadow 0.4s; }
+.price-card::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  border-radius: inherit;
+  background: radial-gradient(320px circle at var(--mx) var(--my), rgba(212, 169, 94, 0.16), transparent 60%);
+  opacity: 0;
+  transition: opacity 0.4s;
+  pointer-events: none;
+}
+.price-card.is-tilting::after { opacity: 1; }
+
+@media (max-width: 720px) {
+  .how-steps { grid-template-columns: 1fr; gap: 28px; }
+  .how-rail { display: none; }
+  .how-step { padding-top: 0; padding-left: 28px; }
+  .how-dot { top: 8px; }
+  .how-num { font-size: 56px; margin-bottom: 8px; }
+  .how-head { margin-bottom: 40px; }
+  .quote { height: 180vh; }
+  .hero-sub { font-size: 11px; letter-spacing: 0.1em; }
+}
