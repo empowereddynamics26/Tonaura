@@ -1,18 +1,15 @@
 import "./homepage.css";
 import Link from "next/link";
-import { BrandMark } from "@/components/marketing/BrandMark";
-import { HeroAmbient } from "@/components/marketing/HeroAmbient";
 import { TrustStrip } from "@/components/marketing/TrustStrip";
-import { ToneStory } from "@/components/marketing/story/ToneStory";
 import { ToneMixer } from "@/components/marketing/story/ToneMixer";
-import { ThemeStory } from "@/components/marketing/story/ThemeStory";
+import { Descent } from "@/components/marketing/story/Descent";
 import { AppFan } from "@/components/marketing/story/AppFan";
 import { HowSteps } from "@/components/marketing/story/HowSteps";
 import { QuoteReveal } from "@/components/marketing/story/QuoteReveal";
 import { CardTilt } from "@/components/marketing/story/CardTilt";
 import { StoryChrome } from "@/components/marketing/story/StoryChrome";
-import { HeroListenButton, HeroTilt } from "@/components/marketing/story/HeroBits";
 import "./story.css";
+import "./descent.css";
 
 export const metadata = {
   title: "Tonaura — Solfeggio Tone Therapy",
@@ -31,69 +28,11 @@ export default function HomePage() {
   return (
     <>
       <StoryChrome />
-      {/* Hero */}
-      <header className="hero hero--solo" id="top">
-        <HeroAmbient />
-        <div className="hero-atmosphere" aria-hidden="true" />
-        <div className="hero-content">
-          <HeroTilt>
-          <div className="hero-mark-wrap">
-  <BrandMark size={190} />
-
-  {/* Rings emit from the mark's exact center — no hardcoded offsets */}
-      <svg
-        className="hero-waves-svg"
-        viewBox="-1000 -1000 2000 2000"
-        preserveAspectRatio="xMidYMid meet"
-        xmlns="http://www.w3.org/2000/svg"
-        aria-hidden="true"
-      >
-        <defs>
-          <linearGradient id="heroWaveGradient" x1="0" y1="0" x2="1" y2="1">
-            <stop offset="0%" stopColor="rgba(212, 169, 94, 0.9)" />
-            <stop offset="50%" stopColor="rgba(184, 134, 90, 0.75)" />
-            <stop offset="100%" stopColor="rgba(79, 179, 169, 0.7)" />
-          </linearGradient>
-        </defs>
-        {[0, 1].map((i) => (
-          <circle
-            key={i}
-            cx="0"
-            cy="0"
-           r="32"      
-            fill="none"
-            stroke="url(#heroWaveGradient)"
-            className={`hero-wave hero-wave--${i}`}
-          />
-        ))}
-      </svg>
-    </div>
-          </HeroTilt>
-          <p className="hero-eyebrow">Solfeggio Tone Therapy</p>
-          <h1 className="hero-headline">
-            Nine solfeggio tones.
-            <br />
-            One place to be still.
-          </h1>
-          <p className="hero-sub">
-            A calm solfeggio mixer with Practice, Presets, and living Theme Packs offline by
-            default, honest about what it is.
-          </p>
-          <div className="hero-cta">
-            <Link className="btn btn--primary btn--large" href="/signup">
-              Create account
-            </Link>
-            <HeroListenButton />
-          </div>
-        </div>
-      </header>
-
+      <Descent />
       <HowSteps />
-      <ToneStory />
       <ToneMixer />
-      <QuoteReveal />
-      <ThemeStory />
       <AppFan />
+      <QuoteReveal />
       <TrustStrip />
 
       {/* Honest grid */}
