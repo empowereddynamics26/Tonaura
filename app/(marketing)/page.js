@@ -1,9 +1,15 @@
 import "./homepage.css";
 import Link from "next/link";
-import { AmbientPhone } from "@/components/marketing/AmbientPhone";
 import { BrandMark } from "@/components/marketing/BrandMark";
 import { HeroAmbient } from "@/components/marketing/HeroAmbient";
 import { TrustStrip } from "@/components/marketing/TrustStrip";
+import { ToneStory } from "@/components/marketing/story/ToneStory";
+import { ToneMixer } from "@/components/marketing/story/ToneMixer";
+import { ThemeStory } from "@/components/marketing/story/ThemeStory";
+import { AppFan } from "@/components/marketing/story/AppFan";
+import { StoryChrome } from "@/components/marketing/story/StoryChrome";
+import { HeroListenButton, HeroTilt } from "@/components/marketing/story/HeroBits";
+import "./story.css";
 
 export const metadata = {
   title: "Tonaura — Solfeggio Tone Therapy",
@@ -13,98 +19,21 @@ export const metadata = {
 };
 
 /**
- * Homepage — migrated from public/index.html.
- *
- * Renders through app/(marketing)/layout.js which provides
- * SiteNav + SiteFooter + CookieModal + PageReveal.
+ * Homepage — hero, then the pinned tone story, a playable mixer, Theme Packs,
+ * the app screens, honesty, pricing and sign-up.
+ * Renders through app/(marketing)/layout.js (nav, footer, cookies, reveal).
  */
-
-const SESSION_STEPS = [
-  {
-    num: "01",
-    title: "Choose a tone",
-    body: "Pick from the classic solfeggio set or blend several into one field.",
-  },
-  {
-    num: "02",
-    title: "Shape the mix",
-    body: "Balance levels, add a Theme Pack if you want, or load a saved preset.",
-  },
-  {
-    num: "03",
-    title: "Stay with it",
-    body: "Mark the day in Practice when you showed up. That is the whole streak.",
-  },
-];
-
-const FREQUENCIES = [
-  { hz: 174, name: "ground" },
-  { hz: 285, name: "soften" },
-  { hz: 396, name: "release" },
-  { hz: 417, name: "shift" },
-  { hz: 528, name: "return" },
-  { hz: 639, name: "connect" },
-  { hz: 741, name: "clear" },
-  { hz: 852, name: "open" },
-  { hz: 963, name: "still" },
-];
-
-/**
- * iOS status bar — time, signal, wifi, battery.
- * Rendered once per phone screen.
- */
-function PhoneStatusBar() {
-  return (
-    <div className="phone-status-bar" aria-hidden="true">
-      <span className="phone-status-time">9:41</span>
-      <span className="phone-status-icons">
-        {/* Signal bars */}
-        <svg width="19" height="11" viewBox="0 0 19 11" fill="currentColor">
-          <rect x="0" y="8" width="3" height="4" rx="0.6" />
-          <rect x="4.5" y="5" width="3" height="6" rx="0.6" />
-          <rect x="9" y="2.5" width="3" height="8.5" rx="0.6" />
-          <rect x="13.5" y="0" width="3" height="11" rx="0.6" />
-        </svg>
-        {/* Wi-Fi */}
-        <svg width="16" height="11" viewBox="0 0 16 11" fill="currentColor">
-          <path d="M8 10.5a1.3 1.3 0 1 0 0-2.6 1.3 1.3 0 0 0 0 2.6Zm0-4.2c1 0 1.9.4 2.6 1l1.1-1.1A6.4 6.4 0 0 0 8 4.5a6.4 6.4 0 0 0-3.7 1.7l1.1 1.1c.7-.6 1.6-1 2.6-1Zm0-3.2c1.7 0 3.3.7 4.5 1.8L13.6 4A9 9 0 0 0 8 1.6 9 9 0 0 0 2.4 4l1.1 1.1A7 7 0 0 1 8 3.1Z" />
-        </svg>
-        {/* Battery */}
-        <svg width="25" height="12" viewBox="0 0 25 12" fill="none">
-          <rect x="0.5" y="0.5" width="21" height="11" rx="3" stroke="currentColor" opacity="0.4" />
-          <rect x="2" y="2" width="18" height="8" rx="2" fill="currentColor" />
-          <path d="M23.5 4v4a1.5 1.5 0 0 0 0-4Z" fill="currentColor" opacity="0.4" />
-        </svg>
-      </span>
-    </div>
-  );
-}
-
-
-
-/**
- * Physical side buttons — Action, volume, power.
- * Live inside .phone-frame, outside .phone-screen.
- */
-function PhoneSideButtons() {
-  return (
-    <>
-      <span className="phone-btn-action" aria-hidden="true" />
-      <span className="phone-btn-vol-up" aria-hidden="true" />
-      <span className="phone-btn-vol-down" aria-hidden="true" />
-      <span className="phone-btn-power" aria-hidden="true" />
-    </>
-  );
-}
 
 export default function HomePage() {
   return (
     <>
+      <StoryChrome />
       {/* Hero */}
       <header className="hero hero--solo" id="top">
         <HeroAmbient />
         <div className="hero-atmosphere" aria-hidden="true" />
         <div className="hero-content">
+          <HeroTilt>
           <div className="hero-mark-wrap">
   <BrandMark size={190} />
 
@@ -136,6 +65,7 @@ export default function HomePage() {
         ))}
       </svg>
     </div>
+          </HeroTilt>
           <p className="hero-eyebrow">Solfeggio Tone Therapy</p>
           <h1 className="hero-headline">
             Nine solfeggio tones.
@@ -150,264 +80,16 @@ export default function HomePage() {
             <Link className="btn btn--primary btn--large" href="/signup">
               Create account
             </Link>
-            <a className="btn btn--ghost btn--large" href="#tones">
-              <span className="btn-dot" />
-              Hear the tones
-            </a>
+            <HeroListenButton />
           </div>
         </div>
       </header>
 
-      {/* Field story */}
-      <section className="field" id="field">
-        <div className="field-grid">
-          <div className="field-copy reveal">
-            <p className="eyebrow">The field</p>
-            <h2 className="field-headline">
-              Sound that holds a room,
-              <br />
-              not a feed.
-            </h2>
-            <p className="field-lede">
-              Layer pure tones, keep a quiet practice streak, and let Theme Packs carry the
-              night without noise, streaks of clutter, or a dashboard of distractions.
-            </p>
-          </div>
-
-          <div className="field-mark" aria-hidden="true">
-            <div className="field-mark-inner">
-              <img
-                src="/images/brand/mark.webp"
-                alt=""
-                className="field-mark-img"
-                width="420"
-                height="420"
-                loading="lazy"
-                decoding="async"
-              />
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Session — the ritual */}
-      <section className="session" id="how">
-        <div className="session-head reveal">
-          <p className="eyebrow">A session</p>
-          <h2 className="session-headline">
-            Three moves.
-            <br />
-            Then you listen.
-          </h2>
-        </div>
-        <ol className="ritual">
-          {SESSION_STEPS.map((step, i) => (
-            <li
-              key={step.num}
-              className={`ritual-step reveal${i > 0 ? ` delay-${i}` : ""}`}
-            >
-              <span className="ritual-num" aria-hidden="true">
-                {step.num}
-              </span>
-              <div className="ritual-body">
-                <h3>{step.title}</h3>
-                <p>{step.body}</p>
-              </div>
-            </li>
-          ))}
-        </ol>
-      </section>
-
-      {/* Frequency cards */}
-      <section className="tones" id="tones">
-        <div className="tones-inner">
-          <div className="tones-head reveal">
-            <p className="eyebrow">The nine</p>
-            <h2>Frequencies you will meet.</h2>
-            <p className="lede">Named plainly. Used as sound not sold as medicine.</p>
-          </div>
-          <ul className="tone-cards" aria-label="Solfeggio frequencies">
-            {FREQUENCIES.map((tone, i) => (
-              <li
-                key={tone.hz}
-                className={`tone-card reveal delay-${Math.min(i % 6, 5) + 1}`}
-                tabIndex={0}
-              >
-                <div className="tone-card-inner">
-                  <span className="tone-card-hz">{tone.hz}</span>
-                  <span className="tone-card-unit">Hz</span>
-                  <span className="tone-card-name">{tone.name}</span>
-                </div>
-              </li>
-            ))}
-          </ul>
-          <div className="tones-cta reveal">
-            <a href="/signup" className="tones-cta-link">
-              Hear the tones
-              <span aria-hidden="true">→</span>
-            </a>
-          </div>
-        </div>
-      </section>
-
-      {/* Trust strip */}
+      <ToneStory />
+      <ToneMixer />
+      <ThemeStory />
+      <AppFan />
       <TrustStrip />
-
-      {/* What's inside */}
-      <section className="inside-wrap" id="inside">
-        <div className="story-inner reveal">
-          <p className="eyebrow">What&rsquo;s inside</p>
-          <h2>
-            Built to be used,
-            <br />
-            not browsed.
-          </h2>
-          <p className="lede">
-            Four views of the app mixer, practice, presets, and living Theme Packs.
-          </p>
-        </div>
-        <div className="showcase-pad">
-          <div className="showcase-shelf">
-            <div className="showcase-shelf-glow" aria-hidden="true" />
-            <div className="showcase-3d">
-              {/* Phone 1 — Mixer */}
-              <article className="phone-3d phone-3d--1 reveal">
-                <div className="phone-3d-inner">
-                  <div className="phone-frame">
-                    <PhoneSideButtons />
-                    <div className="phone-screen">
-                      <PhoneStatusBar />
-                     
-                      <img
-                        src="/images/app/mixer.webp?v=6"
-                        width="720"
-                        height="1280"
-                        alt="Tonaura mixer"
-                        loading="lazy"
-                      />
-                    </div>
-                  </div>
-                </div>
-                <div className="phone-3d-reflection" aria-hidden="true">
-                  <img
-                    src="/images/app/mixer.webp?v=6"
-                    alt=""
-                    loading="lazy"
-                  />
-                </div>
-                <div className="phone-3d-caption">
-                  <h3>The mixer</h3>
-                  <p>Ten pure tones in one breathing view.</p>
-                </div>
-              </article>
-
-              {/* Phone 2 — Practice */}
-              <article className="phone-3d phone-3d--2 reveal delay-1">
-                <div className="phone-3d-inner">
-                  <div className="phone-frame">
-                    <PhoneSideButtons />
-                    <div className="phone-screen">
-                      <PhoneStatusBar />
-                    
-                      <img
-                        src="/images/app/practice.webp?v=6"
-                        width="720"
-                        height="1280"
-                        alt="Tonaura practice streak"
-                        loading="lazy"
-                      />
-                    </div>
-                  </div>
-                </div>
-                <div className="phone-3d-reflection" aria-hidden="true">
-                  <img
-                    src="/images/app/practice.webp?v=6"
-                    alt=""
-                    loading="lazy"
-                  />
-                </div>
-                <div className="phone-3d-caption">
-                  <h3>Practice</h3>
-                  <p>A streak for showing up.</p>
-                </div>
-              </article>
-
-              {/* Phone 3 — Presets */}
-              <article className="phone-3d phone-3d--3 reveal delay-2">
-                <div className="phone-3d-inner">
-                  <div className="phone-frame">
-                    <PhoneSideButtons />
-                    <div className="phone-screen">
-                      <PhoneStatusBar />
-                    
-                      <img
-                        src="/images/app/presets.webp?v=6"
-                        width="720"
-                        height="1280"
-                        alt="Tonaura presets"
-                        loading="lazy"
-                      />
-                    </div>
-                  </div>
-                </div>
-                <div className="phone-3d-reflection" aria-hidden="true">
-                  <img
-                    src="/images/app/presets.webp?v=6"
-                    alt=""
-                    loading="lazy"
-                  />
-                </div>
-                <div className="phone-3d-caption">
-                  <h3>Presets</h3>
-                  <p>Deep sleep, focus, morning reset.</p>
-                </div>
-              </article>
-
-              {/* Phone 4 — Theme Packs (AmbientPhone) */}
-              <article className="phone-3d phone-3d--4 reveal delay-3">
-                <div className="phone-3d-inner">
-                  <div className="phone-frame">
-                    <PhoneSideButtons />
-                    <div className="phone-screen">
-                      <PhoneStatusBar />
-                    
-                      <AmbientPhone />
-                    </div>
-                  </div>
-                </div>
-                <div className="phone-3d-reflection" aria-hidden="true">
-                  <img
-                    src="/images/app/ambients/winter.webp?v=6"
-                    alt=""
-                    loading="lazy"
-                  />
-                </div>
-                <div className="phone-3d-caption">
-                  <h3>Theme Packs</h3>
-                  <p>
-                    Winter free Autumn, Summer, Rain, and Night sky with Premium.
-                  </p>
-                </div>
-              </article>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Interlude — a breath */}
-      <section className="interlude" aria-label="Interlude">
-        <div className="interlude-rings" aria-hidden="true">
-          <span className="interlude-ring interlude-ring--1" />
-          <span className="interlude-ring interlude-ring--2" />
-          <span className="interlude-ring interlude-ring--3" />
-        </div>
-        <div className="interlude-inner reveal">
-          <p className="interlude-line">
-            Sound that asks nothing of&nbsp;you.
-          </p>
-          <p className="interlude-attribution"> A Listener, London</p>
-        </div>
-      </section>
 
       {/* Honest grid */}
       <section className="honest" id="honest">
