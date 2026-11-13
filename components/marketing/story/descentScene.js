@@ -3,20 +3,15 @@
 // World: the camera travels along +z.
 //   · four open rings (the Tonaura mark) spaced in depth, so from the start
 //     they read as the logo and then fly past like a tunnel
-//   · nine sand plates, one per tone, each a Chladni figure at its own depth
+//   · nine forms, one per tone (see toneForms.js), each at its own depth
 //   · dust floating at every depth for parallax
 // Everything is static in the buffers; the vertex shader moves it from
 // uniforms (camera, time), so a frame is one draw call.
 
 import { NINE } from "@/lib/tones";
+import { FORMS } from "./toneForms";
 
 const TAU = Math.PI * 2;
-
-// (n, m, sign) per tone — figures get busier as the pitch rises
-const MODES = [
-  [1, 2, -1], [1, 3, 1], [2, 3, -1], [1, 4, -1], [2, 5, 1],
-  [3, 4, -1], [2, 6, 1], [3, 5, -1], [4, 7, -1],
-];
 
 function rng(seed) {
   let s = seed >>> 0;
@@ -27,35 +22,6 @@ function rng(seed) {
     t ^= t + Math.imul(t ^ (t >>> 7), t | 61);
     return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
   };
-}
-
-// Points on the nodal lines of a square-plate mode, clipped to a disc.
-function chladniCells(n, m, sign) {
-  const G = 300;
-  const f = new Float32Array(G * G);
-  for (let j = 0; j < G; j++) {
-    const v = j / (G - 1);
-    for (let i = 0; i < G; i++) {
-      const u = i / (G - 1);
-      f[j * G + i] =
-        Math.cos(n * Math.PI * u) * Math.cos(m * Math.PI * v) +
-        sign * Math.cos(m * Math.PI * u) * Math.cos(n * Math.PI * v);
-    }
-  }
-  const h = 2 / (G - 1);
-  const cells = [];
-  for (let j = 1; j < G - 1; j++) {
-    for (let i = 1; i < G - 1; i++) {
-      const x = -1 + i * h;
-      const y = -1 + j * h;
-      if (x * x + y * y > 0.92) continue;
-      const k = j * G + i;
-      const gx = (f[k + 1] - f[k - 1]) / (2 * h);
-      const gy = (f[k + G] - f[k - G]) / (2 * h);
-      if (Math.abs(f[k]) / (Math.hypot(gx, gy) + 1e-4) < 0.012) cells.push(x, y);
-    }
-  }
-  return { cells, h };
 }
 
 export const PLATE_R = 2.2;
@@ -77,15 +43,15 @@ export function layoutFor(aspect) {
 export function buildGeometry(aspect, small) {
   const L = layoutFor(aspect);
   const perPlate = small ? 3400 : 7500;
-  const rim = small ? 500 : 900;
   const perRing = small ? 1400 : 2600;
   const dust = small ? 3000 : 7000;
-  const total = 9 * (perPlate + rim) + 4 * perRing + 900 + dust;
+  const total = 9 * perPlate + 4 * perRing + 900 + dust;
 
   const pos = new Float32Array(total * 3);
   const rnd = new Float32Array(total * 3);
   const col = new Float32Array(total * 3);
   const info = new Float32Array(total * 3); // kind, size, seed
+  const cen = new Float32Array(total * 2); // form centre z, form index
   let o = 0;
   const r = rng(20261113);
   function put(x, y, z, rx, ry, rz, c, kind, size) {
@@ -123,26 +89,17 @@ export function buildGeometry(aspect, small) {
     }
   }
 
-  // --- plates (kind 1) and their rims (kind 3)
+  // --- the nine forms (kind 1): aPos = finished shape, aRnd = where it waits
   NINE.forEach((tone, k) => {
-    const [n, m, s] = MODES[k];
-    const { cells, h } = chladniCells(n, m, s);
-    const nCells = cells.length / 2;
     const z = L.plate0 + k * L.spacing;
     const c = tone.rgb;
     const bright = c.map((v) => Math.min(255, v + 45));
-    for (let p = 0; p < perPlate; p++) {
-      const ci = Math.floor(r() * nCells) * 2;
-      const x = (cells[ci] + (r() - 0.5) * h * 1.7) * PLATE_R;
-      const y = (cells[ci + 1] + (r() - 0.5) * h * 1.7) * PLATE_R;
+    FORMS[k](perPlate, r).forEach((pt) => {
       const hot = r() < 0.1;
-      put(x, y, z, r() * 2 - 1, r() * 2 - 1, r() * 2 - 1, hot ? bright : c, 1, hot ? 0.03 : 0.017 + r() * 0.008);
-    }
-    for (let p = 0; p < rim; p++) {
-      const a = r() * TAU;
-      const d = PLATE_R * (1.07 + (r() - 0.5) * 0.02);
-      put(Math.cos(a) * d, Math.sin(a) * d, z, 0, 0, 0, c, 3, 0.014);
-    }
+      cen[o * 2] = z;
+      cen[o * 2 + 1] = k;
+      put(pt.end[0], pt.end[1], pt.end[2], pt.start[0], pt.start[1], pt.start[2], hot ? bright : c, 1, hot ? 0.032 : 0.018 + r() * 0.01);
+    });
   });
 
   // --- dust (kind 2)
@@ -155,7 +112,7 @@ export function buildGeometry(aspect, small) {
     put(Math.cos(a) * d, Math.sin(a) * d, z, 0, 0, 0, c, 2, 0.02 + r() * 0.05);
   }
 
-  return { pos, rnd, col, info, count: o, layout: L };
+  return { pos, rnd, col, info, cen, count: o, layout: L };
 }
 
 const VERT = `#version 300 es
@@ -164,6 +121,7 @@ layout(location=0) in vec3 aPos;
 layout(location=1) in vec3 aRnd;
 layout(location=2) in vec3 aCol;
 layout(location=3) in vec3 aInfo;
+layout(location=4) in vec2 aCen;
 uniform vec3 uCam;      // camera x, y, z
 uniform float uRoll;
 uniform float uAspect;
@@ -183,23 +141,40 @@ void main() {
   float d = aPos.z - uCam.z;
   float glow = 1.0;
   if (kind == 1.0) {
-    float settle = smoothstep(uHold * 2.5, uHold * 1.12, d);
-    float burst = smoothstep(uHold * 0.7, 0.3, d);
-    // the plate turns slowly as you come in
-    float ang = d * 0.05;
-    float c = cos(ang), s = sin(ang);
-    p.xy = mat2(c, -s, s, c) * p.xy;
-    // loose sand hangs in a cloud until the tone takes hold
-    vec3 cloud = aRnd * vec3(2.4, 2.4, uHold * 0.9);
-    cloud.xy += vec2(sin(seed * 40.0 + uTime * 0.4), cos(seed * 31.0 + uTime * 0.35)) * 0.25;
-    p += cloud * (1.0 - settle) * (1.0 - settle);
-    // ...and is thrown outward as the camera passes through
-    vec2 dir = normalize(p.xy + vec2(0.0001));
-    p.xy += dir * burst * burst * (2.5 + seed * 3.0);
-    p.z -= burst * seed * 1.5;
-    // a ringing plate never sits perfectly still
-    p.xy += vec2(sin(uTime * 9.0 + seed * 90.0), cos(uTime * 8.0 + seed * 70.0)) * 0.006 * settle;
-    glow = 0.6 + 0.4 * settle;
+    float f = aCen.y;
+    d = aCen.x - uCam.z;
+    float settle = smoothstep(uHold * 2.3, uHold * 1.05, d);
+    // particles arrive one after another, not all at once
+    float t = clamp(settle * 1.6 - seed * 0.6, 0.0, 1.0);
+    t = t * t * (3.0 - 2.0 * t);
+    vec3 l = mix(aRnd, aPos, t);
+    float pass = smoothstep(uHold * 0.75, 0.0, d);
+    if (f == 0.0) {
+      // the ground rolls like a slow swell, and falls away as you leave
+      l.y += (sin(l.x * 1.3 + uTime * 0.8) * 0.1 + sin(l.z * 1.7 + uTime * 0.6) * 0.08) * t;
+      l.y -= pass * pass * 2.5;
+    } else if (f == 1.0) {
+      l *= 1.0 + 0.06 * sin(uTime * 0.9 + seed * 6.28);
+      l.xy *= 1.0 + pass * 1.6;
+    } else if (f == 2.0) {
+      l.xz *= 1.0 + 0.04 * sin(uTime * 1.4 + seed * 20.0);
+      l.xy *= 1.0 + pass * 1.2;
+    } else if (f == 8.0) {
+      l.xy *= 1.0 + pass * 0.9;
+    } else {
+      l.xy *= 1.0 + pass * 1.3;
+    }
+    // each form turns at its own pace
+    float sy = f == 1.0 ? 0.1 : f == 2.0 ? 0.15 : f == 3.0 ? 0.3 : f == 5.0 ? 0.5 : f == 6.0 ? 0.3 : 0.0;
+    float sz = f == 3.0 ? 0.2 : f == 4.0 ? 0.15 : f == 6.0 ? 0.1 : f == 7.0 ? 0.05 : 0.0;
+    float az = uTime * sz + (f == 4.0 ? (1.0 - t) * 2.0 : 0.0);
+    float ay = uTime * sy;
+    float cz = cos(az), szn = sin(az);
+    l.xy = mat2(cz, -szn, szn, cz) * l.xy;
+    float cy = cos(ay), syn = sin(ay);
+    l.xz = mat2(cy, -syn, syn, cy) * l.xz;
+    p = vec3(l.xy, aCen.x + l.z);
+    glow = 0.25 + 0.75 * t;
   } else if (kind == 0.0) {
     float ang = uTime * 0.05 * (0.5 + fract(aPos.z * 0.37));
     float c = cos(ang), s = sin(ang);
@@ -311,7 +286,7 @@ export function createRenderer(canvas, small) {
   const W = uniforms(gl, wprog, ["uTime", "uScroll", "uAspect", "uPx", "uDir", "uSway", "uSize", "uTwinkle", "uAlpha", "uColor"]);
 
   const vao = gl.createVertexArray();
-  const buffers = [0, 1, 2, 3].map(() => gl.createBuffer());
+  const buffers = [0, 1, 2, 3, 4].map(() => gl.createBuffer());
   let count = 0;
   let layout = null;
   let builtAspect = 0;
@@ -319,11 +294,11 @@ export function createRenderer(canvas, small) {
   function build(aspect) {
     const g = buildGeometry(aspect, small);
     gl.bindVertexArray(vao);
-    [g.pos, g.rnd, g.col, g.info].forEach((data, i) => {
+    [g.pos, g.rnd, g.col, g.info, g.cen].forEach((data, i) => {
       gl.bindBuffer(gl.ARRAY_BUFFER, buffers[i]);
       gl.bufferData(gl.ARRAY_BUFFER, data, gl.STATIC_DRAW);
       gl.enableVertexAttribArray(i);
-      gl.vertexAttribPointer(i, 3, gl.FLOAT, false, 0, 0);
+      gl.vertexAttribPointer(i, i === 4 ? 2 : 3, gl.FLOAT, false, 0, 0);
     });
     count = g.count;
     layout = g.layout;

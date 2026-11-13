@@ -11,7 +11,7 @@ import { setStoryTone, setSound, toggleSound, onSoundChange, isSoundOn } from "@
  *
  *   hero      the Tonaura rings, hanging in depth
  *   flight    the camera dives through the rings
- *   tones     nine sand plates; each settles as you arrive, bursts as you pass
+ *   tones     nine different forms, one per tone, each arriving its own way
  *   worlds    the last plate opens onto the five Theme Pack places
  *
  * Scroll position sets the camera; the pointer leans it; time only adds
